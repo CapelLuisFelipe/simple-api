@@ -1,0 +1,35 @@
+version: 0.2
+
+env:
+  variables:
+    TF_VERSION: "1.8.5"
+    TF_WORKING_DIR: "terraform/environments/dev"
+
+phases:
+  install:
+    commands:
+      - echo "Installing Terraform..."
+      - yum install -y yum-utils unzip
+      - curl -o terraform.zip https://releases.hashicorp.com/terraform/${TF_VERSION}/terraform_${TF_VERSION}_linux_amd64.zip
+      - unzip terraform.zip
+      - mv terraform /usr/local/bin/
+      - terraform version
+
+  pre_build:
+    commands:
+      - echo "Starting Terraform initialization..."
+      - terraform -chdir=$TF_WORKING_DIR init -input=false
+
+  build:
+    commands:
+      - echo "Checking Terraform format..."
+      - terraform -chdir=$TF_WORKING_DIR fmt -check -recursive
+      - echo "Validating Terraform configuration..."
+      - terraform -chdir=$TF_WORKING_DIR validate
+      - echo "Generating Terraform plan..."
+      - terraform -chdir=$TF_WORKING_DIR plan -input=false -out=tfplan
+
+artifacts:
+  files:
+    - terraform/environments/dev/tfplan
+  discard-paths: no
