@@ -105,11 +105,11 @@ dist
 
 # Terraform
 .terraform/
-.terraform.lock.hcl
 *.tfstate
 *.tfstate.*
 terraform.tfvars
 terraform.tfvars.json
+!*.tfvars.example
 crash.log
 crash.*.log
 override.tf

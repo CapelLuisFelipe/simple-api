@@ -62,7 +62,7 @@ variable "rds_identifier" {
 variable "rds_engine_version" {
   description = "RDS PostgreSQL version"
   type        = string
-  default     = "15.3"
+  default     = "15.18"
 }
 
 variable "rds_instance_class" {
@@ -147,5 +147,10 @@ variable "github_branch" {
 
 variable "codestar_connection_arn" {
   description = "ARN of the CodeStar connection to GitHub (created manually in AWS console)"
+  type        = string
+}
+
+variable "alert_email" {
+  description = "E-mail para receber alertas de scaling e pipeline"
   type        = string
 }

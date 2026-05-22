@@ -5,6 +5,5 @@ locals {
     Environment = var.environment
     Project     = "simple-api"
     ManagedBy   = "Terraform"
-    CreatedAt   = timestamp()
   }
 }

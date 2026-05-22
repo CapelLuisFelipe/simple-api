@@ -28,7 +28,9 @@ resource "aws_s3_bucket_public_access_block" "artifacts" {
   restrict_public_buckets = true
 }
 
-# IAM Role for CodeBuild
+# ============================================================================
+# IAM - CodeBuild (app)
+# ============================================================================
 resource "aws_iam_role" "codebuild" {
   name = "simple-api-codebuild-${var.environment}"
 
@@ -52,10 +54,8 @@ resource "aws_iam_role_policy" "codebuild" {
     Version = "2012-10-17"
     Statement = [
       {
-        Effect = "Allow"
-        Action = [
-          "logs:CreateLogGroup", "logs:CreateLogStream", "logs:PutLogEvents"
-        ]
+        Effect   = "Allow"
+        Action   = ["logs:CreateLogGroup", "logs:CreateLogStream", "logs:PutLogEvents"]
         Resource = "*"
       },
       {
@@ -81,7 +81,58 @@ resource "aws_iam_role_policy" "codebuild" {
   })
 }
 
-# IAM Role for CodePipeline
+# ============================================================================
+# IAM - CodeBuild Terraform
+# ============================================================================
+resource "aws_iam_role" "codebuild_terraform" {
+  name = "simple-api-codebuild-terraform-${var.environment}"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Effect    = "Allow"
+      Principal = { Service = "codebuild.amazonaws.com" }
+      Action    = "sts:AssumeRole"
+    }]
+  })
+
+  tags = var.tags
+}
+
+resource "aws_iam_role_policy" "codebuild_terraform" {
+  name = "codebuild-terraform-policy"
+  role = aws_iam_role.codebuild_terraform.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect   = "Allow"
+        Action   = ["logs:CreateLogGroup", "logs:CreateLogStream", "logs:PutLogEvents"]
+        Resource = "*"
+      },
+      {
+        Effect   = "Allow"
+        Action   = ["s3:GetObject", "s3:PutObject", "s3:GetObjectVersion", "s3:GetBucketVersioning", "s3:ListBucket"]
+        Resource = ["${aws_s3_bucket.artifacts.arn}", "${aws_s3_bucket.artifacts.arn}/*"]
+      },
+      {
+        Effect   = "Allow"
+        Action   = ["ssm:GetParameters", "ssm:GetParameter"]
+        Resource = "arn:aws:ssm:*:*:parameter/simple-api/tf/*"
+      },
+      {
+        Effect   = "Allow"
+        Action   = ["*"]
+        Resource = "*"
+      }
+    ]
+  })
+}
+
+# ============================================================================
+# IAM - CodePipeline
+# ============================================================================
 resource "aws_iam_role" "codepipeline" {
   name = "simple-api-codepipeline-${var.environment}"
 
@@ -116,13 +167,16 @@ resource "aws_iam_role_policy" "codepipeline" {
       },
       {
         Effect   = "Allow"
-        Action   = ["ecs:DescribeServices", "ecs:DescribeTaskDefinition", "ecs:DescribeTasks", "ecs:ListTasks", "ecs:RegisterTaskDefinition", "ecs:UpdateService"]
+        Action   = ["ecs:DescribeServices", "ecs:DescribeTaskDefinition", "ecs:DescribeTasks", "ecs:ListTasks", "ecs:RegisterTaskDefinition", "ecs:UpdateService", "ecs:TagResource"]
         Resource = "*"
       },
       {
         Effect   = "Allow"
         Action   = ["iam:PassRole"]
         Resource = "*"
+        Condition = {
+          StringLike = { "iam:PassedToService" = "ecs-tasks.amazonaws.com" }
+        }
       },
       {
         Effect   = "Allow"
@@ -133,15 +187,15 @@ resource "aws_iam_role_policy" "codepipeline" {
   })
 }
 
-# CodeBuild Project
+# ============================================================================
+# CodeBuild - App (Docker build)
+# ============================================================================
 resource "aws_codebuild_project" "main" {
   name          = "simple-api-build-${var.environment}"
   service_role  = aws_iam_role.codebuild.arn
   build_timeout = 20
 
-  artifacts {
-    type = "CODEPIPELINE"
-  }
+  artifacts { type = "CODEPIPELINE" }
 
   environment {
     compute_type                = "BUILD_GENERAL1_SMALL"
@@ -180,10 +234,61 @@ resource "aws_codebuild_project" "main" {
   tags = var.tags
 }
 
-# CodePipeline
+# ============================================================================
+# CodeBuild - Terraform
+# ============================================================================
+resource "aws_codebuild_project" "terraform" {
+  name          = "simple-api-terraform-${var.environment}"
+  service_role  = aws_iam_role.codebuild_terraform.arn
+  build_timeout = 60
+
+  artifacts { type = "CODEPIPELINE" }
+
+  environment {
+    compute_type                = "BUILD_GENERAL1_SMALL"
+    image                       = "aws/codebuild/standard:7.0"
+    type                        = "LINUX_CONTAINER"
+    privileged_mode             = false
+    image_pull_credentials_type = "CODEBUILD"
+
+    environment_variable {
+      name  = "TF_WORKING_DIR"
+      value = "terraform/environments/dev"
+    }
+    environment_variable {
+      name  = "TF_VERSION"
+      value = "1.15.4"
+    }
+  }
+
+  source {
+    type      = "CODEPIPELINE"
+    buildspec = "buildspec-terraform.yml"
+  }
+
+  tags = var.tags
+}
+
+# ============================================================================
+# Pipeline - App (src/** Dockerfile buildspec.yml)
+# ============================================================================
 resource "aws_codepipeline" "main" {
-  name     = "simple-api-pipeline-${var.environment}"
-  role_arn = aws_iam_role.codepipeline.arn
+  name          = "simple-api-pipeline-${var.environment}"
+  role_arn      = aws_iam_role.codepipeline.arn
+  pipeline_type = "V2"
+
+  trigger {
+    provider_type = "CodeStarSourceConnection"
+    git_configuration {
+      source_action_name = "Source"
+      push {
+        branches { includes = [var.github_branch] }
+        file_paths {
+          includes = ["src/**", "Dockerfile", "buildspec.yml", "package*.json"]
+        }
+      }
+    }
+  }
 
   artifact_store {
     location = aws_s3_bucket.artifacts.bucket
@@ -199,7 +304,6 @@ resource "aws_codepipeline" "main" {
       provider         = "CodeStarSourceConnection"
       version          = "1"
       output_artifacts = ["source_output"]
-
       configuration = {
         ConnectionArn    = var.codestar_connection_arn
         FullRepositoryId = var.github_repo
@@ -218,10 +322,7 @@ resource "aws_codepipeline" "main" {
       version          = "1"
       input_artifacts  = ["source_output"]
       output_artifacts = ["build_output"]
-
-      configuration = {
-        ProjectName = aws_codebuild_project.main.name
-      }
+      configuration    = { ProjectName = aws_codebuild_project.main.name }
     }
   }
 
@@ -234,12 +335,71 @@ resource "aws_codepipeline" "main" {
       provider        = "ECS"
       version         = "1"
       input_artifacts = ["build_output"]
-
       configuration = {
         ClusterName = var.ecs_cluster_name
         ServiceName = var.ecs_service_name
         FileName    = "imagedefinitions.json"
       }
+    }
+  }
+
+  tags = var.tags
+}
+
+# ============================================================================
+# Pipeline - Terraform (terraform/**)
+# ============================================================================
+resource "aws_codepipeline" "terraform" {
+  name          = "simple-api-terraform-pipeline-${var.environment}"
+  role_arn      = aws_iam_role.codepipeline.arn
+  pipeline_type = "V2"
+
+  trigger {
+    provider_type = "CodeStarSourceConnection"
+    git_configuration {
+      source_action_name = "Source"
+      push {
+        branches { includes = [var.github_branch] }
+        file_paths {
+          includes = ["terraform/**"]
+        }
+      }
+    }
+  }
+
+  artifact_store {
+    location = aws_s3_bucket.artifacts.bucket
+    type     = "S3"
+  }
+
+  stage {
+    name = "Source"
+    action {
+      name             = "Source"
+      category         = "Source"
+      owner            = "AWS"
+      provider         = "CodeStarSourceConnection"
+      version          = "1"
+      output_artifacts = ["source_output"]
+      configuration = {
+        ConnectionArn    = var.codestar_connection_arn
+        FullRepositoryId = var.github_repo
+        BranchName       = var.github_branch
+      }
+    }
+  }
+
+  stage {
+    name = "Terraform"
+    action {
+      name             = "Plan-and-Apply"
+      category         = "Build"
+      owner            = "AWS"
+      provider         = "CodeBuild"
+      version          = "1"
+      input_artifacts  = ["source_output"]
+      output_artifacts = ["tf_output"]
+      configuration    = { ProjectName = aws_codebuild_project.terraform.name }
     }
   }
 

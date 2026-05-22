@@ -16,7 +16,7 @@ db_password = "CHANGE_ME_SECURE_PASSWORD_HERE"
 
 # RDS
 rds_identifier        = "simple-api-db"
-rds_engine_version    = "15.3"
+rds_engine_version    = "15.18"
 rds_instance_class    = "db.t3.micro"
 rds_allocated_storage = 20
 rds_multi_az          = false
@@ -34,3 +34,6 @@ ecs_max_capacity  = 4
 github_repo             = "your-github-username/simple-api"
 github_branch           = "main"
 codestar_connection_arn = "arn:aws:codestar-connections:us-east-1:ACCOUNT_ID:connection/XXXXXXXX"
+
+# Monitoring
+alert_email = "your-email@example.com"

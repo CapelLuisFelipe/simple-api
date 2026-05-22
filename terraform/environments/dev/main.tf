@@ -2,17 +2,18 @@ data "aws_caller_identity" "current" {}
 
 data "aws_region" "current" {}
 
+
 # ============================================================================
 # NETWORK MODULE - VPC, Subnets, NAT Gateway, Route Tables
 # ============================================================================
 module "network" {
   source = "../../modules/network"
 
-  vpc_cidr              = var.vpc_cidr
-  public_subnet_cidrs   = var.public_subnet_cidrs
-  private_subnet_cidrs  = var.private_subnet_cidrs
-  enable_nat_gateway    = true
-  environment           = var.environment
+  vpc_cidr             = var.vpc_cidr
+  public_subnet_cidrs  = var.public_subnet_cidrs
+  private_subnet_cidrs = var.private_subnet_cidrs
+  enable_nat_gateway   = false
+  environment          = var.environment
 
   tags = local.common_tags
 }
@@ -46,20 +47,20 @@ module "iam" {
 module "rds" {
   source = "../../modules/rds"
 
-  identifier        = var.rds_identifier
-  engine_version    = var.rds_engine_version
-  instance_class    = var.rds_instance_class
-  database_name     = var.db_name
-  master_username   = var.db_username
-  master_password   = var.db_password
-  subnet_ids        = module.network.private_subnet_ids
-  security_group_ids = [module.security.rds_security_group_id]
-  allocated_storage  = var.rds_allocated_storage
-  multi_az          = var.rds_multi_az
+  identifier              = var.rds_identifier
+  engine_version          = var.rds_engine_version
+  instance_class          = var.rds_instance_class
+  database_name           = var.db_name
+  master_username         = var.db_username
+  master_password         = var.db_password
+  subnet_ids              = module.network.private_subnet_ids
+  security_group_ids      = [module.security.rds_security_group_id]
+  allocated_storage       = var.rds_allocated_storage
+  multi_az                = var.rds_multi_az
   backup_retention_period = var.rds_backup_retention
-  skip_final_snapshot = var.rds_skip_final_snapshot
-  deletion_protection = var.rds_deletion_protection
-  publicly_accessible = false
+  skip_final_snapshot     = var.rds_skip_final_snapshot
+  deletion_protection     = var.rds_deletion_protection
+  publicly_accessible     = false
 
   tags = local.common_tags
 }
@@ -80,6 +81,7 @@ resource "aws_cloudwatch_log_group" "ecs" {
 resource "aws_ecr_repository" "main" {
   name                 = var.ecr_repository_name
   image_tag_mutability = "MUTABLE"
+  force_delete         = true
   image_scanning_configuration {
     scan_on_push = true
   }
@@ -109,7 +111,7 @@ resource "aws_ecs_cluster" "main" {
 
   setting {
     name  = "containerInsights"
-    value = "enabled"
+    value = "disabled"
   }
 
   tags = local.common_tags
@@ -194,7 +196,7 @@ resource "aws_ecs_task_definition" "main" {
 # Secrets Manager para DB Password
 resource "aws_secretsmanager_secret" "db_password" {
   name                    = "simple-api/db-password"
-  recovery_window_in_days = 7
+  recovery_window_in_days = 0
 
   tags = local.common_tags
 }
@@ -213,9 +215,9 @@ resource "aws_ecs_service" "main" {
   launch_type     = "FARGATE"
 
   network_configuration {
-    subnets          = module.network.private_subnet_ids
+    subnets          = module.network.public_subnet_ids
     security_groups  = [module.security.ecs_security_group_id]
-    assign_public_ip = false
+    assign_public_ip = true
   }
 
   load_balancer {
@@ -289,4 +291,131 @@ module "cicd" {
   codestar_connection_arn = var.codestar_connection_arn
 
   tags = local.common_tags
+}
+
+# ============================================================================
+# MONITORING - SNS + CloudWatch Alarms
+# ============================================================================
+resource "aws_sns_topic" "alerts" {
+  name = "simple-api-alerts-${var.environment}"
+  tags = local.common_tags
+}
+
+resource "aws_sns_topic_subscription" "email" {
+  topic_arn = aws_sns_topic.alerts.arn
+  protocol  = "email"
+  endpoint  = var.alert_email
+}
+
+# ECS CPU Scale Out
+resource "aws_cloudwatch_metric_alarm" "ecs_cpu_high" {
+  alarm_name          = "simple-api-cpu-high"
+  alarm_description   = "ECS CPU acima de 70% - scale out em andamento"
+  namespace           = "AWS/ECS"
+  metric_name         = "CPUUtilization"
+  dimensions          = { ClusterName = aws_ecs_cluster.main.name, ServiceName = aws_ecs_service.main.name }
+  statistic           = "Average"
+  period              = 60
+  evaluation_periods  = 2
+  threshold           = 70
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  alarm_actions       = [aws_sns_topic.alerts.arn]
+  ok_actions          = [aws_sns_topic.alerts.arn]
+  tags                = local.common_tags
+}
+
+# ECS CPU Scale In
+resource "aws_cloudwatch_metric_alarm" "ecs_cpu_low" {
+  alarm_name          = "simple-api-cpu-low"
+  alarm_description   = "ECS CPU abaixo de 30% - scale in em andamento"
+  namespace           = "AWS/ECS"
+  metric_name         = "CPUUtilization"
+  dimensions          = { ClusterName = aws_ecs_cluster.main.name, ServiceName = aws_ecs_service.main.name }
+  statistic           = "Average"
+  period              = 60
+  evaluation_periods  = 2
+  threshold           = 30
+  comparison_operator = "LessThanOrEqualToThreshold"
+  alarm_actions       = [aws_sns_topic.alerts.arn]
+  ok_actions          = [aws_sns_topic.alerts.arn]
+  tags                = local.common_tags
+}
+
+# ECS Memory Scale Out
+resource "aws_cloudwatch_metric_alarm" "ecs_memory_high" {
+  alarm_name          = "simple-api-memory-high"
+  alarm_description   = "ECS Memória acima de 80% - scale out em andamento"
+  namespace           = "AWS/ECS"
+  metric_name         = "MemoryUtilization"
+  dimensions          = { ClusterName = aws_ecs_cluster.main.name, ServiceName = aws_ecs_service.main.name }
+  statistic           = "Average"
+  period              = 60
+  evaluation_periods  = 2
+  threshold           = 80
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  alarm_actions       = [aws_sns_topic.alerts.arn]
+  ok_actions          = [aws_sns_topic.alerts.arn]
+  tags                = local.common_tags
+}
+
+# ECS Memory Scale In
+resource "aws_cloudwatch_metric_alarm" "ecs_memory_low" {
+  alarm_name          = "simple-api-memory-low"
+  alarm_description   = "ECS Memória abaixo de 40% - scale in em andamento"
+  namespace           = "AWS/ECS"
+  metric_name         = "MemoryUtilization"
+  dimensions          = { ClusterName = aws_ecs_cluster.main.name, ServiceName = aws_ecs_service.main.name }
+  statistic           = "Average"
+  period              = 60
+  evaluation_periods  = 2
+  threshold           = 40
+  comparison_operator = "LessThanOrEqualToThreshold"
+  alarm_actions       = [aws_sns_topic.alerts.arn]
+  ok_actions          = [aws_sns_topic.alerts.arn]
+  tags                = local.common_tags
+}
+
+# CodePipeline - falha
+resource "aws_cloudwatch_event_rule" "pipeline_state" {
+  name        = "simple-api-pipeline-state"
+  description = "Notifica mudanças de estado da pipeline"
+
+  event_pattern = jsonencode({
+    source      = ["aws.codepipeline"]
+    detail-type = ["CodePipeline Pipeline Execution State Change"]
+    detail = {
+      pipeline = [module.cicd.pipeline_name, module.cicd.terraform_pipeline_name]
+      state    = ["STARTED", "SUCCEEDED", "FAILED"]
+    }
+  })
+
+  tags = local.common_tags
+}
+
+resource "aws_cloudwatch_event_target" "pipeline_sns" {
+  rule      = aws_cloudwatch_event_rule.pipeline_state.name
+  target_id = "SendToSNS"
+  arn       = aws_sns_topic.alerts.arn
+
+  input_transformer {
+    input_paths = {
+      pipeline = "$.detail.pipeline"
+      state    = "$.detail.state"
+      time     = "$.time"
+    }
+    input_template = "\"Pipeline <pipeline> mudou para <state> em <time>\""
+  }
+}
+
+resource "aws_sns_topic_policy" "alerts" {
+  arn = aws_sns_topic.alerts.arn
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Effect    = "Allow"
+      Principal = { Service = "events.amazonaws.com" }
+      Action    = "sns:Publish"
+      Resource  = aws_sns_topic.alerts.arn
+    }]
+  })
 }

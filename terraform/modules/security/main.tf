@@ -12,44 +12,30 @@ resource "aws_security_group" "alb" {
   )
 }
 
-# ALB - Allow inbound HTTP/HTTPS
+# ALB - Allow inbound HTTP
 resource "aws_vpc_security_group_ingress_rule" "alb_http" {
   security_group_id = aws_security_group.alb.id
-  
+
   from_port   = 80
   to_port     = 80
   ip_protocol = "tcp"
   cidr_ipv4   = "0.0.0.0/0"
-  
+
   tags = merge(
     var.tags,
     { Name = "allow-http" }
   )
 }
 
-resource "aws_vpc_security_group_ingress_rule" "alb_https" {
-  security_group_id = aws_security_group.alb.id
-  
-  from_port   = 443
-  to_port     = 443
-  ip_protocol = "tcp"
-  cidr_ipv4   = "0.0.0.0/0"
-  
-  tags = merge(
-    var.tags,
-    { Name = "allow-https" }
-  )
-}
-
 # ALB - Allow outbound all
 resource "aws_vpc_security_group_egress_rule" "alb_all" {
   security_group_id = aws_security_group.alb.id
-  
+
   from_port   = -1
   to_port     = -1
   ip_protocol = "-1"
   cidr_ipv4   = "0.0.0.0/0"
-  
+
   tags = merge(
     var.tags,
     { Name = "allow-all-outbound" }
@@ -71,12 +57,12 @@ resource "aws_security_group" "ecs" {
 # ECS - Allow inbound from ALB
 resource "aws_vpc_security_group_ingress_rule" "ecs_from_alb" {
   security_group_id = aws_security_group.ecs.id
-  
+
   from_port                    = 3000
   to_port                      = 3000
   ip_protocol                  = "tcp"
   referenced_security_group_id = aws_security_group.alb.id
-  
+
   tags = merge(
     var.tags,
     { Name = "allow-from-alb" }
@@ -86,12 +72,12 @@ resource "aws_vpc_security_group_ingress_rule" "ecs_from_alb" {
 # ECS - Allow outbound all
 resource "aws_vpc_security_group_egress_rule" "ecs_all" {
   security_group_id = aws_security_group.ecs.id
-  
+
   from_port   = -1
   to_port     = -1
   ip_protocol = "-1"
   cidr_ipv4   = "0.0.0.0/0"
-  
+
   tags = merge(
     var.tags,
     { Name = "allow-all-outbound" }
@@ -113,12 +99,12 @@ resource "aws_security_group" "rds" {
 # RDS - Allow inbound from ECS
 resource "aws_vpc_security_group_ingress_rule" "rds_from_ecs" {
   security_group_id = aws_security_group.rds.id
-  
+
   from_port                    = 5432
   to_port                      = 5432
   ip_protocol                  = "tcp"
   referenced_security_group_id = aws_security_group.ecs.id
-  
+
   tags = merge(
     var.tags,
     { Name = "allow-from-ecs" }
@@ -128,12 +114,12 @@ resource "aws_vpc_security_group_ingress_rule" "rds_from_ecs" {
 # RDS - Allow outbound all (geralmente bloqueado, mas deixamos para flexibilidade)
 resource "aws_vpc_security_group_egress_rule" "rds_all" {
   security_group_id = aws_security_group.rds.id
-  
+
   from_port   = -1
   to_port     = -1
   ip_protocol = "-1"
   cidr_ipv4   = "0.0.0.0/0"
-  
+
   tags = merge(
     var.tags,
     { Name = "allow-all-outbound" }

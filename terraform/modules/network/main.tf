@@ -117,10 +117,10 @@ resource "aws_route_table" "private" {
 
 # Private Routes
 resource "aws_route" "private" {
-  count            = var.enable_nat_gateway ? length(var.private_subnet_cidrs) : 0
-  route_table_id   = aws_route_table.private[count.index].id
+  count                  = var.enable_nat_gateway ? length(var.private_subnet_cidrs) : 0
+  route_table_id         = aws_route_table.private[count.index].id
   destination_cidr_block = "0.0.0.0/0"
-  nat_gateway_id   = aws_nat_gateway.main[count.index].id
+  nat_gateway_id         = aws_nat_gateway.main[count.index].id
 }
 
 # Private Route Table Associations
