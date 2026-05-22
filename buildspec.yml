@@ -1,35 +1,22 @@
 version: 0.2
 
-env:
-  variables:
-    TF_VERSION: "1.8.5"
-    TF_WORKING_DIR: "terraform/environments/dev"
-
 phases:
-  install:
-    commands:
-      - echo "Installing Terraform..."
-      - yum install -y yum-utils unzip
-      - curl -o terraform.zip https://releases.hashicorp.com/terraform/${TF_VERSION}/terraform_${TF_VERSION}_linux_amd64.zip
-      - unzip terraform.zip
-      - mv terraform /usr/local/bin/
-      - terraform version
-
   pre_build:
     commands:
-      - echo "Starting Terraform initialization..."
-      - terraform -chdir=$TF_WORKING_DIR init -input=false
+      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
+      - IMAGE_TAG=$CODEBUILD_RESOLVED_SOURCE_VERSION
 
   build:
     commands:
-      - echo "Checking Terraform format..."
-      - terraform -chdir=$TF_WORKING_DIR fmt -check -recursive
-      - echo "Validating Terraform configuration..."
-      - terraform -chdir=$TF_WORKING_DIR validate
-      - echo "Generating Terraform plan..."
-      - terraform -chdir=$TF_WORKING_DIR plan -input=false -out=tfplan
+      - docker build -t $ECR_REPOSITORY_URI:$IMAGE_TAG .
+      - docker tag $ECR_REPOSITORY_URI:$IMAGE_TAG $ECR_REPOSITORY_URI:latest
+
+  post_build:
+    commands:
+      - docker push $ECR_REPOSITORY_URI:$IMAGE_TAG
+      - docker push $ECR_REPOSITORY_URI:latest
+      - printf '[{"name":"%s","imageUri":"%s"}]' $ECS_CONTAINER_NAME $ECR_REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
 
 artifacts:
   files:
-    - terraform/environments/dev/tfplan
-  discard-paths: no
+    - imagedefinitions.json

@@ -1,0 +1,36 @@
+# terraform.tfvars.example
+# Copie este arquivo para terraform.tfvars e preencha com seus valores
+
+aws_region = "us-east-1"
+environment = "dev"
+
+# Network
+vpc_cidr              = "10.0.0.0/16"
+public_subnet_cidrs   = ["10.0.1.0/24", "10.0.2.0/24"]
+private_subnet_cidrs  = ["10.0.11.0/24", "10.0.12.0/24"]
+
+# Database
+db_name     = "simple_api"
+db_username = "postgres"
+db_password = "CHANGE_ME_SECURE_PASSWORD_HERE"
+
+# RDS
+rds_identifier        = "simple-api-db"
+rds_engine_version    = "15.3"
+rds_instance_class    = "db.t3.micro"
+rds_allocated_storage = 20
+rds_multi_az          = false
+rds_backup_retention  = 7
+
+# ECR
+ecr_repository_name = "simple-api"
+
+# ECS
+ecs_desired_count = 2
+ecs_min_capacity  = 1
+ecs_max_capacity  = 4
+
+# CI/CD
+github_repo             = "your-github-username/simple-api"
+github_branch           = "main"
+codestar_connection_arn = "arn:aws:codestar-connections:us-east-1:ACCOUNT_ID:connection/XXXXXXXX"

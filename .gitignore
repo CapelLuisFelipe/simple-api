@@ -108,8 +108,8 @@ dist
 .terraform.lock.hcl
 *.tfstate
 *.tfstate.*
-*.tfvars
-*.tfvars.json
+terraform.tfvars
+terraform.tfvars.json
 crash.log
 crash.*.log
 override.tf
