@@ -256,7 +256,9 @@ resource "aws_appautoscaling_policy" "ecs_policy_cpu" {
     predefined_metric_specification {
       predefined_metric_type = "ECSServiceAverageCPUUtilization"
     }
-    target_value = 70.0
+    target_value       = 30.0
+    scale_in_cooldown  = 120
+    scale_out_cooldown = 30
   }
 }
 
@@ -299,45 +301,51 @@ module "cicd" {
 resource "aws_sns_topic" "alerts" {
   name = "simple-api-alerts-${var.environment}"
   tags = local.common_tags
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 resource "aws_sns_topic_subscription" "email" {
   topic_arn = aws_sns_topic.alerts.arn
   protocol  = "email"
   endpoint  = var.alert_email
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 # ECS CPU Scale Out
 resource "aws_cloudwatch_metric_alarm" "ecs_cpu_high" {
   alarm_name          = "simple-api-cpu-high"
-  alarm_description   = "ECS CPU acima de 70% - scale out em andamento"
+  alarm_description   = "ECS CPU acima de 30% - scale out em andamento"
   namespace           = "AWS/ECS"
   metric_name         = "CPUUtilization"
   dimensions          = { ClusterName = aws_ecs_cluster.main.name, ServiceName = aws_ecs_service.main.name }
   statistic           = "Average"
   period              = 60
-  evaluation_periods  = 2
-  threshold           = 70
+  evaluation_periods  = 1
+  threshold           = 30
   comparison_operator = "GreaterThanOrEqualToThreshold"
   alarm_actions       = [aws_sns_topic.alerts.arn]
-  ok_actions          = [aws_sns_topic.alerts.arn]
   tags                = local.common_tags
 }
 
 # ECS CPU Scale In
 resource "aws_cloudwatch_metric_alarm" "ecs_cpu_low" {
   alarm_name          = "simple-api-cpu-low"
-  alarm_description   = "ECS CPU abaixo de 30% - scale in em andamento"
+  alarm_description   = "ECS CPU abaixo de 20% - scale in em andamento"
   namespace           = "AWS/ECS"
   metric_name         = "CPUUtilization"
   dimensions          = { ClusterName = aws_ecs_cluster.main.name, ServiceName = aws_ecs_service.main.name }
   statistic           = "Average"
   period              = 60
   evaluation_periods  = 2
-  threshold           = 30
+  threshold           = 20
   comparison_operator = "LessThanOrEqualToThreshold"
   alarm_actions       = [aws_sns_topic.alerts.arn]
-  ok_actions          = [aws_sns_topic.alerts.arn]
   tags                = local.common_tags
 }
 
@@ -354,7 +362,6 @@ resource "aws_cloudwatch_metric_alarm" "ecs_memory_high" {
   threshold           = 80
   comparison_operator = "GreaterThanOrEqualToThreshold"
   alarm_actions       = [aws_sns_topic.alerts.arn]
-  ok_actions          = [aws_sns_topic.alerts.arn]
   tags                = local.common_tags
 }
 
@@ -371,7 +378,6 @@ resource "aws_cloudwatch_metric_alarm" "ecs_memory_low" {
   threshold           = 40
   comparison_operator = "LessThanOrEqualToThreshold"
   alarm_actions       = [aws_sns_topic.alerts.arn]
-  ok_actions          = [aws_sns_topic.alerts.arn]
   tags                = local.common_tags
 }
 
@@ -407,13 +413,41 @@ resource "aws_cloudwatch_event_target" "pipeline_sns" {
   }
 }
 
+# Auto Scaling scale-out / scale-in events
+resource "aws_cloudwatch_event_rule" "ecs_scaling" {
+  name        = "simple-api-ecs-scaling"
+  description = "Notifica scale-out e scale-in do ECS"
+
+  event_pattern = jsonencode({
+    source      = ["aws.application-autoscaling"]
+    detail-type = ["Application Auto Scaling Scaling Activity State Change"]
+  })
+
+  tags = local.common_tags
+}
+
+resource "aws_cloudwatch_event_target" "ecs_scaling_sns" {
+  rule      = aws_cloudwatch_event_rule.ecs_scaling.name
+  target_id = "EcsScalingSNS"
+  arn       = aws_sns_topic.alerts.arn
+
+  input_transformer {
+    input_paths = {
+      desc  = "$.detail.description"
+      cause = "$.detail.cause"
+      time  = "$.time"
+    }
+    input_template = "\"[ECS Auto Scaling] <desc> | Causa: <cause> | <time>\""
+  }
+}
+
 resource "aws_sns_topic_policy" "alerts" {
   arn = aws_sns_topic.alerts.arn
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [{
       Effect    = "Allow"
-      Principal = { Service = "events.amazonaws.com" }
+      Principal = { Service = ["events.amazonaws.com", "cloudwatch.amazonaws.com"] }
       Action    = "sns:Publish"
       Resource  = aws_sns_topic.alerts.arn
     }]

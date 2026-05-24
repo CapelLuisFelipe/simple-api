@@ -116,7 +116,7 @@ variable "ecr_repository_name" {
 variable "ecs_desired_count" {
   description = "Desired number of ECS tasks"
   type        = number
-  default     = 2
+  default     = 1
 }
 
 variable "ecs_min_capacity" {

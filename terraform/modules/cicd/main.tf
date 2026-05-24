@@ -284,7 +284,7 @@ resource "aws_codepipeline" "main" {
       push {
         branches { includes = [var.github_branch] }
         file_paths {
-          includes = ["src/**", "Dockerfile", "buildspec.yml", "package*.json"]
+          includes = ["src/**", "public/**", "Dockerfile", "buildspec.yml", "package*.json"]
         }
       }
     }

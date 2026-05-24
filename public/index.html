@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KXC Simple API — Dashboard</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<header>
+  <img
+    class="logo-img"
+    src="/assets/kxc-logo.png"
+    alt="KXC"
+    onerror="this.style.display='none'; document.getElementById('logo-text').style.display='block'">
+  <div class="logo-text" id="logo-text" style="display:none">
+    <div class="brand">KXC</div>
+    <div class="tagline">Keep your eXperience in Cloud</div>
+  </div>
+</header>
+
+<div class="hero">
+  <h1>KXC <span>Simple API</span> Challenge</h1>
+  <p>Validação visual da API, PostgreSQL e Auto Scaling na AWS</p>
+</div>
+
+<div class="badges">
+  <span class="badge accent">AWS ECS Fargate</span>
+  <span class="badge accent">Application Load Balancer</span>
+  <span class="badge accent">RDS PostgreSQL privado</span>
+  <span class="badge">Terraform</span>
+  <span class="badge">CI/CD · CodePipeline</span>
+  <span class="badge">Docker</span>
+  <span class="badge">Node.js · Express</span>
+  <span class="badge">Auto Scaling</span>
+</div>
+
+<div class="main">
+
+  <!-- ── actions panel ──────────────────────────────────────────────── -->
+  <div class="card">
+    <h2>Testar API</h2>
+    <div class="btn-group">
+
+      <button class="btn btn-primary" id="btn-root">
+        <span class="btn-icon">📡</span>
+        GET &nbsp;/
+      </button>
+
+      <button class="btn btn-primary" id="btn-connect">
+        <span class="btn-icon">🗄️</span>
+        GET &nbsp;/connect
+      </button>
+
+      <hr class="divider">
+
+      <button class="btn btn-stress-loop" id="btn-stress-loop">
+        <span class="btn-icon" id="loop-icon">🔥</span>
+        <span id="loop-label">Iniciar Stress Contínuo</span>
+      </button>
+
+      <div class="stress-info">
+        <strong>Demo Auto Scaling</strong><br>
+        Satura CPU do container em loop contínuo (rodadas de 30s).<br>
+        Trigger: CPU média &gt; 30% → ECS escala de 1 → até 4 tasks.<br>
+        Notificação por e-mail via CloudWatch + SNS.
+      </div>
+
+      <hr class="divider">
+
+      <button class="btn btn-ghost" id="btn-open-root">
+        <span class="btn-icon">↗</span>
+        Abrir &nbsp;/ &nbsp;em nova aba
+      </button>
+
+      <button class="btn btn-ghost" id="btn-open-connect">
+        <span class="btn-icon">↗</span>
+        Abrir &nbsp;/connect &nbsp;em nova aba
+      </button>
+
+    </div>
+  </div>
+
+  <!-- ── result panel ───────────────────────────────────────────────── -->
+  <div class="card" id="result-card">
+    <h2>Resultado</h2>
+    <div id="result-inner">
+      <div class="result-empty">
+        <span class="icon">🛰️</span>
+        <p>Clique em um botão para executar uma requisição.</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  KXC Simple API Challenge &nbsp;·&nbsp; ECS Fargate &nbsp;·&nbsp; RDS PostgreSQL &nbsp;·&nbsp; Terraform &nbsp;·&nbsp; CI/CD CodePipeline
+</footer>
+
+<script src="/app.js"></script>
+</body>
+</html>
