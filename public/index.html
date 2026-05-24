@@ -95,6 +95,34 @@
 
 </div>
 
+<!-- ── observability panel ─────────────────────────────────────────── -->
+<div class="obs">
+  <div class="obs-header">
+    <span class="obs-title">Observabilidade</span>
+    <button class="btn btn-ghost obs-refresh-btn" id="btn-obs-refresh">
+      <span id="obs-refresh-icon">↺</span> Atualizar
+    </button>
+  </div>
+  <div class="obs-grid">
+
+    <div class="card">
+      <h2>ECS Tasks</h2>
+      <div id="obs-status"><div class="obs-loading">Carregando…</div></div>
+    </div>
+
+    <div class="card">
+      <h2>Scaling Events</h2>
+      <div id="obs-events"><div class="obs-loading">Carregando…</div></div>
+    </div>
+
+    <div class="card">
+      <h2>CloudWatch Alarms <span class="obs-subtitle">histórico de estados</span></h2>
+      <div id="obs-alarms"><div class="obs-loading">Carregando…</div></div>
+    </div>
+
+  </div>
+</div>
+
 <footer>
   KXC Simple API Challenge &nbsp;·&nbsp; ECS Fargate &nbsp;·&nbsp; RDS PostgreSQL &nbsp;·&nbsp; Terraform &nbsp;·&nbsp; CI/CD CodePipeline
 </footer>

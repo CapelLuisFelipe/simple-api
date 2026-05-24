@@ -151,6 +151,6 @@ variable "codestar_connection_arn" {
 }
 
 variable "alert_email" {
-  description = "E-mail para receber alertas de scaling e pipeline"
+  description = "E-mail para receber alertas de scaling, alarmes CloudWatch e pipeline"
   type        = string
 }
