@@ -1,0 +1,2129 @@
+capel@MacBook-Air-de-Luis dev % terraform plan
+module.cicd.data.aws_caller_identity.current: Reading...
+module.network.data.aws_availability_zones.available: Reading...
+module.iam.data.aws_iam_policy_document.ecs_task_execution_assume: Reading...
+module.cicd.data.aws_region.current: Reading...
+data.aws_caller_identity.current: Reading...
+data.aws_region.current: Reading...
+data.aws_region.current: Read complete after 0s [id=us-east-1]
+module.cicd.data.aws_region.current: Read complete after 0s [id=us-east-1]
+module.iam.data.aws_iam_policy_document.ecs_task_execution_assume: Read complete after 0s [id=1077804475]
+module.cicd.data.aws_caller_identity.current: Read complete after 0s [id=491085390322]
+data.aws_caller_identity.current: Read complete after 0s [id=491085390322]
+module.network.data.aws_availability_zones.available: Read complete after 0s [id=us-east-1]
+
+Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # aws_appautoscaling_policy.ecs_policy_cpu will be created
+  + resource "aws_appautoscaling_policy" "ecs_policy_cpu" {
+      + alarm_arns         = (known after apply)
+      + arn                = (known after apply)
+      + id                 = (known after apply)
+      + name               = "simple-api-cpu-autoscaling"
+      + policy_type        = "TargetTrackingScaling"
+      + resource_id        = "service/simple-api-cluster/simple-api-service"
+      + scalable_dimension = "ecs:service:DesiredCount"
+      + service_namespace  = "ecs"
+
+      + target_tracking_scaling_policy_configuration {
+          + disable_scale_in   = false
+          + scale_in_cooldown  = 120
+          + scale_out_cooldown = 30
+          + target_value       = 30
+
+          + predefined_metric_specification {
+              + predefined_metric_type = "ECSServiceAverageCPUUtilization"
+            }
+        }
+    }
+
+  # aws_appautoscaling_policy.ecs_policy_memory will be created
+  + resource "aws_appautoscaling_policy" "ecs_policy_memory" {
+      + alarm_arns         = (known after apply)
+      + arn                = (known after apply)
+      + id                 = (known after apply)
+      + name               = "simple-api-memory-autoscaling"
+      + policy_type        = "TargetTrackingScaling"
+      + resource_id        = "service/simple-api-cluster/simple-api-service"
+      + scalable_dimension = "ecs:service:DesiredCount"
+      + service_namespace  = "ecs"
+
+      + target_tracking_scaling_policy_configuration {
+          + disable_scale_in = false
+          + target_value     = 80
+
+          + predefined_metric_specification {
+              + predefined_metric_type = "ECSServiceAverageMemoryUtilization"
+            }
+        }
+    }
+
+  # aws_appautoscaling_target.ecs_target will be created
+  + resource "aws_appautoscaling_target" "ecs_target" {
+      + arn                = (known after apply)
+      + id                 = (known after apply)
+      + max_capacity       = 4
+      + min_capacity       = 1
+      + resource_id        = "service/simple-api-cluster/simple-api-service"
+      + role_arn           = (known after apply)
+      + scalable_dimension = "ecs:service:DesiredCount"
+      + service_namespace  = "ecs"
+      + tags_all           = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "terraform"
+          + "Owner"       = "CapelLuisFelipe"
+          + "Project"     = "kxc-simple-api"
+        }
+
+      + suspended_state (known after apply)
+    }
+
+  # aws_cloudwatch_event_rule.ecs_scaling will be created
+  + resource "aws_cloudwatch_event_rule" "ecs_scaling" {
+      + arn            = (known after apply)
+      + description    = "Notifica scale-out e scale-in do ECS"
+      + event_bus_name = "default"
+      + event_pattern  = jsonencode(
+            {
+              + detail-type = [
+                  + "Application Auto Scaling Scaling Activity State Change",
+                ]
+              + source      = [
+                  + "aws.application-autoscaling",
+                ]
+            }
+        )
+      + force_destroy  = false
+      + id             = (known after apply)
+      + name           = "simple-api-ecs-scaling"
+      + name_prefix    = (known after apply)
+      + tags           = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "Terraform"
+          + "Project"     = "simple-api"
+        }
+      + tags_all       = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "Terraform"
+          + "Owner"       = "CapelLuisFelipe"
+          + "Project"     = "simple-api"
+        }
+    }
+
+  # aws_cloudwatch_event_rule.pipeline_state will be created
+  + resource "aws_cloudwatch_event_rule" "pipeline_state" {
+      + arn            = (known after apply)
+      + description    = "Notifica mudanças de estado da pipeline"
+      + event_bus_name = "default"
+      + event_pattern  = jsonencode(
+            {
+              + detail      = {
+                  + pipeline = [
+                      + "simple-api-pipeline-dev",
+                      + "simple-api-terraform-pipeline-dev",
+                    ]
+                  + state    = [
+                      + "STARTED",
+                      + "SUCCEEDED",
+                      + "FAILED",
+                    ]
+                }
+              + detail-type = [
+                  + "CodePipeline Pipeline Execution State Change",
+                ]
+              + source      = [
+                  + "aws.codepipeline",
+                ]
+            }
+        )
+      + force_destroy  = false
+      + id             = (known after apply)
+      + name           = "simple-api-pipeline-state"
+      + name_prefix    = (known after apply)
+      + tags           = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "Terraform"
+          + "Project"     = "simple-api"
+        }
+      + tags_all       = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "Terraform"
+          + "Owner"       = "CapelLuisFelipe"
+          + "Project"     = "simple-api"
+        }
+    }
+
+  # aws_cloudwatch_event_target.ecs_scaling_sns will be created
+  + resource "aws_cloudwatch_event_target" "ecs_scaling_sns" {
+      + arn            = (known after apply)
+      + event_bus_name = "default"
+      + force_destroy  = false
+      + id             = (known after apply)
+      + rule           = "simple-api-ecs-scaling"
+      + target_id      = "EcsScalingSNS"
+
+      + input_transformer {
+          + input_paths    = {
+              + "cause" = "$.detail.cause"
+              + "desc"  = "$.detail.description"
+              + "time"  = "$.time"
+            }
+          + input_template = "\"[ECS Auto Scaling] <desc> | Causa: <cause> | <time>\""
+        }
+    }
+
+  # aws_cloudwatch_event_target.pipeline_sns will be created
+  + resource "aws_cloudwatch_event_target" "pipeline_sns" {
+      + arn            = (known after apply)
+      + event_bus_name = "default"
+      + force_destroy  = false
+      + id             = (known after apply)
+      + rule           = "simple-api-pipeline-state"
+      + target_id      = "SendToSNS"
+
+      + input_transformer {
+          + input_paths    = {
+              + "pipeline" = "$.detail.pipeline"
+              + "state"    = "$.detail.state"
+              + "time"     = "$.time"
+            }
+          + input_template = "\"Pipeline <pipeline> mudou para <state> em <time>\""
+        }
+    }
+
+  # aws_cloudwatch_log_group.ecs will be created
+  + resource "aws_cloudwatch_log_group" "ecs" {
+      + arn               = (known after apply)
+      + id                = (known after apply)
+      + log_group_class   = (known after apply)
+      + name              = "/ecs/simple-api"
+      + name_prefix       = (known after apply)
+      + retention_in_days = 7
+      + skip_destroy      = false
+      + tags              = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "Terraform"
+          + "Project"     = "simple-api"
+        }
+      + tags_all          = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "Terraform"
+          + "Owner"       = "CapelLuisFelipe"
+          + "Project"     = "simple-api"
+        }
+    }
+
+  # aws_cloudwatch_metric_alarm.ecs_cpu_high will be created
+  + resource "aws_cloudwatch_metric_alarm" "ecs_cpu_high" {
+      + actions_enabled                       = true
+      + alarm_actions                         = (known after apply)
+      + alarm_description                     = "ECS CPU acima de 30% - scale out em andamento"
+      + alarm_name                            = "simple-api-cpu-high"
+      + arn                                   = (known after apply)
+      + comparison_operator                   = "GreaterThanOrEqualToThreshold"
+      + dimensions                            = {
+          + "ClusterName" = "simple-api-cluster"
+          + "ServiceName" = "simple-api-service"
+        }
+      + evaluate_low_sample_count_percentiles = (known after apply)
+      + evaluation_periods                    = 1
+      + id                                    = (known after apply)
+      + metric_name                           = "CPUUtilization"
+      + namespace                             = "AWS/ECS"
+      + period                                = 60
+      + statistic                             = "Average"
+      + tags                                  = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "Terraform"
+          + "Project"     = "simple-api"
+        }
+      + tags_all                              = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "Terraform"
+          + "Owner"       = "CapelLuisFelipe"
+          + "Project"     = "simple-api"
+        }
+      + threshold                             = 30
+      + treat_missing_data                    = "missing"
+    }
+
+  # aws_cloudwatch_metric_alarm.ecs_cpu_low will be created
+  + resource "aws_cloudwatch_metric_alarm" "ecs_cpu_low" {
+      + actions_enabled                       = true
+      + alarm_actions                         = (known after apply)
+      + alarm_description                     = "ECS CPU abaixo de 20% - scale in em andamento"
+      + alarm_name                            = "simple-api-cpu-low"
+      + arn                                   = (known after apply)
+      + comparison_operator                   = "LessThanOrEqualToThreshold"
+      + dimensions                            = {
+          + "ClusterName" = "simple-api-cluster"
+          + "ServiceName" = "simple-api-service"
+        }
+      + evaluate_low_sample_count_percentiles = (known after apply)
+      + evaluation_periods                    = 2
+      + id                                    = (known after apply)
+      + metric_name                           = "CPUUtilization"
+      + namespace                             = "AWS/ECS"
+      + period                                = 60
+      + statistic                             = "Average"
+      + tags                                  = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "Terraform"
+          + "Project"     = "simple-api"
+        }
+      + tags_all                              = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "Terraform"
+          + "Owner"       = "CapelLuisFelipe"
+          + "Project"     = "simple-api"
+        }
+      + threshold                             = 20
+      + treat_missing_data                    = "missing"
+    }
+
+  # aws_cloudwatch_metric_alarm.ecs_memory_high will be created
+  + resource "aws_cloudwatch_metric_alarm" "ecs_memory_high" {
+      + actions_enabled                       = true
+      + alarm_actions                         = (known after apply)
+      + alarm_description                     = "ECS Memória acima de 80% - scale out em andamento"
+      + alarm_name                            = "simple-api-memory-high"
+      + arn                                   = (known after apply)
+      + comparison_operator                   = "GreaterThanOrEqualToThreshold"
+      + dimensions                            = {
+          + "ClusterName" = "simple-api-cluster"
+          + "ServiceName" = "simple-api-service"
+        }
+      + evaluate_low_sample_count_percentiles = (known after apply)
+      + evaluation_periods                    = 2
+      + id                                    = (known after apply)
+      + metric_name                           = "MemoryUtilization"
+      + namespace                             = "AWS/ECS"
+      + period                                = 60
+      + statistic                             = "Average"
+      + tags                                  = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "Terraform"
+          + "Project"     = "simple-api"
+        }
+      + tags_all                              = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "Terraform"
+          + "Owner"       = "CapelLuisFelipe"
+          + "Project"     = "simple-api"
+        }
+      + threshold                             = 80
+      + treat_missing_data                    = "missing"
+    }
+
+  # aws_cloudwatch_metric_alarm.ecs_memory_low will be created
+  + resource "aws_cloudwatch_metric_alarm" "ecs_memory_low" {
+      + actions_enabled                       = true
+      + alarm_actions                         = (known after apply)
+      + alarm_description                     = "ECS Memória abaixo de 40% - scale in em andamento"
+      + alarm_name                            = "simple-api-memory-low"
+      + arn                                   = (known after apply)
+      + comparison_operator                   = "LessThanOrEqualToThreshold"
+      + dimensions                            = {
+          + "ClusterName" = "simple-api-cluster"
+          + "ServiceName" = "simple-api-service"
+        }
+      + evaluate_low_sample_count_percentiles = (known after apply)
+      + evaluation_periods                    = 2
+      + id                                    = (known after apply)
+      + metric_name                           = "MemoryUtilization"
+      + namespace                             = "AWS/ECS"
+      + period                                = 60
+      + statistic                             = "Average"
+      + tags                                  = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "Terraform"
+          + "Project"     = "simple-api"
+        }
+      + tags_all                              = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "Terraform"
+          + "Owner"       = "CapelLuisFelipe"
+          + "Project"     = "simple-api"
+        }
+      + threshold                             = 40
+      + treat_missing_data                    = "missing"
+    }
+
+  # aws_ecr_repository.main will be created
+  + resource "aws_ecr_repository" "main" {
+      + arn                  = (known after apply)
+      + force_delete         = true
+      + id                   = (known after apply)
+      + image_tag_mutability = "MUTABLE"
+      + name                 = "simple-api"
+      + registry_id          = (known after apply)
+      + repository_url       = (known after apply)
+      + tags                 = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "Terraform"
+          + "Project"     = "simple-api"
+        }
+      + tags_all             = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "Terraform"
+          + "Owner"       = "CapelLuisFelipe"
+          + "Project"     = "simple-api"
+        }
+
+      + image_scanning_configuration {
+          + scan_on_push = true
+        }
+    }
+
+  # aws_ecs_cluster.main will be created
+  + resource "aws_ecs_cluster" "main" {
+      + arn      = (known after apply)
+      + id       = (known after apply)
+      + name     = "simple-api-cluster"
+      + tags     = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "Terraform"
+          + "Project"     = "simple-api"
+        }
+      + tags_all = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "Terraform"
+          + "Owner"       = "CapelLuisFelipe"
+          + "Project"     = "simple-api"
+        }
+
+      + setting {
+          + name  = "containerInsights"
+          + value = "disabled"
+        }
+    }
+
+  # aws_ecs_cluster_capacity_providers.main will be created
+  + resource "aws_ecs_cluster_capacity_providers" "main" {
+      + capacity_providers = [
+          + "FARGATE",
+          + "FARGATE_SPOT",
+        ]
+      + cluster_name       = "simple-api-cluster"
+      + id                 = (known after apply)
+
+      + default_capacity_provider_strategy {
+          + base              = 1
+          + capacity_provider = "FARGATE"
+          + weight            = 100
+        }
+    }
+
+  # aws_ecs_service.main will be created
+  + resource "aws_ecs_service" "main" {
+      + availability_zone_rebalancing      = "DISABLED"
+      + cluster                            = (known after apply)
+      + deployment_maximum_percent         = 200
+      + deployment_minimum_healthy_percent = 100
+      + desired_count                      = 1
+      + enable_ecs_managed_tags            = false
+      + enable_execute_command             = false
+      + iam_role                           = (known after apply)
+      + id                                 = (known after apply)
+      + launch_type                        = "FARGATE"
+      + name                               = "simple-api-service"
+      + platform_version                   = (known after apply)
+      + scheduling_strategy                = "REPLICA"
+      + tags                               = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "Terraform"
+          + "Project"     = "simple-api"
+        }
+      + tags_all                           = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "Terraform"
+          + "Owner"       = "CapelLuisFelipe"
+          + "Project"     = "simple-api"
+        }
+      + task_definition                    = (known after apply)
+      + triggers                           = (known after apply)
+      + wait_for_steady_state              = false
+
+      + load_balancer {
+          + container_name   = "simple-api"
+          + container_port   = 3000
+          + target_group_arn = (known after apply)
+            # (1 unchanged attribute hidden)
+        }
+
+      + network_configuration {
+          + assign_public_ip = true
+          + security_groups  = (known after apply)
+          + subnets          = (known after apply)
+        }
+    }
+
+  # aws_ecs_task_definition.main will be created
+  + resource "aws_ecs_task_definition" "main" {
+      + arn                      = (known after apply)
+      + arn_without_revision     = (known after apply)
+      + container_definitions    = (sensitive value)
+      + cpu                      = "256"
+      + enable_fault_injection   = (known after apply)
+      + execution_role_arn       = (known after apply)
+      + family                   = "simple-api"
+      + id                       = (known after apply)
+      + memory                   = "512"
+      + network_mode             = "awsvpc"
+      + requires_compatibilities = [
+          + "FARGATE",
+        ]
+      + revision                 = (known after apply)
+      + skip_destroy             = false
+      + tags                     = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "Terraform"
+          + "Project"     = "simple-api"
+        }
+      + tags_all                 = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "Terraform"
+          + "Owner"       = "CapelLuisFelipe"
+          + "Project"     = "simple-api"
+        }
+      + task_role_arn            = (known after apply)
+      + track_latest             = false
+    }
+
+  # aws_secretsmanager_secret.db_password will be created
+  + resource "aws_secretsmanager_secret" "db_password" {
+      + arn                            = (known after apply)
+      + force_overwrite_replica_secret = false
+      + id                             = (known after apply)
+      + name                           = "simple-api/db-password"
+      + name_prefix                    = (known after apply)
+      + policy                         = (known after apply)
+      + recovery_window_in_days        = 0
+      + tags                           = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "Terraform"
+          + "Project"     = "simple-api"
+        }
+      + tags_all                       = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "Terraform"
+          + "Owner"       = "CapelLuisFelipe"
+          + "Project"     = "simple-api"
+        }
+
+      + replica (known after apply)
+    }
+
+  # aws_secretsmanager_secret_version.db_password will be created
+  + resource "aws_secretsmanager_secret_version" "db_password" {
+      + arn                  = (known after apply)
+      + has_secret_string_wo = (known after apply)
+      + id                   = (known after apply)
+      + secret_id            = (known after apply)
+      + secret_string        = (sensitive value)
+      + secret_string_wo     = (write-only attribute)
+      + version_id           = (known after apply)
+      + version_stages       = (known after apply)
+    }
+
+  # aws_sns_topic.alerts will be created
+  + resource "aws_sns_topic" "alerts" {
+      + arn                         = (known after apply)
+      + beginning_archive_time      = (known after apply)
+      + content_based_deduplication = false
+      + fifo_throughput_scope       = (known after apply)
+      + fifo_topic                  = false
+      + id                          = (known after apply)
+      + name                        = "simple-api-alerts-dev"
+      + name_prefix                 = (known after apply)
+      + owner                       = (known after apply)
+      + policy                      = (known after apply)
+      + signature_version           = (known after apply)
+      + tags                        = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "Terraform"
+          + "Project"     = "simple-api"
+        }
+      + tags_all                    = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "Terraform"
+          + "Owner"       = "CapelLuisFelipe"
+          + "Project"     = "simple-api"
+        }
+      + tracing_config              = (known after apply)
+    }
+
+  # aws_sns_topic_policy.alerts will be created
+  + resource "aws_sns_topic_policy" "alerts" {
+      + arn    = (known after apply)
+      + id     = (known after apply)
+      + owner  = (known after apply)
+      + policy = (known after apply)
+    }
+
+  # aws_sns_topic_subscription.email will be created
+  + resource "aws_sns_topic_subscription" "email" {
+      + arn                             = (known after apply)
+      + confirmation_timeout_in_minutes = 1
+      + confirmation_was_authenticated  = (known after apply)
+      + endpoint                        = "capelluisfelipe@gmail.com"
+      + endpoint_auto_confirms          = false
+      + filter_policy_scope             = (known after apply)
+      + id                              = (known after apply)
+      + owner_id                        = (known after apply)
+      + pending_confirmation            = (known after apply)
+      + protocol                        = "email"
+      + raw_message_delivery            = false
+      + topic_arn                       = (known after apply)
+    }
+
+  # module.alb.aws_lb.main will be created
+  + resource "aws_lb" "main" {
+      + arn                                                          = (known after apply)
+      + arn_suffix                                                   = (known after apply)
+      + client_keep_alive                                            = 3600
+      + desync_mitigation_mode                                       = "defensive"
+      + dns_name                                                     = (known after apply)
+      + drop_invalid_header_fields                                   = false
+      + enable_deletion_protection                                   = false
+      + enable_http2                                                 = true
+      + enable_tls_version_and_cipher_suite_headers                  = false
+      + enable_waf_fail_open                                         = false
+      + enable_xff_client_port                                       = false
+      + enable_zonal_shift                                           = false
+      + enforce_security_group_inbound_rules_on_private_link_traffic = (known after apply)
+      + id                                                           = (known after apply)
+      + idle_timeout                                                 = 60
+      + internal                                                     = false
+      + ip_address_type                                              = (known after apply)
+      + load_balancer_type                                           = "application"
+      + name                                                         = "simple-api-alb"
+      + name_prefix                                                  = (known after apply)
+      + preserve_host_header                                         = false
+      + security_groups                                              = (known after apply)
+      + subnets                                                      = (known after apply)
+      + tags                                                         = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "Terraform"
+          + "Name"        = "simple-api-alb"
+          + "Project"     = "simple-api"
+        }
+      + tags_all                                                     = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "Terraform"
+          + "Name"        = "simple-api-alb"
+          + "Owner"       = "CapelLuisFelipe"
+          + "Project"     = "simple-api"
+        }
+      + vpc_id                                                       = (known after apply)
+      + xff_header_processing_mode                                   = "append"
+      + zone_id                                                      = (known after apply)
+
+      + subnet_mapping (known after apply)
+    }
+
+  # module.alb.aws_lb_listener.main will be created
+  + resource "aws_lb_listener" "main" {
+      + arn                                                                   = (known after apply)
+      + id                                                                    = (known after apply)
+      + load_balancer_arn                                                     = (known after apply)
+      + port                                                                  = 80
+      + protocol                                                              = "HTTP"
+      + routing_http_request_x_amzn_mtls_clientcert_header_name               = (known after apply)
+      + routing_http_request_x_amzn_mtls_clientcert_issuer_header_name        = (known after apply)
+      + routing_http_request_x_amzn_mtls_clientcert_leaf_header_name          = (known after apply)
+      + routing_http_request_x_amzn_mtls_clientcert_serial_number_header_name = (known after apply)
+      + routing_http_request_x_amzn_mtls_clientcert_subject_header_name       = (known after apply)
+      + routing_http_request_x_amzn_mtls_clientcert_validity_header_name      = (known after apply)
+      + routing_http_request_x_amzn_tls_cipher_suite_header_name              = (known after apply)
+      + routing_http_request_x_amzn_tls_version_header_name                   = (known after apply)
+      + routing_http_response_access_control_allow_credentials_header_value   = (known after apply)
+      + routing_http_response_access_control_allow_headers_header_value       = (known after apply)
+      + routing_http_response_access_control_allow_methods_header_value       = (known after apply)
+      + routing_http_response_access_control_allow_origin_header_value        = (known after apply)
+      + routing_http_response_access_control_expose_headers_header_value      = (known after apply)
+      + routing_http_response_access_control_max_age_header_value             = (known after apply)
+      + routing_http_response_content_security_policy_header_value            = (known after apply)
+      + routing_http_response_server_enabled                                  = (known after apply)
+      + routing_http_response_strict_transport_security_header_value          = (known after apply)
+      + routing_http_response_x_content_type_options_header_value             = (known after apply)
+      + routing_http_response_x_frame_options_header_value                    = (known after apply)
+      + ssl_policy                                                            = (known after apply)
+      + tags_all                                                              = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "terraform"
+          + "Owner"       = "CapelLuisFelipe"
+          + "Project"     = "kxc-simple-api"
+        }
+      + tcp_idle_timeout_seconds                                              = (known after apply)
+
+      + default_action {
+          + order            = (known after apply)
+          + target_group_arn = (known after apply)
+          + type             = "forward"
+        }
+
+      + mutual_authentication (known after apply)
+    }
+
+  # module.alb.aws_lb_target_group.main will be created
+  + resource "aws_lb_target_group" "main" {
+      + arn                                = (known after apply)
+      + arn_suffix                         = (known after apply)
+      + connection_termination             = (known after apply)
+      + deregistration_delay               = "300"
+      + id                                 = (known after apply)
+      + ip_address_type                    = (known after apply)
+      + lambda_multi_value_headers_enabled = false
+      + load_balancer_arns                 = (known after apply)
+      + load_balancing_algorithm_type      = (known after apply)
+      + load_balancing_anomaly_mitigation  = (known after apply)
+      + load_balancing_cross_zone_enabled  = (known after apply)
+      + name                               = "simple-api-tg"
+      + name_prefix                        = (known after apply)
+      + port                               = 3000
+      + preserve_client_ip                 = (known after apply)
+      + protocol                           = "HTTP"
+      + protocol_version                   = (known after apply)
+      + proxy_protocol_v2                  = false
+      + slow_start                         = 0
+      + tags                               = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "Terraform"
+          + "Name"        = "simple-api-tg"
+          + "Project"     = "simple-api"
+        }
+      + tags_all                           = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "Terraform"
+          + "Name"        = "simple-api-tg"
+          + "Owner"       = "CapelLuisFelipe"
+          + "Project"     = "simple-api"
+        }
+      + target_type                        = "ip"
+      + vpc_id                             = (known after apply)
+
+      + health_check {
+          + enabled             = true
+          + healthy_threshold   = 2
+          + interval            = 30
+          + matcher             = "200"
+          + path                = "/"
+          + port                = "traffic-port"
+          + protocol            = "HTTP"
+          + timeout             = 3
+          + unhealthy_threshold = 2
+        }
+
+      + stickiness (known after apply)
+
+      + target_failover (known after apply)
+
+      + target_group_health (known after apply)
+
+      + target_health_state (known after apply)
+    }
+
+  # module.cicd.aws_codebuild_project.main will be created
+  + resource "aws_codebuild_project" "main" {
+      + arn                  = (known after apply)
+      + badge_enabled        = false
+      + badge_url            = (known after apply)
+      + build_timeout        = 20
+      + description          = (known after apply)
+      + encryption_key       = (known after apply)
+      + id                   = (known after apply)
+      + name                 = "simple-api-build-dev"
+      + project_visibility   = "PRIVATE"
+      + public_project_alias = (known after apply)
+      + queued_timeout       = 480
+      + service_role         = (known after apply)
+      + tags                 = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "Terraform"
+          + "Project"     = "simple-api"
+        }
+      + tags_all             = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "Terraform"
+          + "Owner"       = "CapelLuisFelipe"
+          + "Project"     = "simple-api"
+        }
+
+      + artifacts {
+          + encryption_disabled    = false
+          + override_artifact_name = false
+          + type                   = "CODEPIPELINE"
+        }
+
+      + environment {
+          + compute_type                = "BUILD_GENERAL1_SMALL"
+          + image                       = "aws/codebuild/standard:7.0"
+          + image_pull_credentials_type = "CODEBUILD"
+          + privileged_mode             = true
+          + type                        = "LINUX_CONTAINER"
+
+          + environment_variable {
+              + name  = "AWS_DEFAULT_REGION"
+              + type  = "PLAINTEXT"
+              + value = "us-east-1"
+            }
+          + environment_variable {
+              + name  = "AWS_ACCOUNT_ID"
+              + type  = "PLAINTEXT"
+              + value = "491085390322"
+            }
+          + environment_variable {
+              + name  = "ECR_REPOSITORY_URI"
+              + type  = "PLAINTEXT"
+              + value = (known after apply)
+            }
+          + environment_variable {
+              + name  = "ECR_REPOSITORY_NAME"
+              + type  = "PLAINTEXT"
+              + value = "simple-api"
+            }
+          + environment_variable {
+              + name  = "ECS_CONTAINER_NAME"
+              + type  = "PLAINTEXT"
+              + value = "simple-api"
+            }
+        }
+
+      + source {
+          + buildspec = "buildspec.yml"
+          + type      = "CODEPIPELINE"
+        }
+    }
+
+  # module.cicd.aws_codebuild_project.terraform will be created
+  + resource "aws_codebuild_project" "terraform" {
+      + arn                  = (known after apply)
+      + badge_enabled        = false
+      + badge_url            = (known after apply)
+      + build_timeout        = 60
+      + description          = (known after apply)
+      + encryption_key       = (known after apply)
+      + id                   = (known after apply)
+      + name                 = "simple-api-terraform-dev"
+      + project_visibility   = "PRIVATE"
+      + public_project_alias = (known after apply)
+      + queued_timeout       = 480
+      + service_role         = (known after apply)
+      + tags                 = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "Terraform"
+          + "Project"     = "simple-api"
+        }
+      + tags_all             = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "Terraform"
+          + "Owner"       = "CapelLuisFelipe"
+          + "Project"     = "simple-api"
+        }
+
+      + artifacts {
+          + encryption_disabled    = false
+          + override_artifact_name = false
+          + type                   = "CODEPIPELINE"
+        }
+
+      + environment {
+          + compute_type                = "BUILD_GENERAL1_SMALL"
+          + image                       = "aws/codebuild/standard:7.0"
+          + image_pull_credentials_type = "CODEBUILD"
+          + privileged_mode             = false
+          + type                        = "LINUX_CONTAINER"
+
+          + environment_variable {
+              + name  = "TF_WORKING_DIR"
+              + type  = "PLAINTEXT"
+              + value = "terraform/environments/dev"
+            }
+          + environment_variable {
+              + name  = "TF_VERSION"
+              + type  = "PLAINTEXT"
+              + value = "1.15.4"
+            }
+        }
+
+      + source {
+          + buildspec = "buildspec-terraform.yml"
+          + type      = "CODEPIPELINE"
+        }
+    }
+
+  # module.cicd.aws_codepipeline.main will be created
+  + resource "aws_codepipeline" "main" {
+      + arn            = (known after apply)
+      + execution_mode = "SUPERSEDED"
+      + id             = (known after apply)
+      + name           = "simple-api-pipeline-dev"
+      + pipeline_type  = "V2"
+      + role_arn       = (known after apply)
+      + tags           = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "Terraform"
+          + "Project"     = "simple-api"
+        }
+      + tags_all       = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "Terraform"
+          + "Owner"       = "CapelLuisFelipe"
+          + "Project"     = "simple-api"
+        }
+      + trigger_all    = (known after apply)
+
+      + artifact_store {
+          + location = "simple-api-pipeline-artifacts-491085390322"
+          + type     = "S3"
+            # (1 unchanged attribute hidden)
+        }
+
+      + stage {
+          + name = "Source"
+
+          + action {
+              + category         = "Source"
+              + configuration    = {
+                  + "BranchName"       = "main"
+                  + "ConnectionArn"    = "arn:aws:codeconnections:us-east-1:491085390322:connection/7dac355b-faae-4fa1-9c0e-b59c76096dbf"
+                  + "FullRepositoryId" = "CapelLuisFelipe/simple-api"
+                }
+              + name             = "Source"
+              + output_artifacts = [
+                  + "source_output",
+                ]
+              + owner            = "AWS"
+              + provider         = "CodeStarSourceConnection"
+              + region           = (known after apply)
+              + run_order        = (known after apply)
+              + version          = "1"
+            }
+        }
+      + stage {
+          + name = "Build"
+
+          + action {
+              + category         = "Build"
+              + configuration    = {
+                  + "ProjectName" = "simple-api-build-dev"
+                }
+              + input_artifacts  = [
+                  + "source_output",
+                ]
+              + name             = "Build"
+              + output_artifacts = [
+                  + "build_output",
+                ]
+              + owner            = "AWS"
+              + provider         = "CodeBuild"
+              + region           = (known after apply)
+              + run_order        = (known after apply)
+              + version          = "1"
+            }
+        }
+      + stage {
+          + name = "Deploy"
+
+          + action {
+              + category        = "Deploy"
+              + configuration   = {
+                  + "ClusterName" = "simple-api-cluster"
+                  + "FileName"    = "imagedefinitions.json"
+                  + "ServiceName" = "simple-api-service"
+                }
+              + input_artifacts = [
+                  + "build_output",
+                ]
+              + name            = "Deploy"
+              + owner           = "AWS"
+              + provider        = "ECS"
+              + region          = (known after apply)
+              + run_order       = (known after apply)
+              + version         = "1"
+            }
+        }
+
+      + trigger {
+          + provider_type = "CodeStarSourceConnection"
+
+          + git_configuration {
+              + source_action_name = "Source"
+
+              + push {
+                  + branches {
+                      + includes = [
+                          + "main",
+                        ]
+                    }
+                  + file_paths {
+                      + includes = [
+                          + "src/**",
+                          + "public/**",
+                          + "Dockerfile",
+                          + "buildspec.yml",
+                          + "package*.json",
+                        ]
+                    }
+                }
+            }
+        }
+    }
+
+  # module.cicd.aws_codepipeline.terraform will be created
+  + resource "aws_codepipeline" "terraform" {
+      + arn            = (known after apply)
+      + execution_mode = "SUPERSEDED"
+      + id             = (known after apply)
+      + name           = "simple-api-terraform-pipeline-dev"
+      + pipeline_type  = "V2"
+      + role_arn       = (known after apply)
+      + tags           = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "Terraform"
+          + "Project"     = "simple-api"
+        }
+      + tags_all       = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "Terraform"
+          + "Owner"       = "CapelLuisFelipe"
+          + "Project"     = "simple-api"
+        }
+      + trigger_all    = (known after apply)
+
+      + artifact_store {
+          + location = "simple-api-pipeline-artifacts-491085390322"
+          + type     = "S3"
+            # (1 unchanged attribute hidden)
+        }
+
+      + stage {
+          + name = "Source"
+
+          + action {
+              + category         = "Source"
+              + configuration    = {
+                  + "BranchName"       = "main"
+                  + "ConnectionArn"    = "arn:aws:codeconnections:us-east-1:491085390322:connection/7dac355b-faae-4fa1-9c0e-b59c76096dbf"
+                  + "FullRepositoryId" = "CapelLuisFelipe/simple-api"
+                }
+              + name             = "Source"
+              + output_artifacts = [
+                  + "source_output",
+                ]
+              + owner            = "AWS"
+              + provider         = "CodeStarSourceConnection"
+              + region           = (known after apply)
+              + run_order        = (known after apply)
+              + version          = "1"
+            }
+        }
+      + stage {
+          + name = "Terraform"
+
+          + action {
+              + category         = "Build"
+              + configuration    = {
+                  + "ProjectName" = "simple-api-terraform-dev"
+                }
+              + input_artifacts  = [
+                  + "source_output",
+                ]
+              + name             = "Plan-and-Apply"
+              + output_artifacts = [
+                  + "tf_output",
+                ]
+              + owner            = "AWS"
+              + provider         = "CodeBuild"
+              + region           = (known after apply)
+              + run_order        = (known after apply)
+              + version          = "1"
+            }
+        }
+
+      + trigger {
+          + provider_type = "CodeStarSourceConnection"
+
+          + git_configuration {
+              + source_action_name = "Source"
+
+              + push {
+                  + branches {
+                      + includes = [
+                          + "main",
+                        ]
+                    }
+                  + file_paths {
+                      + includes = [
+                          + "terraform/**",
+                        ]
+                    }
+                }
+            }
+        }
+    }
+
+  # module.cicd.aws_iam_role.codebuild will be created
+  + resource "aws_iam_role" "codebuild" {
+      + arn                   = (known after apply)
+      + assume_role_policy    = jsonencode(
+            {
+              + Statement = [
+                  + {
+                      + Action    = "sts:AssumeRole"
+                      + Effect    = "Allow"
+                      + Principal = {
+                          + Service = "codebuild.amazonaws.com"
+                        }
+                    },
+                ]
+              + Version   = "2012-10-17"
+            }
+        )
+      + create_date           = (known after apply)
+      + force_detach_policies = false
+      + id                    = (known after apply)
+      + managed_policy_arns   = (known after apply)
+      + max_session_duration  = 3600
+      + name                  = "simple-api-codebuild-dev"
+      + name_prefix           = (known after apply)
+      + path                  = "/"
+      + tags                  = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "Terraform"
+          + "Project"     = "simple-api"
+        }
+      + tags_all              = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "Terraform"
+          + "Owner"       = "CapelLuisFelipe"
+          + "Project"     = "simple-api"
+        }
+      + unique_id             = (known after apply)
+
+      + inline_policy (known after apply)
+    }
+
+  # module.cicd.aws_iam_role.codebuild_terraform will be created
+  + resource "aws_iam_role" "codebuild_terraform" {
+      + arn                   = (known after apply)
+      + assume_role_policy    = jsonencode(
+            {
+              + Statement = [
+                  + {
+                      + Action    = "sts:AssumeRole"
+                      + Effect    = "Allow"
+                      + Principal = {
+                          + Service = "codebuild.amazonaws.com"
+                        }
+                    },
+                ]
+              + Version   = "2012-10-17"
+            }
+        )
+      + create_date           = (known after apply)
+      + force_detach_policies = false
+      + id                    = (known after apply)
+      + managed_policy_arns   = (known after apply)
+      + max_session_duration  = 3600
+      + name                  = "simple-api-codebuild-terraform-dev"
+      + name_prefix           = (known after apply)
+      + path                  = "/"
+      + tags                  = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "Terraform"
+          + "Project"     = "simple-api"
+        }
+      + tags_all              = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "Terraform"
+          + "Owner"       = "CapelLuisFelipe"
+          + "Project"     = "simple-api"
+        }
+      + unique_id             = (known after apply)
+
+      + inline_policy (known after apply)
+    }
+
+  # module.cicd.aws_iam_role.codepipeline will be created
+  + resource "aws_iam_role" "codepipeline" {
+      + arn                   = (known after apply)
+      + assume_role_policy    = jsonencode(
+            {
+              + Statement = [
+                  + {
+                      + Action    = "sts:AssumeRole"
+                      + Effect    = "Allow"
+                      + Principal = {
+                          + Service = "codepipeline.amazonaws.com"
+                        }
+                    },
+                ]
+              + Version   = "2012-10-17"
+            }
+        )
+      + create_date           = (known after apply)
+      + force_detach_policies = false
+      + id                    = (known after apply)
+      + managed_policy_arns   = (known after apply)
+      + max_session_duration  = 3600
+      + name                  = "simple-api-codepipeline-dev"
+      + name_prefix           = (known after apply)
+      + path                  = "/"
+      + tags                  = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "Terraform"
+          + "Project"     = "simple-api"
+        }
+      + tags_all              = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "Terraform"
+          + "Owner"       = "CapelLuisFelipe"
+          + "Project"     = "simple-api"
+        }
+      + unique_id             = (known after apply)
+
+      + inline_policy (known after apply)
+    }
+
+  # module.cicd.aws_iam_role_policy.codebuild will be created
+  + resource "aws_iam_role_policy" "codebuild" {
+      + id          = (known after apply)
+      + name        = "codebuild-policy"
+      + name_prefix = (known after apply)
+      + policy      = (known after apply)
+      + role        = (known after apply)
+    }
+
+  # module.cicd.aws_iam_role_policy.codebuild_terraform will be created
+  + resource "aws_iam_role_policy" "codebuild_terraform" {
+      + id          = (known after apply)
+      + name        = "codebuild-terraform-policy"
+      + name_prefix = (known after apply)
+      + policy      = (known after apply)
+      + role        = (known after apply)
+    }
+
+  # module.cicd.aws_iam_role_policy.codepipeline will be created
+  + resource "aws_iam_role_policy" "codepipeline" {
+      + id          = (known after apply)
+      + name        = "codepipeline-policy"
+      + name_prefix = (known after apply)
+      + policy      = (known after apply)
+      + role        = (known after apply)
+    }
+
+  # module.cicd.aws_s3_bucket.artifacts will be created
+  + resource "aws_s3_bucket" "artifacts" {
+      + acceleration_status         = (known after apply)
+      + acl                         = (known after apply)
+      + arn                         = (known after apply)
+      + bucket                      = "simple-api-pipeline-artifacts-491085390322"
+      + bucket_domain_name          = (known after apply)
+      + bucket_prefix               = (known after apply)
+      + bucket_regional_domain_name = (known after apply)
+      + force_destroy               = true
+      + hosted_zone_id              = (known after apply)
+      + id                          = (known after apply)
+      + object_lock_enabled         = (known after apply)
+      + policy                      = (known after apply)
+      + region                      = (known after apply)
+      + request_payer               = (known after apply)
+      + tags                        = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "Terraform"
+          + "Project"     = "simple-api"
+        }
+      + tags_all                    = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "Terraform"
+          + "Owner"       = "CapelLuisFelipe"
+          + "Project"     = "simple-api"
+        }
+      + website_domain              = (known after apply)
+      + website_endpoint            = (known after apply)
+
+      + cors_rule (known after apply)
+
+      + grant (known after apply)
+
+      + lifecycle_rule (known after apply)
+
+      + logging (known after apply)
+
+      + object_lock_configuration (known after apply)
+
+      + replication_configuration (known after apply)
+
+      + server_side_encryption_configuration (known after apply)
+
+      + versioning (known after apply)
+
+      + website (known after apply)
+    }
+
+  # module.cicd.aws_s3_bucket_public_access_block.artifacts will be created
+  + resource "aws_s3_bucket_public_access_block" "artifacts" {
+      + block_public_acls       = true
+      + block_public_policy     = true
+      + bucket                  = (known after apply)
+      + id                      = (known after apply)
+      + ignore_public_acls      = true
+      + restrict_public_buckets = true
+    }
+
+  # module.cicd.aws_s3_bucket_server_side_encryption_configuration.artifacts will be created
+  + resource "aws_s3_bucket_server_side_encryption_configuration" "artifacts" {
+      + bucket = (known after apply)
+      + id     = (known after apply)
+
+      + rule {
+          + apply_server_side_encryption_by_default {
+              + sse_algorithm     = "AES256"
+                # (1 unchanged attribute hidden)
+            }
+        }
+    }
+
+  # module.cicd.aws_s3_bucket_versioning.artifacts will be created
+  + resource "aws_s3_bucket_versioning" "artifacts" {
+      + bucket = (known after apply)
+      + id     = (known after apply)
+
+      + versioning_configuration {
+          + mfa_delete = (known after apply)
+          + status     = "Enabled"
+        }
+    }
+
+  # module.iam.aws_iam_role.ecs_task will be created
+  + resource "aws_iam_role" "ecs_task" {
+      + arn                   = (known after apply)
+      + assume_role_policy    = jsonencode(
+            {
+              + Statement = [
+                  + {
+                      + Action    = "sts:AssumeRole"
+                      + Effect    = "Allow"
+                      + Principal = {
+                          + Service = "ecs-tasks.amazonaws.com"
+                        }
+                    },
+                ]
+              + Version   = "2012-10-17"
+            }
+        )
+      + create_date           = (known after apply)
+      + force_detach_policies = false
+      + id                    = (known after apply)
+      + managed_policy_arns   = (known after apply)
+      + max_session_duration  = 3600
+      + name                  = "simple-api-ecs-task-dev"
+      + name_prefix           = (known after apply)
+      + path                  = "/"
+      + tags                  = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "Terraform"
+          + "Project"     = "simple-api"
+        }
+      + tags_all              = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "Terraform"
+          + "Owner"       = "CapelLuisFelipe"
+          + "Project"     = "simple-api"
+        }
+      + unique_id             = (known after apply)
+
+      + inline_policy (known after apply)
+    }
+
+  # module.iam.aws_iam_role.ecs_task_execution will be created
+  + resource "aws_iam_role" "ecs_task_execution" {
+      + arn                   = (known after apply)
+      + assume_role_policy    = jsonencode(
+            {
+              + Statement = [
+                  + {
+                      + Action    = "sts:AssumeRole"
+                      + Effect    = "Allow"
+                      + Principal = {
+                          + Service = "ecs-tasks.amazonaws.com"
+                        }
+                    },
+                ]
+              + Version   = "2012-10-17"
+            }
+        )
+      + create_date           = (known after apply)
+      + force_detach_policies = false
+      + id                    = (known after apply)
+      + managed_policy_arns   = (known after apply)
+      + max_session_duration  = 3600
+      + name                  = "simple-api-ecs-task-execution-dev"
+      + name_prefix           = (known after apply)
+      + path                  = "/"
+      + tags                  = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "Terraform"
+          + "Project"     = "simple-api"
+        }
+      + tags_all              = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "Terraform"
+          + "Owner"       = "CapelLuisFelipe"
+          + "Project"     = "simple-api"
+        }
+      + unique_id             = (known after apply)
+
+      + inline_policy (known after apply)
+    }
+
+  # module.iam.aws_iam_role_policy.ecs_task_execution_secrets will be created
+  + resource "aws_iam_role_policy" "ecs_task_execution_secrets" {
+      + id          = (known after apply)
+      + name        = "allow-secrets-manager"
+      + name_prefix = (known after apply)
+      + policy      = jsonencode(
+            {
+              + Statement = [
+                  + {
+                      + Action   = [
+                          + "secretsmanager:GetSecretValue",
+                        ]
+                      + Effect   = "Allow"
+                      + Resource = "*"
+                    },
+                ]
+              + Version   = "2012-10-17"
+            }
+        )
+      + role        = (known after apply)
+    }
+
+  # module.iam.aws_iam_role_policy.ecs_task_observability will be created
+  + resource "aws_iam_role_policy" "ecs_task_observability" {
+      + id          = (known after apply)
+      + name        = "observability"
+      + name_prefix = (known after apply)
+      + policy      = jsonencode(
+            {
+              + Statement = [
+                  + {
+                      + Action   = [
+                          + "ecs:DescribeServices",
+                          + "ecs:ListTasks",
+                          + "ecs:DescribeTasks",
+                        ]
+                      + Effect   = "Allow"
+                      + Resource = "*"
+                    },
+                  + {
+                      + Action   = [
+                          + "application-autoscaling:DescribeScalingActivities",
+                        ]
+                      + Effect   = "Allow"
+                      + Resource = "*"
+                    },
+                  + {
+                      + Action   = [
+                          + "cloudwatch:DescribeAlarmHistory",
+                          + "cloudwatch:DescribeAlarms",
+                        ]
+                      + Effect   = "Allow"
+                      + Resource = "*"
+                    },
+                ]
+              + Version   = "2012-10-17"
+            }
+        )
+      + role        = (known after apply)
+    }
+
+  # module.iam.aws_iam_role_policy_attachment.ecs_task_execution will be created
+  + resource "aws_iam_role_policy_attachment" "ecs_task_execution" {
+      + id         = (known after apply)
+      + policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
+      + role       = "simple-api-ecs-task-execution-dev"
+    }
+
+  # module.network.aws_internet_gateway.main will be created
+  + resource "aws_internet_gateway" "main" {
+      + arn      = (known after apply)
+      + id       = (known after apply)
+      + owner_id = (known after apply)
+      + tags     = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "Terraform"
+          + "Name"        = "simple-api-igw"
+          + "Project"     = "simple-api"
+        }
+      + tags_all = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "Terraform"
+          + "Name"        = "simple-api-igw"
+          + "Owner"       = "CapelLuisFelipe"
+          + "Project"     = "simple-api"
+        }
+      + vpc_id   = (known after apply)
+    }
+
+  # module.network.aws_route.public will be created
+  + resource "aws_route" "public" {
+      + destination_cidr_block = "0.0.0.0/0"
+      + gateway_id             = (known after apply)
+      + id                     = (known after apply)
+      + instance_id            = (known after apply)
+      + instance_owner_id      = (known after apply)
+      + network_interface_id   = (known after apply)
+      + origin                 = (known after apply)
+      + route_table_id         = (known after apply)
+      + state                  = (known after apply)
+    }
+
+  # module.network.aws_route_table.private[0] will be created
+  + resource "aws_route_table" "private" {
+      + arn              = (known after apply)
+      + id               = (known after apply)
+      + owner_id         = (known after apply)
+      + propagating_vgws = (known after apply)
+      + route            = (known after apply)
+      + tags             = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "Terraform"
+          + "Name"        = "simple-api-private-rt-1"
+          + "Project"     = "simple-api"
+        }
+      + tags_all         = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "Terraform"
+          + "Name"        = "simple-api-private-rt-1"
+          + "Owner"       = "CapelLuisFelipe"
+          + "Project"     = "simple-api"
+        }
+      + vpc_id           = (known after apply)
+    }
+
+  # module.network.aws_route_table.public will be created
+  + resource "aws_route_table" "public" {
+      + arn              = (known after apply)
+      + id               = (known after apply)
+      + owner_id         = (known after apply)
+      + propagating_vgws = (known after apply)
+      + route            = (known after apply)
+      + tags             = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "Terraform"
+          + "Name"        = "simple-api-public-rt"
+          + "Project"     = "simple-api"
+        }
+      + tags_all         = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "Terraform"
+          + "Name"        = "simple-api-public-rt"
+          + "Owner"       = "CapelLuisFelipe"
+          + "Project"     = "simple-api"
+        }
+      + vpc_id           = (known after apply)
+    }
+
+  # module.network.aws_route_table_association.private[0] will be created
+  + resource "aws_route_table_association" "private" {
+      + id             = (known after apply)
+      + route_table_id = (known after apply)
+      + subnet_id      = (known after apply)
+    }
+
+  # module.network.aws_route_table_association.private[1] will be created
+  + resource "aws_route_table_association" "private" {
+      + id             = (known after apply)
+      + route_table_id = (known after apply)
+      + subnet_id      = (known after apply)
+    }
+
+  # module.network.aws_route_table_association.public[0] will be created
+  + resource "aws_route_table_association" "public" {
+      + id             = (known after apply)
+      + route_table_id = (known after apply)
+      + subnet_id      = (known after apply)
+    }
+
+  # module.network.aws_route_table_association.public[1] will be created
+  + resource "aws_route_table_association" "public" {
+      + id             = (known after apply)
+      + route_table_id = (known after apply)
+      + subnet_id      = (known after apply)
+    }
+
+  # module.network.aws_subnet.private[0] will be created
+  + resource "aws_subnet" "private" {
+      + arn                                            = (known after apply)
+      + assign_ipv6_address_on_creation                = false
+      + availability_zone                              = "us-east-1a"
+      + availability_zone_id                           = (known after apply)
+      + cidr_block                                     = "10.0.11.0/24"
+      + enable_dns64                                   = false
+      + enable_resource_name_dns_a_record_on_launch    = false
+      + enable_resource_name_dns_aaaa_record_on_launch = false
+      + id                                             = (known after apply)
+      + ipv6_cidr_block_association_id                 = (known after apply)
+      + ipv6_native                                    = false
+      + map_public_ip_on_launch                        = false
+      + owner_id                                       = (known after apply)
+      + private_dns_hostname_type_on_launch            = (known after apply)
+      + tags                                           = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "Terraform"
+          + "Name"        = "simple-api-private-subnet-1"
+          + "Project"     = "simple-api"
+        }
+      + tags_all                                       = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "Terraform"
+          + "Name"        = "simple-api-private-subnet-1"
+          + "Owner"       = "CapelLuisFelipe"
+          + "Project"     = "simple-api"
+        }
+      + vpc_id                                         = (known after apply)
+    }
+
+  # module.network.aws_subnet.private[1] will be created
+  + resource "aws_subnet" "private" {
+      + arn                                            = (known after apply)
+      + assign_ipv6_address_on_creation                = false
+      + availability_zone                              = "us-east-1b"
+      + availability_zone_id                           = (known after apply)
+      + cidr_block                                     = "10.0.12.0/24"
+      + enable_dns64                                   = false
+      + enable_resource_name_dns_a_record_on_launch    = false
+      + enable_resource_name_dns_aaaa_record_on_launch = false
+      + id                                             = (known after apply)
+      + ipv6_cidr_block_association_id                 = (known after apply)
+      + ipv6_native                                    = false
+      + map_public_ip_on_launch                        = false
+      + owner_id                                       = (known after apply)
+      + private_dns_hostname_type_on_launch            = (known after apply)
+      + tags                                           = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "Terraform"
+          + "Name"        = "simple-api-private-subnet-2"
+          + "Project"     = "simple-api"
+        }
+      + tags_all                                       = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "Terraform"
+          + "Name"        = "simple-api-private-subnet-2"
+          + "Owner"       = "CapelLuisFelipe"
+          + "Project"     = "simple-api"
+        }
+      + vpc_id                                         = (known after apply)
+    }
+
+  # module.network.aws_subnet.public[0] will be created
+  + resource "aws_subnet" "public" {
+      + arn                                            = (known after apply)
+      + assign_ipv6_address_on_creation                = false
+      + availability_zone                              = "us-east-1a"
+      + availability_zone_id                           = (known after apply)
+      + cidr_block                                     = "10.0.1.0/24"
+      + enable_dns64                                   = false
+      + enable_resource_name_dns_a_record_on_launch    = false
+      + enable_resource_name_dns_aaaa_record_on_launch = false
+      + id                                             = (known after apply)
+      + ipv6_cidr_block_association_id                 = (known after apply)
+      + ipv6_native                                    = false
+      + map_public_ip_on_launch                        = true
+      + owner_id                                       = (known after apply)
+      + private_dns_hostname_type_on_launch            = (known after apply)
+      + tags                                           = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "Terraform"
+          + "Name"        = "simple-api-public-subnet-1"
+          + "Project"     = "simple-api"
+        }
+      + tags_all                                       = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "Terraform"
+          + "Name"        = "simple-api-public-subnet-1"
+          + "Owner"       = "CapelLuisFelipe"
+          + "Project"     = "simple-api"
+        }
+      + vpc_id                                         = (known after apply)
+    }
+
+  # module.network.aws_subnet.public[1] will be created
+  + resource "aws_subnet" "public" {
+      + arn                                            = (known after apply)
+      + assign_ipv6_address_on_creation                = false
+      + availability_zone                              = "us-east-1b"
+      + availability_zone_id                           = (known after apply)
+      + cidr_block                                     = "10.0.2.0/24"
+      + enable_dns64                                   = false
+      + enable_resource_name_dns_a_record_on_launch    = false
+      + enable_resource_name_dns_aaaa_record_on_launch = false
+      + id                                             = (known after apply)
+      + ipv6_cidr_block_association_id                 = (known after apply)
+      + ipv6_native                                    = false
+      + map_public_ip_on_launch                        = true
+      + owner_id                                       = (known after apply)
+      + private_dns_hostname_type_on_launch            = (known after apply)
+      + tags                                           = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "Terraform"
+          + "Name"        = "simple-api-public-subnet-2"
+          + "Project"     = "simple-api"
+        }
+      + tags_all                                       = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "Terraform"
+          + "Name"        = "simple-api-public-subnet-2"
+          + "Owner"       = "CapelLuisFelipe"
+          + "Project"     = "simple-api"
+        }
+      + vpc_id                                         = (known after apply)
+    }
+
+  # module.network.aws_vpc.main will be created
+  + resource "aws_vpc" "main" {
+      + arn                                  = (known after apply)
+      + cidr_block                           = "10.0.0.0/16"
+      + default_network_acl_id               = (known after apply)
+      + default_route_table_id               = (known after apply)
+      + default_security_group_id            = (known after apply)
+      + dhcp_options_id                      = (known after apply)
+      + enable_dns_hostnames                 = true
+      + enable_dns_support                   = true
+      + enable_network_address_usage_metrics = (known after apply)
+      + id                                   = (known after apply)
+      + instance_tenancy                     = "default"
+      + ipv6_association_id                  = (known after apply)
+      + ipv6_cidr_block                      = (known after apply)
+      + ipv6_cidr_block_network_border_group = (known after apply)
+      + main_route_table_id                  = (known after apply)
+      + owner_id                             = (known after apply)
+      + tags                                 = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "Terraform"
+          + "Name"        = "simple-api-vpc"
+          + "Project"     = "simple-api"
+        }
+      + tags_all                             = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "Terraform"
+          + "Name"        = "simple-api-vpc"
+          + "Owner"       = "CapelLuisFelipe"
+          + "Project"     = "simple-api"
+        }
+    }
+
+  # module.rds.aws_db_instance.main will be created
+  + resource "aws_db_instance" "main" {
+      + address                               = (known after apply)
+      + allocated_storage                     = 20
+      + apply_immediately                     = false
+      + arn                                   = (known after apply)
+      + auto_minor_version_upgrade            = true
+      + availability_zone                     = (known after apply)
+      + backup_retention_period               = 7
+      + backup_target                         = (known after apply)
+      + backup_window                         = (known after apply)
+      + ca_cert_identifier                    = (known after apply)
+      + character_set_name                    = (known after apply)
+      + copy_tags_to_snapshot                 = false
+      + database_insights_mode                = (known after apply)
+      + db_name                               = "simple_api"
+      + db_subnet_group_name                  = "simple-api-db-subnet-group"
+      + dedicated_log_volume                  = false
+      + delete_automated_backups              = true
+      + deletion_protection                   = false
+      + domain_fqdn                           = (known after apply)
+      + enabled_cloudwatch_logs_exports       = [
+          + "postgresql",
+        ]
+      + endpoint                              = (known after apply)
+      + engine                                = "postgres"
+      + engine_lifecycle_support              = (known after apply)
+      + engine_version                        = "15.18"
+      + engine_version_actual                 = (known after apply)
+      + hosted_zone_id                        = (known after apply)
+      + id                                    = (known after apply)
+      + identifier                            = "simple-api-db"
+      + identifier_prefix                     = (known after apply)
+      + instance_class                        = "db.t3.micro"
+      + iops                                  = (known after apply)
+      + kms_key_id                            = (known after apply)
+      + latest_restorable_time                = (known after apply)
+      + license_model                         = (known after apply)
+      + listener_endpoint                     = (known after apply)
+      + maintenance_window                    = (known after apply)
+      + master_user_secret                    = (known after apply)
+      + master_user_secret_kms_key_id         = (known after apply)
+      + monitoring_interval                   = 0
+      + monitoring_role_arn                   = (known after apply)
+      + multi_az                              = false
+      + nchar_character_set_name              = (known after apply)
+      + network_type                          = (known after apply)
+      + option_group_name                     = (known after apply)
+      + parameter_group_name                  = "simple-api-db-pg"
+      + password                              = (sensitive value)
+      + password_wo                           = (write-only attribute)
+      + performance_insights_enabled          = true
+      + performance_insights_kms_key_id       = (known after apply)
+      + performance_insights_retention_period = 7
+      + port                                  = (known after apply)
+      + publicly_accessible                   = false
+      + replica_mode                          = (known after apply)
+      + replicas                              = (known after apply)
+      + resource_id                           = (known after apply)
+      + skip_final_snapshot                   = true
+      + snapshot_identifier                   = (known after apply)
+      + status                                = (known after apply)
+      + storage_encrypted                     = true
+      + storage_throughput                    = (known after apply)
+      + storage_type                          = (known after apply)
+      + tags                                  = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "Terraform"
+          + "Name"        = "simple-api-db"
+          + "Project"     = "simple-api"
+        }
+      + tags_all                              = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "Terraform"
+          + "Name"        = "simple-api-db"
+          + "Owner"       = "CapelLuisFelipe"
+          + "Project"     = "simple-api"
+        }
+      + timezone                              = (known after apply)
+      + username                              = (sensitive value)
+      + vpc_security_group_ids                = (known after apply)
+    }
+
+  # module.rds.aws_db_parameter_group.main will be created
+  + resource "aws_db_parameter_group" "main" {
+      + arn          = (known after apply)
+      + description  = "Managed by Terraform"
+      + family       = "postgres15"
+      + id           = (known after apply)
+      + name         = "simple-api-db-pg"
+      + name_prefix  = (known after apply)
+      + skip_destroy = false
+      + tags         = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "Terraform"
+          + "Name"        = "simple-api-db-pg"
+          + "Project"     = "simple-api"
+        }
+      + tags_all     = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "Terraform"
+          + "Name"        = "simple-api-db-pg"
+          + "Owner"       = "CapelLuisFelipe"
+          + "Project"     = "simple-api"
+        }
+
+      + parameter {
+          + apply_method = "immediate"
+          + name         = "rds.force_ssl"
+          + value        = "0"
+        }
+    }
+
+  # module.rds.aws_db_subnet_group.main will be created
+  + resource "aws_db_subnet_group" "main" {
+      + arn                     = (known after apply)
+      + description             = "Managed by Terraform"
+      + id                      = (known after apply)
+      + name                    = "simple-api-db-subnet-group"
+      + name_prefix             = (known after apply)
+      + subnet_ids              = (known after apply)
+      + supported_network_types = (known after apply)
+      + tags                    = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "Terraform"
+          + "Name"        = "simple-api-db-subnet-group"
+          + "Project"     = "simple-api"
+        }
+      + tags_all                = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "Terraform"
+          + "Name"        = "simple-api-db-subnet-group"
+          + "Owner"       = "CapelLuisFelipe"
+          + "Project"     = "simple-api"
+        }
+      + vpc_id                  = (known after apply)
+    }
+
+  # module.security.aws_security_group.alb will be created
+  + resource "aws_security_group" "alb" {
+      + arn                    = (known after apply)
+      + description            = "Security group for ALB"
+      + egress                 = (known after apply)
+      + id                     = (known after apply)
+      + ingress                = (known after apply)
+      + name                   = "simple-api-alb-sg"
+      + name_prefix            = (known after apply)
+      + owner_id               = (known after apply)
+      + revoke_rules_on_delete = false
+      + tags                   = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "Terraform"
+          + "Name"        = "simple-api-alb-sg"
+          + "Project"     = "simple-api"
+        }
+      + tags_all               = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "Terraform"
+          + "Name"        = "simple-api-alb-sg"
+          + "Owner"       = "CapelLuisFelipe"
+          + "Project"     = "simple-api"
+        }
+      + vpc_id                 = (known after apply)
+    }
+
+  # module.security.aws_security_group.ecs will be created
+  + resource "aws_security_group" "ecs" {
+      + arn                    = (known after apply)
+      + description            = "Security group for ECS tasks"
+      + egress                 = (known after apply)
+      + id                     = (known after apply)
+      + ingress                = (known after apply)
+      + name                   = "simple-api-ecs-sg"
+      + name_prefix            = (known after apply)
+      + owner_id               = (known after apply)
+      + revoke_rules_on_delete = false
+      + tags                   = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "Terraform"
+          + "Name"        = "simple-api-ecs-sg"
+          + "Project"     = "simple-api"
+        }
+      + tags_all               = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "Terraform"
+          + "Name"        = "simple-api-ecs-sg"
+          + "Owner"       = "CapelLuisFelipe"
+          + "Project"     = "simple-api"
+        }
+      + vpc_id                 = (known after apply)
+    }
+
+  # module.security.aws_security_group.rds will be created
+  + resource "aws_security_group" "rds" {
+      + arn                    = (known after apply)
+      + description            = "Security group for RDS database"
+      + egress                 = (known after apply)
+      + id                     = (known after apply)
+      + ingress                = (known after apply)
+      + name                   = "simple-api-rds-sg"
+      + name_prefix            = (known after apply)
+      + owner_id               = (known after apply)
+      + revoke_rules_on_delete = false
+      + tags                   = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "Terraform"
+          + "Name"        = "simple-api-rds-sg"
+          + "Project"     = "simple-api"
+        }
+      + tags_all               = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "Terraform"
+          + "Name"        = "simple-api-rds-sg"
+          + "Owner"       = "CapelLuisFelipe"
+          + "Project"     = "simple-api"
+        }
+      + vpc_id                 = (known after apply)
+    }
+
+  # module.security.aws_vpc_security_group_egress_rule.alb_all will be created
+  + resource "aws_vpc_security_group_egress_rule" "alb_all" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "0.0.0.0/0"
+      + from_port              = -1
+      + id                     = (known after apply)
+      + ip_protocol            = "-1"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags                   = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "Terraform"
+          + "Name"        = "allow-all-outbound"
+          + "Project"     = "simple-api"
+        }
+      + tags_all               = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "Terraform"
+          + "Name"        = "allow-all-outbound"
+          + "Owner"       = "CapelLuisFelipe"
+          + "Project"     = "simple-api"
+        }
+      + to_port                = -1
+    }
+
+  # module.security.aws_vpc_security_group_egress_rule.ecs_all will be created
+  + resource "aws_vpc_security_group_egress_rule" "ecs_all" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "0.0.0.0/0"
+      + from_port              = -1
+      + id                     = (known after apply)
+      + ip_protocol            = "-1"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags                   = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "Terraform"
+          + "Name"        = "allow-all-outbound"
+          + "Project"     = "simple-api"
+        }
+      + tags_all               = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "Terraform"
+          + "Name"        = "allow-all-outbound"
+          + "Owner"       = "CapelLuisFelipe"
+          + "Project"     = "simple-api"
+        }
+      + to_port                = -1
+    }
+
+  # module.security.aws_vpc_security_group_egress_rule.rds_all will be created
+  + resource "aws_vpc_security_group_egress_rule" "rds_all" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "0.0.0.0/0"
+      + from_port              = -1
+      + id                     = (known after apply)
+      + ip_protocol            = "-1"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags                   = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "Terraform"
+          + "Name"        = "allow-all-outbound"
+          + "Project"     = "simple-api"
+        }
+      + tags_all               = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "Terraform"
+          + "Name"        = "allow-all-outbound"
+          + "Owner"       = "CapelLuisFelipe"
+          + "Project"     = "simple-api"
+        }
+      + to_port                = -1
+    }
+
+  # module.security.aws_vpc_security_group_ingress_rule.alb_http will be created
+  + resource "aws_vpc_security_group_ingress_rule" "alb_http" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "0.0.0.0/0"
+      + from_port              = 80
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags                   = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "Terraform"
+          + "Name"        = "allow-http"
+          + "Project"     = "simple-api"
+        }
+      + tags_all               = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "Terraform"
+          + "Name"        = "allow-http"
+          + "Owner"       = "CapelLuisFelipe"
+          + "Project"     = "simple-api"
+        }
+      + to_port                = 80
+    }
+
+  # module.security.aws_vpc_security_group_ingress_rule.ecs_from_alb will be created
+  + resource "aws_vpc_security_group_ingress_rule" "ecs_from_alb" {
+      + arn                          = (known after apply)
+      + from_port                    = 3000
+      + id                           = (known after apply)
+      + ip_protocol                  = "tcp"
+      + referenced_security_group_id = (known after apply)
+      + security_group_id            = (known after apply)
+      + security_group_rule_id       = (known after apply)
+      + tags                         = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "Terraform"
+          + "Name"        = "allow-from-alb"
+          + "Project"     = "simple-api"
+        }
+      + tags_all                     = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "Terraform"
+          + "Name"        = "allow-from-alb"
+          + "Owner"       = "CapelLuisFelipe"
+          + "Project"     = "simple-api"
+        }
+      + to_port                      = 3000
+    }
+
+  # module.security.aws_vpc_security_group_ingress_rule.rds_from_ecs will be created
+  + resource "aws_vpc_security_group_ingress_rule" "rds_from_ecs" {
+      + arn                          = (known after apply)
+      + from_port                    = 5432
+      + id                           = (known after apply)
+      + ip_protocol                  = "tcp"
+      + referenced_security_group_id = (known after apply)
+      + security_group_id            = (known after apply)
+      + security_group_rule_id       = (known after apply)
+      + tags                         = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "Terraform"
+          + "Name"        = "allow-from-ecs"
+          + "Project"     = "simple-api"
+        }
+      + tags_all                     = {
+          + "Environment" = "dev"
+          + "ManagedBy"   = "Terraform"
+          + "Name"        = "allow-from-ecs"
+          + "Owner"       = "CapelLuisFelipe"
+          + "Project"     = "simple-api"
+        }
+      + to_port                      = 5432
+    }
+
+Plan: 69 to add, 0 to change, 0 to destroy.
+
+Changes to Outputs:
+  + alb_arn                 = (known after apply)
+  + alb_dns_name            = (known after apply)
+  + api_endpoints           = {
+      + connect = (known after apply)
+      + root    = (known after apply)
+    }
+  + api_url                 = (known after apply)
+  + aws_account_id          = "491085390322"
+  + aws_region              = "us-east-1"
+  + codebuild_project_name  = "simple-api-build-dev"
+  + ecr_repository_arn      = (known after apply)
+  + ecr_repository_url      = (known after apply)
+  + ecs_cluster_arn         = (known after apply)
+  + ecs_cluster_name        = "simple-api-cluster"
+  + ecs_service_name        = "simple-api-service"
+  + ecs_task_definition_arn = (known after apply)
+  + pipeline_name           = "simple-api-pipeline-dev"
+  + private_subnet_ids      = [
+      + (known after apply),
+      + (known after apply),
+    ]
+  + public_subnet_ids       = [
+      + (known after apply),
+      + (known after apply),
+    ]
+  + rds_address             = (known after apply)
+  + rds_database_name       = "simple_api"
+  + rds_endpoint            = (known after apply)
+  + rds_port                = (known after apply)
+  + rds_username            = (sensitive value)
+  + vpc_id                  = (known after apply)
+
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+Note: You didn't use the -out option to save this plan, so Terraform can't guarantee to take exactly these actions if you run "terraform apply" now.
+capel@MacBook-Air-de-Luis dev % 

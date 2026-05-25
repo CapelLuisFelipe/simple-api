@@ -1,0 +1,3093 @@
+capel@MacBook-Air-de-Luis dev % bash destroy.sh
+=== Removendo SNS do state (prevent_destroy) ===
+Removed aws_sns_topic.alerts
+Successfully removed 1 resource instance(s).
+Removed aws_sns_topic_subscription.email
+Successfully removed 1 resource instance(s).
+=== Destruindo infraestrutura ===
+data.aws_caller_identity.current: Reading...
+module.network.data.aws_availability_zones.available: Reading...
+module.cicd.data.aws_region.current: Reading...
+aws_cloudwatch_event_rule.ecs_scaling: Refreshing state... [id=simple-api-ecs-scaling]
+aws_ecr_repository.main: Refreshing state... [id=simple-api]
+aws_cloudwatch_log_group.ecs: Refreshing state... [id=/ecs/simple-api]
+module.cicd.aws_iam_role.codebuild: Refreshing state... [id=simple-api-codebuild-dev]
+module.cicd.aws_iam_role.codebuild_terraform: Refreshing state... [id=simple-api-codebuild-terraform-dev]
+module.network.aws_vpc.main: Refreshing state... [id=vpc-05bd6cbbbfe5fd35d]
+module.cicd.data.aws_region.current: Read complete after 0s [id=us-east-1]
+module.rds.aws_db_parameter_group.main: Refreshing state... [id=simple-api-db-pg]
+aws_secretsmanager_secret.db_password: Refreshing state... [id=arn:aws:secretsmanager:us-east-1:491085390322:secret:simple-api/db-password-42k1AJ]
+data.aws_caller_identity.current: Read complete after 0s [id=491085390322]
+module.cicd.aws_iam_role.codepipeline: Refreshing state... [id=simple-api-codepipeline-dev]
+module.network.data.aws_availability_zones.available: Read complete after 1s [id=us-east-1]
+aws_ecs_cluster.main: Refreshing state... [id=arn:aws:ecs:us-east-1:491085390322:cluster/simple-api-cluster]
+module.cicd.data.aws_caller_identity.current: Reading...
+data.aws_region.current: Reading...
+data.aws_region.current: Read complete after 0s [id=us-east-1]
+module.iam.data.aws_iam_policy_document.ecs_task_execution_assume: Reading...
+module.iam.data.aws_iam_policy_document.ecs_task_execution_assume: Read complete after 0s [id=1077804475]
+aws_sns_topic_policy.alerts: Refreshing state... [id=arn:aws:sns:us-east-1:491085390322:simple-api-alerts-dev]
+module.cicd.data.aws_caller_identity.current: Read complete after 0s [id=491085390322]
+aws_secretsmanager_secret_version.db_password: Refreshing state... [id=arn:aws:secretsmanager:us-east-1:491085390322:secret:simple-api/db-password-42k1AJ|terraform-20260525131958464100000002]
+module.iam.aws_iam_role.ecs_task_execution: Refreshing state... [id=simple-api-ecs-task-execution-dev]
+module.iam.aws_iam_role.ecs_task: Refreshing state... [id=simple-api-ecs-task-dev]
+module.cicd.aws_s3_bucket.artifacts: Refreshing state... [id=simple-api-pipeline-artifacts-491085390322]
+aws_cloudwatch_event_target.ecs_scaling_sns: Refreshing state... [id=simple-api-ecs-scaling-EcsScalingSNS]
+module.cicd.aws_codebuild_project.terraform: Refreshing state... [id=arn:aws:codebuild:us-east-1:491085390322:project/simple-api-terraform-dev]
+module.cicd.aws_codebuild_project.main: Refreshing state... [id=arn:aws:codebuild:us-east-1:491085390322:project/simple-api-build-dev]
+aws_ecs_cluster_capacity_providers.main: Refreshing state... [id=simple-api-cluster]
+module.iam.aws_iam_role_policy_attachment.ecs_task_execution: Refreshing state... [id=simple-api-ecs-task-execution-dev-20260525131959095100000003]
+module.iam.aws_iam_role_policy.ecs_task_execution_secrets: Refreshing state... [id=simple-api-ecs-task-execution-dev:allow-secrets-manager]
+module.iam.aws_iam_role_policy.ecs_task_observability: Refreshing state... [id=simple-api-ecs-task-dev:observability]
+module.network.aws_internet_gateway.main: Refreshing state... [id=igw-00c5597baee3d12da]
+module.network.aws_route_table.public: Refreshing state... [id=rtb-0f73e72768ca675f0]
+module.network.aws_subnet.public[0]: Refreshing state... [id=subnet-017c1c6e476a48bf2]
+module.network.aws_subnet.private[1]: Refreshing state... [id=subnet-0b8d088a66bf68a76]
+module.network.aws_route_table.private[0]: Refreshing state... [id=rtb-0f42fecca36127026]
+module.network.aws_subnet.public[1]: Refreshing state... [id=subnet-02831e868cf473da2]
+module.security.aws_security_group.rds: Refreshing state... [id=sg-081d80775cb33b806]
+module.network.aws_subnet.private[0]: Refreshing state... [id=subnet-06bcb35e2af89abaa]
+module.security.aws_security_group.ecs: Refreshing state... [id=sg-0e4f6a2ee649f8e86]
+module.security.aws_security_group.alb: Refreshing state... [id=sg-0eb6ee789faca69ec]
+module.alb.aws_lb_target_group.main: Refreshing state... [id=arn:aws:elasticloadbalancing:us-east-1:491085390322:targetgroup/simple-api-tg/0c30d88c4e9ff8f1]
+module.network.aws_route.public: Refreshing state... [id=r-rtb-0f73e72768ca675f01080289494]
+module.security.aws_vpc_security_group_egress_rule.rds_all: Refreshing state... [id=sgr-07d107f4c42c238ba]
+module.security.aws_vpc_security_group_egress_rule.ecs_all: Refreshing state... [id=sgr-0c939a35e44d67e1e]
+module.security.aws_vpc_security_group_ingress_rule.rds_from_ecs: Refreshing state... [id=sgr-0a5302cfdd5374227]
+module.security.aws_vpc_security_group_ingress_rule.ecs_from_alb: Refreshing state... [id=sgr-0b551493b32723f21]
+module.security.aws_vpc_security_group_ingress_rule.alb_http: Refreshing state... [id=sgr-0b6908c068f848fa3]
+module.security.aws_vpc_security_group_egress_rule.alb_all: Refreshing state... [id=sgr-0d3586be0b5c082ac]
+module.network.aws_route_table_association.public[0]: Refreshing state... [id=rtbassoc-0d669161cbe69ca5a]
+module.network.aws_route_table_association.public[1]: Refreshing state... [id=rtbassoc-0c4044a216c664b9d]
+module.network.aws_route_table_association.private[0]: Refreshing state... [id=rtbassoc-0f9a631b72bca0001]
+module.network.aws_route_table_association.private[1]: Refreshing state... [id=rtbassoc-0ff350e66b095c4fb]
+module.rds.aws_db_subnet_group.main: Refreshing state... [id=simple-api-db-subnet-group]
+module.alb.aws_lb.main: Refreshing state... [id=arn:aws:elasticloadbalancing:us-east-1:491085390322:loadbalancer/app/simple-api-alb/d1941ea7ec4e28c8]
+module.rds.aws_db_instance.main: Refreshing state... [id=db-H5QVCY4TKGYUBNX3G4SHKG2CQA]
+module.cicd.aws_s3_bucket_public_access_block.artifacts: Refreshing state... [id=simple-api-pipeline-artifacts-491085390322]
+module.cicd.aws_iam_role_policy.codepipeline: Refreshing state... [id=simple-api-codepipeline-dev:codepipeline-policy]
+module.cicd.aws_iam_role_policy.codebuild: Refreshing state... [id=simple-api-codebuild-dev:codebuild-policy]
+module.cicd.aws_s3_bucket_server_side_encryption_configuration.artifacts: Refreshing state... [id=simple-api-pipeline-artifacts-491085390322]
+module.cicd.aws_iam_role_policy.codebuild_terraform: Refreshing state... [id=simple-api-codebuild-terraform-dev:codebuild-terraform-policy]
+module.cicd.aws_s3_bucket_versioning.artifacts: Refreshing state... [id=simple-api-pipeline-artifacts-491085390322]
+module.cicd.aws_codepipeline.terraform: Refreshing state... [id=simple-api-terraform-pipeline-dev]
+aws_ecs_task_definition.main: Refreshing state... [id=simple-api]
+module.alb.aws_lb_listener.main: Refreshing state... [id=arn:aws:elasticloadbalancing:us-east-1:491085390322:listener/app/simple-api-alb/d1941ea7ec4e28c8/9ec0cf6d1b1ca045]
+aws_ecs_service.main: Refreshing state... [id=arn:aws:ecs:us-east-1:491085390322:service/simple-api-cluster/simple-api-service]
+aws_appautoscaling_target.ecs_target: Refreshing state... [id=service/simple-api-cluster/simple-api-service]
+aws_cloudwatch_metric_alarm.ecs_cpu_high: Refreshing state... [id=simple-api-cpu-high]
+aws_cloudwatch_metric_alarm.ecs_memory_high: Refreshing state... [id=simple-api-memory-high]
+aws_cloudwatch_metric_alarm.ecs_memory_low: Refreshing state... [id=simple-api-memory-low]
+aws_cloudwatch_metric_alarm.ecs_cpu_low: Refreshing state... [id=simple-api-cpu-low]
+module.cicd.aws_codepipeline.main: Refreshing state... [id=simple-api-pipeline-dev]
+aws_cloudwatch_event_rule.pipeline_state: Refreshing state... [id=simple-api-pipeline-state]
+aws_cloudwatch_event_target.pipeline_sns: Refreshing state... [id=simple-api-pipeline-state-SendToSNS]
+aws_appautoscaling_policy.ecs_policy_memory: Refreshing state... [id=simple-api-memory-autoscaling]
+aws_appautoscaling_policy.ecs_policy_cpu: Refreshing state... [id=simple-api-cpu-autoscaling]
+
+Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following symbols:
+  - destroy
+
+Terraform will perform the following actions:
+
+  # aws_appautoscaling_policy.ecs_policy_cpu will be destroyed
+  - resource "aws_appautoscaling_policy" "ecs_policy_cpu" {
+      - alarm_arns         = [
+          - "arn:aws:cloudwatch:us-east-1:491085390322:alarm:TargetTracking-service/simple-api-cluster/simple-api-service-AlarmHigh-7d1131c5-65ec-4b36-b52a-676e60129ccf",
+          - "arn:aws:cloudwatch:us-east-1:491085390322:alarm:TargetTracking-service/simple-api-cluster/simple-api-service-AlarmLow-ce5f516e-06ac-40c2-9ecd-4e2d489b0290",
+        ] -> null
+      - arn                = "arn:aws:autoscaling:us-east-1:491085390322:scalingPolicy:9b51631c-8801-49f6-a432-643625f3ba74:resource/ecs/service/simple-api-cluster/simple-api-service:policyName/simple-api-cpu-autoscaling" -> null
+      - id                 = "simple-api-cpu-autoscaling" -> null
+      - name               = "simple-api-cpu-autoscaling" -> null
+      - policy_type        = "TargetTrackingScaling" -> null
+      - resource_id        = "service/simple-api-cluster/simple-api-service" -> null
+      - scalable_dimension = "ecs:service:DesiredCount" -> null
+      - service_namespace  = "ecs" -> null
+
+      - target_tracking_scaling_policy_configuration {
+          - disable_scale_in   = false -> null
+          - scale_in_cooldown  = 120 -> null
+          - scale_out_cooldown = 30 -> null
+          - target_value       = 30 -> null
+
+          - predefined_metric_specification {
+              - predefined_metric_type = "ECSServiceAverageCPUUtilization" -> null
+                # (1 unchanged attribute hidden)
+            }
+        }
+    }
+
+  # aws_appautoscaling_policy.ecs_policy_memory will be destroyed
+  - resource "aws_appautoscaling_policy" "ecs_policy_memory" {
+      - alarm_arns         = [
+          - "arn:aws:cloudwatch:us-east-1:491085390322:alarm:TargetTracking-service/simple-api-cluster/simple-api-service-AlarmHigh-8b3b3320-8cb7-45a2-95f3-5e317b7a9ee6",
+          - "arn:aws:cloudwatch:us-east-1:491085390322:alarm:TargetTracking-service/simple-api-cluster/simple-api-service-AlarmLow-8c2c0dcc-0a02-4ee0-a1e9-0ea9262c428f",
+        ] -> null
+      - arn                = "arn:aws:autoscaling:us-east-1:491085390322:scalingPolicy:9b51631c-8801-49f6-a432-643625f3ba74:resource/ecs/service/simple-api-cluster/simple-api-service:policyName/simple-api-memory-autoscaling" -> null
+      - id                 = "simple-api-memory-autoscaling" -> null
+      - name               = "simple-api-memory-autoscaling" -> null
+      - policy_type        = "TargetTrackingScaling" -> null
+      - resource_id        = "service/simple-api-cluster/simple-api-service" -> null
+      - scalable_dimension = "ecs:service:DesiredCount" -> null
+      - service_namespace  = "ecs" -> null
+
+      - target_tracking_scaling_policy_configuration {
+          - disable_scale_in   = false -> null
+          - scale_in_cooldown  = 0 -> null
+          - scale_out_cooldown = 0 -> null
+          - target_value       = 80 -> null
+
+          - predefined_metric_specification {
+              - predefined_metric_type = "ECSServiceAverageMemoryUtilization" -> null
+                # (1 unchanged attribute hidden)
+            }
+        }
+    }
+
+  # aws_appautoscaling_target.ecs_target will be destroyed
+  - resource "aws_appautoscaling_target" "ecs_target" {
+      - arn                = "arn:aws:application-autoscaling:us-east-1:491085390322:scalable-target/0ec59b51631c880149f6a432643625f3ba74" -> null
+      - id                 = "service/simple-api-cluster/simple-api-service" -> null
+      - max_capacity       = 4 -> null
+      - min_capacity       = 1 -> null
+      - resource_id        = "service/simple-api-cluster/simple-api-service" -> null
+      - role_arn           = "arn:aws:iam::491085390322:role/aws-service-role/ecs.application-autoscaling.amazonaws.com/AWSServiceRoleForApplicationAutoScaling_ECSService" -> null
+      - scalable_dimension = "ecs:service:DesiredCount" -> null
+      - service_namespace  = "ecs" -> null
+      - tags               = {} -> null
+      - tags_all           = {
+          - "Environment" = "dev"
+          - "ManagedBy"   = "terraform"
+          - "Owner"       = "CapelLuisFelipe"
+          - "Project"     = "kxc-simple-api"
+        } -> null
+
+      - suspended_state {
+          - dynamic_scaling_in_suspended  = false -> null
+          - dynamic_scaling_out_suspended = false -> null
+          - scheduled_scaling_suspended   = false -> null
+        }
+    }
+
+  # aws_cloudwatch_event_rule.ecs_scaling will be destroyed
+  - resource "aws_cloudwatch_event_rule" "ecs_scaling" {
+      - arn                 = "arn:aws:events:us-east-1:491085390322:rule/simple-api-ecs-scaling" -> null
+      - description         = "Notifica scale-out e scale-in do ECS" -> null
+      - event_bus_name      = "default" -> null
+      - event_pattern       = jsonencode(
+            {
+              - detail-type = [
+                  - "Application Auto Scaling Scaling Activity State Change",
+                ]
+              - source      = [
+                  - "aws.application-autoscaling",
+                ]
+            }
+        ) -> null
+      - force_destroy       = false -> null
+      - id                  = "simple-api-ecs-scaling" -> null
+      - is_enabled          = true -> null
+      - name                = "simple-api-ecs-scaling" -> null
+      - state               = "ENABLED" -> null
+      - tags                = {
+          - "Environment" = "dev"
+          - "ManagedBy"   = "Terraform"
+          - "Project"     = "simple-api"
+        } -> null
+      - tags_all            = {
+          - "Environment" = "dev"
+          - "ManagedBy"   = "Terraform"
+          - "Owner"       = "CapelLuisFelipe"
+          - "Project"     = "simple-api"
+        } -> null
+        # (3 unchanged attributes hidden)
+    }
+
+  # aws_cloudwatch_event_rule.pipeline_state will be destroyed
+  - resource "aws_cloudwatch_event_rule" "pipeline_state" {
+      - arn                 = "arn:aws:events:us-east-1:491085390322:rule/simple-api-pipeline-state" -> null
+      - description         = "Notifica mudanças de estado da pipeline" -> null
+      - event_bus_name      = "default" -> null
+      - event_pattern       = jsonencode(
+            {
+              - detail      = {
+                  - pipeline = [
+                      - "simple-api-pipeline-dev",
+                      - "simple-api-terraform-pipeline-dev",
+                    ]
+                  - state    = [
+                      - "STARTED",
+                      - "SUCCEEDED",
+                      - "FAILED",
+                    ]
+                }
+              - detail-type = [
+                  - "CodePipeline Pipeline Execution State Change",
+                ]
+              - source      = [
+                  - "aws.codepipeline",
+                ]
+            }
+        ) -> null
+      - force_destroy       = false -> null
+      - id                  = "simple-api-pipeline-state" -> null
+      - is_enabled          = true -> null
+      - name                = "simple-api-pipeline-state" -> null
+      - state               = "ENABLED" -> null
+      - tags                = {
+          - "Environment" = "dev"
+          - "ManagedBy"   = "Terraform"
+          - "Project"     = "simple-api"
+        } -> null
+      - tags_all            = {
+          - "Environment" = "dev"
+          - "ManagedBy"   = "Terraform"
+          - "Owner"       = "CapelLuisFelipe"
+          - "Project"     = "simple-api"
+        } -> null
+        # (3 unchanged attributes hidden)
+    }
+
+  # aws_cloudwatch_event_target.ecs_scaling_sns will be destroyed
+  - resource "aws_cloudwatch_event_target" "ecs_scaling_sns" {
+      - arn            = "arn:aws:sns:us-east-1:491085390322:simple-api-alerts-dev" -> null
+      - event_bus_name = "default" -> null
+      - force_destroy  = false -> null
+      - id             = "simple-api-ecs-scaling-EcsScalingSNS" -> null
+      - rule           = "simple-api-ecs-scaling" -> null
+      - target_id      = "EcsScalingSNS" -> null
+        # (3 unchanged attributes hidden)
+
+      - input_transformer {
+          - input_paths    = {
+              - "cause" = "$.detail.cause"
+              - "desc"  = "$.detail.description"
+              - "time"  = "$.time"
+            } -> null
+          - input_template = "\"[ECS Auto Scaling] <desc> | Causa: <cause> | <time>\"" -> null
+        }
+    }
+
+  # aws_cloudwatch_event_target.pipeline_sns will be destroyed
+  - resource "aws_cloudwatch_event_target" "pipeline_sns" {
+      - arn            = "arn:aws:sns:us-east-1:491085390322:simple-api-alerts-dev" -> null
+      - event_bus_name = "default" -> null
+      - force_destroy  = false -> null
+      - id             = "simple-api-pipeline-state-SendToSNS" -> null
+      - rule           = "simple-api-pipeline-state" -> null
+      - target_id      = "SendToSNS" -> null
+        # (3 unchanged attributes hidden)
+
+      - input_transformer {
+          - input_paths    = {
+              - "pipeline" = "$.detail.pipeline"
+              - "state"    = "$.detail.state"
+              - "time"     = "$.time"
+            } -> null
+          - input_template = "\"Pipeline <pipeline> mudou para <state> em <time>\"" -> null
+        }
+    }
+
+  # aws_cloudwatch_log_group.ecs will be destroyed
+  - resource "aws_cloudwatch_log_group" "ecs" {
+      - arn               = "arn:aws:logs:us-east-1:491085390322:log-group:/ecs/simple-api" -> null
+      - id                = "/ecs/simple-api" -> null
+      - log_group_class   = "STANDARD" -> null
+      - name              = "/ecs/simple-api" -> null
+      - retention_in_days = 7 -> null
+      - skip_destroy      = false -> null
+      - tags              = {
+          - "Environment" = "dev"
+          - "ManagedBy"   = "Terraform"
+          - "Project"     = "simple-api"
+        } -> null
+      - tags_all          = {
+          - "Environment" = "dev"
+          - "ManagedBy"   = "Terraform"
+          - "Owner"       = "CapelLuisFelipe"
+          - "Project"     = "simple-api"
+        } -> null
+        # (2 unchanged attributes hidden)
+    }
+
+  # aws_cloudwatch_metric_alarm.ecs_cpu_high will be destroyed
+  - resource "aws_cloudwatch_metric_alarm" "ecs_cpu_high" {
+      - actions_enabled                       = true -> null
+      - alarm_actions                         = [
+          - "arn:aws:sns:us-east-1:491085390322:simple-api-alerts-dev",
+        ] -> null
+      - alarm_description                     = "ECS CPU acima de 30% - scale out em andamento" -> null
+      - alarm_name                            = "simple-api-cpu-high" -> null
+      - arn                                   = "arn:aws:cloudwatch:us-east-1:491085390322:alarm:simple-api-cpu-high" -> null
+      - comparison_operator                   = "GreaterThanOrEqualToThreshold" -> null
+      - datapoints_to_alarm                   = 0 -> null
+      - dimensions                            = {
+          - "ClusterName" = "simple-api-cluster"
+          - "ServiceName" = "simple-api-service"
+        } -> null
+      - evaluation_periods                    = 1 -> null
+      - id                                    = "simple-api-cpu-high" -> null
+      - insufficient_data_actions             = [] -> null
+      - metric_name                           = "CPUUtilization" -> null
+      - namespace                             = "AWS/ECS" -> null
+      - ok_actions                            = [] -> null
+      - period                                = 60 -> null
+      - statistic                             = "Average" -> null
+      - tags                                  = {
+          - "Environment" = "dev"
+          - "ManagedBy"   = "Terraform"
+          - "Project"     = "simple-api"
+        } -> null
+      - tags_all                              = {
+          - "Environment" = "dev"
+          - "ManagedBy"   = "Terraform"
+          - "Owner"       = "CapelLuisFelipe"
+          - "Project"     = "simple-api"
+        } -> null
+      - threshold                             = 30 -> null
+      - treat_missing_data                    = "missing" -> null
+        # (4 unchanged attributes hidden)
+    }
+
+  # aws_cloudwatch_metric_alarm.ecs_cpu_low will be destroyed
+  - resource "aws_cloudwatch_metric_alarm" "ecs_cpu_low" {
+      - actions_enabled                       = true -> null
+      - alarm_actions                         = [
+          - "arn:aws:sns:us-east-1:491085390322:simple-api-alerts-dev",
+        ] -> null
+      - alarm_description                     = "ECS CPU abaixo de 20% - scale in em andamento" -> null
+      - alarm_name                            = "simple-api-cpu-low" -> null
+      - arn                                   = "arn:aws:cloudwatch:us-east-1:491085390322:alarm:simple-api-cpu-low" -> null
+      - comparison_operator                   = "LessThanOrEqualToThreshold" -> null
+      - datapoints_to_alarm                   = 0 -> null
+      - dimensions                            = {
+          - "ClusterName" = "simple-api-cluster"
+          - "ServiceName" = "simple-api-service"
+        } -> null
+      - evaluation_periods                    = 2 -> null
+      - id                                    = "simple-api-cpu-low" -> null
+      - insufficient_data_actions             = [] -> null
+      - metric_name                           = "CPUUtilization" -> null
+      - namespace                             = "AWS/ECS" -> null
+      - ok_actions                            = [] -> null
+      - period                                = 60 -> null
+      - statistic                             = "Average" -> null
+      - tags                                  = {
+          - "Environment" = "dev"
+          - "ManagedBy"   = "Terraform"
+          - "Project"     = "simple-api"
+        } -> null
+      - tags_all                              = {
+          - "Environment" = "dev"
+          - "ManagedBy"   = "Terraform"
+          - "Owner"       = "CapelLuisFelipe"
+          - "Project"     = "simple-api"
+        } -> null
+      - threshold                             = 20 -> null
+      - treat_missing_data                    = "missing" -> null
+        # (4 unchanged attributes hidden)
+    }
+
+  # aws_cloudwatch_metric_alarm.ecs_memory_high will be destroyed
+  - resource "aws_cloudwatch_metric_alarm" "ecs_memory_high" {
+      - actions_enabled                       = true -> null
+      - alarm_actions                         = [
+          - "arn:aws:sns:us-east-1:491085390322:simple-api-alerts-dev",
+        ] -> null
+      - alarm_description                     = "ECS Memória acima de 80% - scale out em andamento" -> null
+      - alarm_name                            = "simple-api-memory-high" -> null
+      - arn                                   = "arn:aws:cloudwatch:us-east-1:491085390322:alarm:simple-api-memory-high" -> null
+      - comparison_operator                   = "GreaterThanOrEqualToThreshold" -> null
+      - datapoints_to_alarm                   = 0 -> null
+      - dimensions                            = {
+          - "ClusterName" = "simple-api-cluster"
+          - "ServiceName" = "simple-api-service"
+        } -> null
+      - evaluation_periods                    = 2 -> null
+      - id                                    = "simple-api-memory-high" -> null
+      - insufficient_data_actions             = [] -> null
+      - metric_name                           = "MemoryUtilization" -> null
+      - namespace                             = "AWS/ECS" -> null
+      - ok_actions                            = [] -> null
+      - period                                = 60 -> null
+      - statistic                             = "Average" -> null
+      - tags                                  = {
+          - "Environment" = "dev"
+          - "ManagedBy"   = "Terraform"
+          - "Project"     = "simple-api"
+        } -> null
+      - tags_all                              = {
+          - "Environment" = "dev"
+          - "ManagedBy"   = "Terraform"
+          - "Owner"       = "CapelLuisFelipe"
+          - "Project"     = "simple-api"
+        } -> null
+      - threshold                             = 80 -> null
+      - treat_missing_data                    = "missing" -> null
+        # (4 unchanged attributes hidden)
+    }
+
+  # aws_cloudwatch_metric_alarm.ecs_memory_low will be destroyed
+  - resource "aws_cloudwatch_metric_alarm" "ecs_memory_low" {
+      - actions_enabled                       = true -> null
+      - alarm_actions                         = [
+          - "arn:aws:sns:us-east-1:491085390322:simple-api-alerts-dev",
+        ] -> null
+      - alarm_description                     = "ECS Memória abaixo de 40% - scale in em andamento" -> null
+      - alarm_name                            = "simple-api-memory-low" -> null
+      - arn                                   = "arn:aws:cloudwatch:us-east-1:491085390322:alarm:simple-api-memory-low" -> null
+      - comparison_operator                   = "LessThanOrEqualToThreshold" -> null
+      - datapoints_to_alarm                   = 0 -> null
+      - dimensions                            = {
+          - "ClusterName" = "simple-api-cluster"
+          - "ServiceName" = "simple-api-service"
+        } -> null
+      - evaluation_periods                    = 2 -> null
+      - id                                    = "simple-api-memory-low" -> null
+      - insufficient_data_actions             = [] -> null
+      - metric_name                           = "MemoryUtilization" -> null
+      - namespace                             = "AWS/ECS" -> null
+      - ok_actions                            = [] -> null
+      - period                                = 60 -> null
+      - statistic                             = "Average" -> null
+      - tags                                  = {
+          - "Environment" = "dev"
+          - "ManagedBy"   = "Terraform"
+          - "Project"     = "simple-api"
+        } -> null
+      - tags_all                              = {
+          - "Environment" = "dev"
+          - "ManagedBy"   = "Terraform"
+          - "Owner"       = "CapelLuisFelipe"
+          - "Project"     = "simple-api"
+        } -> null
+      - threshold                             = 40 -> null
+      - treat_missing_data                    = "missing" -> null
+        # (4 unchanged attributes hidden)
+    }
+
+  # aws_ecr_repository.main will be destroyed
+  - resource "aws_ecr_repository" "main" {
+      - arn                  = "arn:aws:ecr:us-east-1:491085390322:repository/simple-api" -> null
+      - force_delete         = true -> null
+      - id                   = "simple-api" -> null
+      - image_tag_mutability = "MUTABLE" -> null
+      - name                 = "simple-api" -> null
+      - registry_id          = "491085390322" -> null
+      - repository_url       = "491085390322.dkr.ecr.us-east-1.amazonaws.com/simple-api" -> null
+      - tags                 = {
+          - "Environment" = "dev"
+          - "ManagedBy"   = "Terraform"
+          - "Project"     = "simple-api"
+        } -> null
+      - tags_all             = {
+          - "Environment" = "dev"
+          - "ManagedBy"   = "Terraform"
+          - "Owner"       = "CapelLuisFelipe"
+          - "Project"     = "simple-api"
+        } -> null
+
+      - encryption_configuration {
+          - encryption_type = "AES256" -> null
+            # (1 unchanged attribute hidden)
+        }
+
+      - image_scanning_configuration {
+          - scan_on_push = true -> null
+        }
+    }
+
+  # aws_ecs_cluster.main will be destroyed
+  - resource "aws_ecs_cluster" "main" {
+      - arn      = "arn:aws:ecs:us-east-1:491085390322:cluster/simple-api-cluster" -> null
+      - id       = "arn:aws:ecs:us-east-1:491085390322:cluster/simple-api-cluster" -> null
+      - name     = "simple-api-cluster" -> null
+      - tags     = {
+          - "Environment" = "dev"
+          - "ManagedBy"   = "Terraform"
+          - "Project"     = "simple-api"
+        } -> null
+      - tags_all = {
+          - "Environment" = "dev"
+          - "ManagedBy"   = "Terraform"
+          - "Owner"       = "CapelLuisFelipe"
+          - "Project"     = "simple-api"
+        } -> null
+
+      - setting {
+          - name  = "containerInsights" -> null
+          - value = "disabled" -> null
+        }
+    }
+
+  # aws_ecs_cluster_capacity_providers.main will be destroyed
+  - resource "aws_ecs_cluster_capacity_providers" "main" {
+      - capacity_providers = [
+          - "FARGATE",
+          - "FARGATE_SPOT",
+        ] -> null
+      - cluster_name       = "simple-api-cluster" -> null
+      - id                 = "simple-api-cluster" -> null
+
+      - default_capacity_provider_strategy {
+          - base              = 1 -> null
+          - capacity_provider = "FARGATE" -> null
+          - weight            = 100 -> null
+        }
+    }
+
+  # aws_ecs_service.main will be destroyed
+  - resource "aws_ecs_service" "main" {
+      - availability_zone_rebalancing      = "DISABLED" -> null
+      - cluster                            = "arn:aws:ecs:us-east-1:491085390322:cluster/simple-api-cluster" -> null
+      - deployment_maximum_percent         = 200 -> null
+      - deployment_minimum_healthy_percent = 100 -> null
+      - desired_count                      = 1 -> null
+      - enable_ecs_managed_tags            = false -> null
+      - enable_execute_command             = false -> null
+      - health_check_grace_period_seconds  = 0 -> null
+      - iam_role                           = "/aws-service-role/ecs.amazonaws.com/AWSServiceRoleForECS" -> null
+      - id                                 = "arn:aws:ecs:us-east-1:491085390322:service/simple-api-cluster/simple-api-service" -> null
+      - launch_type                        = "FARGATE" -> null
+      - name                               = "simple-api-service" -> null
+      - platform_version                   = "LATEST" -> null
+      - propagate_tags                     = "NONE" -> null
+      - scheduling_strategy                = "REPLICA" -> null
+      - tags                               = {
+          - "Environment" = "dev"
+          - "ManagedBy"   = "Terraform"
+          - "Project"     = "simple-api"
+        } -> null
+      - tags_all                           = {
+          - "Environment" = "dev"
+          - "ManagedBy"   = "Terraform"
+          - "Owner"       = "CapelLuisFelipe"
+          - "Project"     = "simple-api"
+        } -> null
+      - task_definition                    = "arn:aws:ecs:us-east-1:491085390322:task-definition/simple-api:42" -> null
+      - triggers                           = {} -> null
+      - wait_for_steady_state              = false -> null
+
+      - deployment_circuit_breaker {
+          - enable   = false -> null
+          - rollback = false -> null
+        }
+
+      - deployment_controller {
+          - type = "ECS" -> null
+        }
+
+      - load_balancer {
+          - container_name   = "simple-api" -> null
+          - container_port   = 3000 -> null
+          - target_group_arn = "arn:aws:elasticloadbalancing:us-east-1:491085390322:targetgroup/simple-api-tg/0c30d88c4e9ff8f1" -> null
+            # (1 unchanged attribute hidden)
+        }
+
+      - network_configuration {
+          - assign_public_ip = true -> null
+          - security_groups  = [
+              - "sg-0e4f6a2ee649f8e86",
+            ] -> null
+          - subnets          = [
+              - "subnet-017c1c6e476a48bf2",
+              - "subnet-02831e868cf473da2",
+            ] -> null
+        }
+    }
+
+  # aws_ecs_task_definition.main will be destroyed
+  - resource "aws_ecs_task_definition" "main" {
+      - arn                      = "arn:aws:ecs:us-east-1:491085390322:task-definition/simple-api:40" -> null
+      - arn_without_revision     = "arn:aws:ecs:us-east-1:491085390322:task-definition/simple-api" -> null
+      - container_definitions    = (sensitive value) -> null
+      - cpu                      = "256" -> null
+      - enable_fault_injection   = false -> null
+      - execution_role_arn       = "arn:aws:iam::491085390322:role/simple-api-ecs-task-execution-dev" -> null
+      - family                   = "simple-api" -> null
+      - id                       = "simple-api" -> null
+      - memory                   = "512" -> null
+      - network_mode             = "awsvpc" -> null
+      - requires_compatibilities = [
+          - "FARGATE",
+        ] -> null
+      - revision                 = 40 -> null
+      - skip_destroy             = false -> null
+      - tags                     = {
+          - "Environment" = "dev"
+          - "ManagedBy"   = "Terraform"
+          - "Project"     = "simple-api"
+        } -> null
+      - tags_all                 = {
+          - "Environment" = "dev"
+          - "ManagedBy"   = "Terraform"
+          - "Owner"       = "CapelLuisFelipe"
+          - "Project"     = "simple-api"
+        } -> null
+      - task_role_arn            = "arn:aws:iam::491085390322:role/simple-api-ecs-task-dev" -> null
+      - track_latest             = false -> null
+        # (2 unchanged attributes hidden)
+    }
+
+  # aws_secretsmanager_secret.db_password will be destroyed
+  - resource "aws_secretsmanager_secret" "db_password" {
+      - arn                            = "arn:aws:secretsmanager:us-east-1:491085390322:secret:simple-api/db-password-42k1AJ" -> null
+      - force_overwrite_replica_secret = false -> null
+      - id                             = "arn:aws:secretsmanager:us-east-1:491085390322:secret:simple-api/db-password-42k1AJ" -> null
+      - name                           = "simple-api/db-password" -> null
+      - recovery_window_in_days        = 0 -> null
+      - tags                           = {
+          - "Environment" = "dev"
+          - "ManagedBy"   = "Terraform"
+          - "Project"     = "simple-api"
+        } -> null
+      - tags_all                       = {
+          - "Environment" = "dev"
+          - "ManagedBy"   = "Terraform"
+          - "Owner"       = "CapelLuisFelipe"
+          - "Project"     = "simple-api"
+        } -> null
+        # (4 unchanged attributes hidden)
+    }
+
+  # aws_secretsmanager_secret_version.db_password will be destroyed
+  - resource "aws_secretsmanager_secret_version" "db_password" {
+      - arn              = "arn:aws:secretsmanager:us-east-1:491085390322:secret:simple-api/db-password-42k1AJ" -> null
+      - id               = "arn:aws:secretsmanager:us-east-1:491085390322:secret:simple-api/db-password-42k1AJ|terraform-20260525131958464100000002" -> null
+      - secret_id        = "arn:aws:secretsmanager:us-east-1:491085390322:secret:simple-api/db-password-42k1AJ" -> null
+      - secret_string    = (sensitive value) -> null
+      - secret_string_wo = (write-only attribute) -> null
+      - version_id       = "terraform-20260525131958464100000002" -> null
+      - version_stages   = [
+          - "AWSCURRENT",
+        ] -> null
+        # (1 unchanged attribute hidden)
+    }
+
+  # aws_sns_topic_policy.alerts will be destroyed
+  - resource "aws_sns_topic_policy" "alerts" {
+      - arn    = "arn:aws:sns:us-east-1:491085390322:simple-api-alerts-dev" -> null
+      - id     = "arn:aws:sns:us-east-1:491085390322:simple-api-alerts-dev" -> null
+      - owner  = "491085390322" -> null
+      - policy = jsonencode(
+            {
+              - Statement = [
+                  - {
+                      - Action    = "sns:Publish"
+                      - Effect    = "Allow"
+                      - Principal = {
+                          - Service = [
+                              - "events.amazonaws.com",
+                              - "cloudwatch.amazonaws.com",
+                            ]
+                        }
+                      - Resource  = "arn:aws:sns:us-east-1:491085390322:simple-api-alerts-dev"
+                    },
+                ]
+              - Version   = "2012-10-17"
+            }
+        ) -> null
+    }
+
+  # module.alb.aws_lb.main will be destroyed
+  - resource "aws_lb" "main" {
+      - arn                                                          = "arn:aws:elasticloadbalancing:us-east-1:491085390322:loadbalancer/app/simple-api-alb/d1941ea7ec4e28c8" -> null
+      - arn_suffix                                                   = "app/simple-api-alb/d1941ea7ec4e28c8" -> null
+      - client_keep_alive                                            = 3600 -> null
+      - desync_mitigation_mode                                       = "defensive" -> null
+      - dns_name                                                     = "simple-api-alb-942091090.us-east-1.elb.amazonaws.com" -> null
+      - drop_invalid_header_fields                                   = false -> null
+      - enable_cross_zone_load_balancing                             = true -> null
+      - enable_deletion_protection                                   = false -> null
+      - enable_http2                                                 = true -> null
+      - enable_tls_version_and_cipher_suite_headers                  = false -> null
+      - enable_waf_fail_open                                         = false -> null
+      - enable_xff_client_port                                       = false -> null
+      - enable_zonal_shift                                           = false -> null
+      - id                                                           = "arn:aws:elasticloadbalancing:us-east-1:491085390322:loadbalancer/app/simple-api-alb/d1941ea7ec4e28c8" -> null
+      - idle_timeout                                                 = 60 -> null
+      - internal                                                     = false -> null
+      - ip_address_type                                              = "ipv4" -> null
+      - load_balancer_type                                           = "application" -> null
+      - name                                                         = "simple-api-alb" -> null
+      - preserve_host_header                                         = false -> null
+      - security_groups                                              = [
+          - "sg-0eb6ee789faca69ec",
+        ] -> null
+      - subnets                                                      = [
+          - "subnet-017c1c6e476a48bf2",
+          - "subnet-02831e868cf473da2",
+        ] -> null
+      - tags                                                         = {
+          - "Environment" = "dev"
+          - "ManagedBy"   = "Terraform"
+          - "Name"        = "simple-api-alb"
+          - "Project"     = "simple-api"
+        } -> null
+      - tags_all                                                     = {
+          - "Environment" = "dev"
+          - "ManagedBy"   = "Terraform"
+          - "Name"        = "simple-api-alb"
+          - "Owner"       = "CapelLuisFelipe"
+          - "Project"     = "simple-api"
+        } -> null
+      - vpc_id                                                       = "vpc-05bd6cbbbfe5fd35d" -> null
+      - xff_header_processing_mode                                   = "append" -> null
+      - zone_id                                                      = "Z35SXDOTRQ7X7K" -> null
+        # (3 unchanged attributes hidden)
+
+      - access_logs {
+          - enabled = false -> null
+            # (2 unchanged attributes hidden)
+        }
+
+      - connection_logs {
+          - enabled = false -> null
+            # (2 unchanged attributes hidden)
+        }
+
+      - subnet_mapping {
+          - subnet_id            = "subnet-017c1c6e476a48bf2" -> null
+            # (4 unchanged attributes hidden)
+        }
+      - subnet_mapping {
+          - subnet_id            = "subnet-02831e868cf473da2" -> null
+            # (4 unchanged attributes hidden)
+        }
+    }
+
+  # module.alb.aws_lb_listener.main will be destroyed
+  - resource "aws_lb_listener" "main" {
+      - arn                                                                 = "arn:aws:elasticloadbalancing:us-east-1:491085390322:listener/app/simple-api-alb/d1941ea7ec4e28c8/9ec0cf6d1b1ca045" -> null
+      - id                                                                  = "arn:aws:elasticloadbalancing:us-east-1:491085390322:listener/app/simple-api-alb/d1941ea7ec4e28c8/9ec0cf6d1b1ca045" -> null
+      - load_balancer_arn                                                   = "arn:aws:elasticloadbalancing:us-east-1:491085390322:loadbalancer/app/simple-api-alb/d1941ea7ec4e28c8" -> null
+      - port                                                                = 80 -> null
+      - protocol                                                            = "HTTP" -> null
+      - routing_http_response_server_enabled                                = true -> null
+      - tags                                                                = {} -> null
+      - tags_all                                                            = {
+          - "Environment" = "dev"
+          - "ManagedBy"   = "terraform"
+          - "Owner"       = "CapelLuisFelipe"
+          - "Project"     = "kxc-simple-api"
+        } -> null
+        # (11 unchanged attributes hidden)
+
+      - default_action {
+          - order            = 1 -> null
+          - target_group_arn = "arn:aws:elasticloadbalancing:us-east-1:491085390322:targetgroup/simple-api-tg/0c30d88c4e9ff8f1" -> null
+          - type             = "forward" -> null
+        }
+    }
+
+  # module.alb.aws_lb_target_group.main will be destroyed
+  - resource "aws_lb_target_group" "main" {
+      - arn                                = "arn:aws:elasticloadbalancing:us-east-1:491085390322:targetgroup/simple-api-tg/0c30d88c4e9ff8f1" -> null
+      - arn_suffix                         = "targetgroup/simple-api-tg/0c30d88c4e9ff8f1" -> null
+      - deregistration_delay               = "300" -> null
+      - id                                 = "arn:aws:elasticloadbalancing:us-east-1:491085390322:targetgroup/simple-api-tg/0c30d88c4e9ff8f1" -> null
+      - ip_address_type                    = "ipv4" -> null
+      - lambda_multi_value_headers_enabled = false -> null
+      - load_balancer_arns                 = [
+          - "arn:aws:elasticloadbalancing:us-east-1:491085390322:loadbalancer/app/simple-api-alb/d1941ea7ec4e28c8",
+        ] -> null
+      - load_balancing_algorithm_type      = "round_robin" -> null
+      - load_balancing_anomaly_mitigation  = "off" -> null
+      - load_balancing_cross_zone_enabled  = "use_load_balancer_configuration" -> null
+      - name                               = "simple-api-tg" -> null
+      - port                               = 3000 -> null
+      - protocol                           = "HTTP" -> null
+      - protocol_version                   = "HTTP1" -> null
+      - proxy_protocol_v2                  = false -> null
+      - slow_start                         = 0 -> null
+      - tags                               = {
+          - "Environment" = "dev"
+          - "ManagedBy"   = "Terraform"
+          - "Name"        = "simple-api-tg"
+          - "Project"     = "simple-api"
+        } -> null
+      - tags_all                           = {
+          - "Environment" = "dev"
+          - "ManagedBy"   = "Terraform"
+          - "Name"        = "simple-api-tg"
+          - "Owner"       = "CapelLuisFelipe"
+          - "Project"     = "simple-api"
+        } -> null
+      - target_type                        = "ip" -> null
+      - vpc_id                             = "vpc-05bd6cbbbfe5fd35d" -> null
+        # (1 unchanged attribute hidden)
+
+      - health_check {
+          - enabled             = true -> null
+          - healthy_threshold   = 2 -> null
+          - interval            = 30 -> null
+          - matcher             = "200" -> null
+          - path                = "/health" -> null
+          - port                = "traffic-port" -> null
+          - protocol            = "HTTP" -> null
+          - timeout             = 3 -> null
+          - unhealthy_threshold = 2 -> null
+        }
+
+      - stickiness {
+          - cookie_duration = 86400 -> null
+          - enabled         = false -> null
+          - type            = "lb_cookie" -> null
+            # (1 unchanged attribute hidden)
+        }
+
+      - target_failover {}
+
+      - target_group_health {
+          - dns_failover {
+              - minimum_healthy_targets_count      = "1" -> null
+              - minimum_healthy_targets_percentage = "off" -> null
+            }
+          - unhealthy_state_routing {
+              - minimum_healthy_targets_count      = 1 -> null
+              - minimum_healthy_targets_percentage = "off" -> null
+            }
+        }
+
+      - target_health_state {}
+    }
+
+  # module.cicd.aws_codebuild_project.main will be destroyed
+  - resource "aws_codebuild_project" "main" {
+      - arn                    = "arn:aws:codebuild:us-east-1:491085390322:project/simple-api-build-dev" -> null
+      - badge_enabled          = false -> null
+      - build_timeout          = 20 -> null
+      - concurrent_build_limit = 0 -> null
+      - encryption_key         = "arn:aws:kms:us-east-1:491085390322:alias/aws/s3" -> null
+      - id                     = "arn:aws:codebuild:us-east-1:491085390322:project/simple-api-build-dev" -> null
+      - name                   = "simple-api-build-dev" -> null
+      - project_visibility     = "PRIVATE" -> null
+      - queued_timeout         = 480 -> null
+      - service_role           = "arn:aws:iam::491085390322:role/simple-api-codebuild-dev" -> null
+      - tags                   = {
+          - "Environment" = "dev"
+          - "ManagedBy"   = "Terraform"
+          - "Project"     = "simple-api"
+        } -> null
+      - tags_all               = {
+          - "Environment" = "dev"
+          - "ManagedBy"   = "Terraform"
+          - "Owner"       = "CapelLuisFelipe"
+          - "Project"     = "simple-api"
+        } -> null
+        # (5 unchanged attributes hidden)
+
+      - artifacts {
+          - encryption_disabled    = false -> null
+          - name                   = "simple-api-build-dev" -> null
+          - override_artifact_name = false -> null
+          - packaging              = "NONE" -> null
+          - type                   = "CODEPIPELINE" -> null
+            # (5 unchanged attributes hidden)
+        }
+
+      - cache {
+          - modes    = [] -> null
+          - type     = "NO_CACHE" -> null
+            # (1 unchanged attribute hidden)
+        }
+
+      - environment {
+          - compute_type                = "BUILD_GENERAL1_SMALL" -> null
+          - image                       = "aws/codebuild/standard:7.0" -> null
+          - image_pull_credentials_type = "CODEBUILD" -> null
+          - privileged_mode             = true -> null
+          - type                        = "LINUX_CONTAINER" -> null
+            # (1 unchanged attribute hidden)
+
+          - environment_variable {
+              - name  = "AWS_DEFAULT_REGION" -> null
+              - type  = "PLAINTEXT" -> null
+              - value = "us-east-1" -> null
+            }
+          - environment_variable {
+              - name  = "AWS_ACCOUNT_ID" -> null
+              - type  = "PLAINTEXT" -> null
+              - value = "491085390322" -> null
+            }
+          - environment_variable {
+              - name  = "ECR_REPOSITORY_URI" -> null
+              - type  = "PLAINTEXT" -> null
+              - value = "491085390322.dkr.ecr.us-east-1.amazonaws.com/simple-api" -> null
+            }
+          - environment_variable {
+              - name  = "ECR_REPOSITORY_NAME" -> null
+              - type  = "PLAINTEXT" -> null
+              - value = "simple-api" -> null
+            }
+          - environment_variable {
+              - name  = "ECS_CONTAINER_NAME" -> null
+              - type  = "PLAINTEXT" -> null
+              - value = "simple-api" -> null
+            }
+        }
+
+      - logs_config {
+          - cloudwatch_logs {
+              - status      = "ENABLED" -> null
+                # (2 unchanged attributes hidden)
+            }
+          - s3_logs {
+              - encryption_disabled = false -> null
+              - status              = "DISABLED" -> null
+                # (2 unchanged attributes hidden)
+            }
+        }
+
+      - source {
+          - buildspec           = "buildspec.yml" -> null
+          - git_clone_depth     = 0 -> null
+          - insecure_ssl        = false -> null
+          - report_build_status = false -> null
+          - type                = "CODEPIPELINE" -> null
+            # (1 unchanged attribute hidden)
+        }
+    }
+
+  # module.cicd.aws_codebuild_project.terraform will be destroyed
+  - resource "aws_codebuild_project" "terraform" {
+      - arn                    = "arn:aws:codebuild:us-east-1:491085390322:project/simple-api-terraform-dev" -> null
+      - badge_enabled          = false -> null
+      - build_timeout          = 60 -> null
+      - concurrent_build_limit = 0 -> null
+      - encryption_key         = "arn:aws:kms:us-east-1:491085390322:alias/aws/s3" -> null
+      - id                     = "arn:aws:codebuild:us-east-1:491085390322:project/simple-api-terraform-dev" -> null
+      - name                   = "simple-api-terraform-dev" -> null
+      - project_visibility     = "PRIVATE" -> null
+      - queued_timeout         = 480 -> null
+      - service_role           = "arn:aws:iam::491085390322:role/simple-api-codebuild-terraform-dev" -> null
+      - tags                   = {
+          - "Environment" = "dev"
+          - "ManagedBy"   = "Terraform"
+          - "Project"     = "simple-api"
+        } -> null
+      - tags_all               = {
+          - "Environment" = "dev"
+          - "ManagedBy"   = "Terraform"
+          - "Owner"       = "CapelLuisFelipe"
+          - "Project"     = "simple-api"
+        } -> null
+        # (5 unchanged attributes hidden)
+
+      - artifacts {
+          - encryption_disabled    = false -> null
+          - name                   = "simple-api-terraform-dev" -> null
+          - override_artifact_name = false -> null
+          - packaging              = "NONE" -> null
+          - type                   = "CODEPIPELINE" -> null
+            # (5 unchanged attributes hidden)
+        }
+
+      - cache {
+          - modes    = [] -> null
+          - type     = "NO_CACHE" -> null
+            # (1 unchanged attribute hidden)
+        }
+
+      - environment {
+          - compute_type                = "BUILD_GENERAL1_SMALL" -> null
+          - image                       = "aws/codebuild/standard:7.0" -> null
+          - image_pull_credentials_type = "CODEBUILD" -> null
+          - privileged_mode             = false -> null
+          - type                        = "LINUX_CONTAINER" -> null
+            # (1 unchanged attribute hidden)
+
+          - environment_variable {
+              - name  = "TF_WORKING_DIR" -> null
+              - type  = "PLAINTEXT" -> null
+              - value = "terraform/environments/dev" -> null
+            }
+          - environment_variable {
+              - name  = "TF_VERSION" -> null
+              - type  = "PLAINTEXT" -> null
+              - value = "1.15.4" -> null
+            }
+        }
+
+      - logs_config {
+          - cloudwatch_logs {
+              - status      = "ENABLED" -> null
+                # (2 unchanged attributes hidden)
+            }
+          - s3_logs {
+              - encryption_disabled = false -> null
+              - status              = "DISABLED" -> null
+                # (2 unchanged attributes hidden)
+            }
+        }
+
+      - source {
+          - buildspec           = "buildspec-terraform.yml" -> null
+          - git_clone_depth     = 0 -> null
+          - insecure_ssl        = false -> null
+          - report_build_status = false -> null
+          - type                = "CODEPIPELINE" -> null
+            # (1 unchanged attribute hidden)
+        }
+    }
+
+  # module.cicd.aws_codepipeline.main will be destroyed
+  - resource "aws_codepipeline" "main" {
+      - arn            = "arn:aws:codepipeline:us-east-1:491085390322:simple-api-pipeline-dev" -> null
+      - execution_mode = "SUPERSEDED" -> null
+      - id             = "simple-api-pipeline-dev" -> null
+      - name           = "simple-api-pipeline-dev" -> null
+      - pipeline_type  = "V2" -> null
+      - role_arn       = "arn:aws:iam::491085390322:role/simple-api-codepipeline-dev" -> null
+      - tags           = {
+          - "Environment" = "dev"
+          - "ManagedBy"   = "Terraform"
+          - "Project"     = "simple-api"
+        } -> null
+      - tags_all       = {
+          - "Environment" = "dev"
+          - "ManagedBy"   = "Terraform"
+          - "Owner"       = "CapelLuisFelipe"
+          - "Project"     = "simple-api"
+        } -> null
+      - trigger_all    = [
+          - {
+              - git_configuration = [
+                  - {
+                      - pull_request       = []
+                      - push               = [
+                          - {
+                              - branches   = [
+                                  - {
+                                      - excludes = []
+                                      - includes = [
+                                          - "main",
+                                        ]
+                                    },
+                                ]
+                              - file_paths = [
+                                  - {
+                                      - excludes = []
+                                      - includes = [
+                                          - "src/**",
+                                          - "public/**",
+                                          - "Dockerfile",
+                                          - "buildspec.yml",
+                                          - "package*.json",
+                                        ]
+                                    },
+                                ]
+                              - tags       = []
+                            },
+                        ]
+                      - source_action_name = "Source"
+                    },
+                ]
+              - provider_type     = "CodeStarSourceConnection"
+            },
+        ] -> null
+
+      - artifact_store {
+          - location = "simple-api-pipeline-artifacts-491085390322" -> null
+          - type     = "S3" -> null
+            # (1 unchanged attribute hidden)
+        }
+
+      - stage {
+          - name = "Source" -> null
+
+          - action {
+              - category           = "Source" -> null
+              - configuration      = {
+                  - "BranchName"       = "main"
+                  - "ConnectionArn"    = "arn:aws:codeconnections:us-east-1:491085390322:connection/7dac355b-faae-4fa1-9c0e-b59c76096dbf"
+                  - "FullRepositoryId" = "CapelLuisFelipe/simple-api"
+                } -> null
+              - input_artifacts    = [] -> null
+              - name               = "Source" -> null
+              - output_artifacts   = [
+                  - "source_output",
+                ] -> null
+              - owner              = "AWS" -> null
+              - provider           = "CodeStarSourceConnection" -> null
+              - run_order          = 1 -> null
+              - timeout_in_minutes = 0 -> null
+              - version            = "1" -> null
+                # (3 unchanged attributes hidden)
+            }
+        }
+      - stage {
+          - name = "Build" -> null
+
+          - action {
+              - category           = "Build" -> null
+              - configuration      = {
+                  - "ProjectName" = "simple-api-build-dev"
+                } -> null
+              - input_artifacts    = [
+                  - "source_output",
+                ] -> null
+              - name               = "Build" -> null
+              - output_artifacts   = [
+                  - "build_output",
+                ] -> null
+              - owner              = "AWS" -> null
+              - provider           = "CodeBuild" -> null
+              - run_order          = 1 -> null
+              - timeout_in_minutes = 0 -> null
+              - version            = "1" -> null
+                # (3 unchanged attributes hidden)
+            }
+        }
+      - stage {
+          - name = "Deploy" -> null
+
+          - action {
+              - category           = "Deploy" -> null
+              - configuration      = {
+                  - "ClusterName" = "simple-api-cluster"
+                  - "FileName"    = "imagedefinitions.json"
+                  - "ServiceName" = "simple-api-service"
+                } -> null
+              - input_artifacts    = [
+                  - "build_output",
+                ] -> null
+              - name               = "Deploy" -> null
+              - output_artifacts   = [] -> null
+              - owner              = "AWS" -> null
+              - provider           = "ECS" -> null
+              - run_order          = 1 -> null
+              - timeout_in_minutes = 0 -> null
+              - version            = "1" -> null
+                # (3 unchanged attributes hidden)
+            }
+        }
+
+      - trigger {
+          - provider_type = "CodeStarSourceConnection" -> null
+
+          - git_configuration {
+              - source_action_name = "Source" -> null
+
+              - push {
+                  - branches {
+                      - excludes = [] -> null
+                      - includes = [
+                          - "main",
+                        ] -> null
+                    }
+                  - file_paths {
+                      - excludes = [] -> null
+                      - includes = [
+                          - "src/**",
+                          - "public/**",
+                          - "Dockerfile",
+                          - "buildspec.yml",
+                          - "package*.json",
+                        ] -> null
+                    }
+                }
+            }
+        }
+    }
+
+  # module.cicd.aws_codepipeline.terraform will be destroyed
+  - resource "aws_codepipeline" "terraform" {
+      - arn            = "arn:aws:codepipeline:us-east-1:491085390322:simple-api-terraform-pipeline-dev" -> null
+      - execution_mode = "SUPERSEDED" -> null
+      - id             = "simple-api-terraform-pipeline-dev" -> null
+      - name           = "simple-api-terraform-pipeline-dev" -> null
+      - pipeline_type  = "V2" -> null
+      - role_arn       = "arn:aws:iam::491085390322:role/simple-api-codepipeline-dev" -> null
+      - tags           = {
+          - "Environment" = "dev"
+          - "ManagedBy"   = "Terraform"
+          - "Project"     = "simple-api"
+        } -> null
+      - tags_all       = {
+          - "Environment" = "dev"
+          - "ManagedBy"   = "Terraform"
+          - "Owner"       = "CapelLuisFelipe"
+          - "Project"     = "simple-api"
+        } -> null
+      - trigger_all    = [
+          - {
+              - git_configuration = [
+                  - {
+                      - pull_request       = []
+                      - push               = [
+                          - {
+                              - branches   = [
+                                  - {
+                                      - excludes = []
+                                      - includes = [
+                                          - "main",
+                                        ]
+                                    },
+                                ]
+                              - file_paths = [
+                                  - {
+                                      - excludes = []
+                                      - includes = [
+                                          - "terraform/**",
+                                        ]
+                                    },
+                                ]
+                              - tags       = []
+                            },
+                        ]
+                      - source_action_name = "Source"
+                    },
+                ]
+              - provider_type     = "CodeStarSourceConnection"
+            },
+        ] -> null
+
+      - artifact_store {
+          - location = "simple-api-pipeline-artifacts-491085390322" -> null
+          - type     = "S3" -> null
+            # (1 unchanged attribute hidden)
+        }
+
+      - stage {
+          - name = "Source" -> null
+
+          - action {
+              - category           = "Source" -> null
+              - configuration      = {
+                  - "BranchName"       = "main"
+                  - "ConnectionArn"    = "arn:aws:codeconnections:us-east-1:491085390322:connection/7dac355b-faae-4fa1-9c0e-b59c76096dbf"
+                  - "FullRepositoryId" = "CapelLuisFelipe/simple-api"
+                } -> null
+              - input_artifacts    = [] -> null
+              - name               = "Source" -> null
+              - output_artifacts   = [
+                  - "source_output",
+                ] -> null
+              - owner              = "AWS" -> null
+              - provider           = "CodeStarSourceConnection" -> null
+              - run_order          = 1 -> null
+              - timeout_in_minutes = 0 -> null
+              - version            = "1" -> null
+                # (3 unchanged attributes hidden)
+            }
+        }
+      - stage {
+          - name = "Terraform" -> null
+
+          - action {
+              - category           = "Build" -> null
+              - configuration      = {
+                  - "ProjectName" = "simple-api-terraform-dev"
+                } -> null
+              - input_artifacts    = [
+                  - "source_output",
+                ] -> null
+              - name               = "Plan-and-Apply" -> null
+              - output_artifacts   = [
+                  - "tf_output",
+                ] -> null
+              - owner              = "AWS" -> null
+              - provider           = "CodeBuild" -> null
+              - run_order          = 1 -> null
+              - timeout_in_minutes = 0 -> null
+              - version            = "1" -> null
+                # (3 unchanged attributes hidden)
+            }
+        }
+
+      - trigger {
+          - provider_type = "CodeStarSourceConnection" -> null
+
+          - git_configuration {
+              - source_action_name = "Source" -> null
+
+              - push {
+                  - branches {
+                      - excludes = [] -> null
+                      - includes = [
+                          - "main",
+                        ] -> null
+                    }
+                  - file_paths {
+                      - excludes = [] -> null
+                      - includes = [
+                          - "terraform/**",
+                        ] -> null
+                    }
+                }
+            }
+        }
+    }
+
+  # module.cicd.aws_iam_role.codebuild will be destroyed
+  - resource "aws_iam_role" "codebuild" {
+      - arn                   = "arn:aws:iam::491085390322:role/simple-api-codebuild-dev" -> null
+      - assume_role_policy    = jsonencode(
+            {
+              - Statement = [
+                  - {
+                      - Action    = "sts:AssumeRole"
+                      - Effect    = "Allow"
+                      - Principal = {
+                          - Service = "codebuild.amazonaws.com"
+                        }
+                    },
+                ]
+              - Version   = "2012-10-17"
+            }
+        ) -> null
+      - create_date           = "2026-05-25T13:19:58Z" -> null
+      - force_detach_policies = false -> null
+      - id                    = "simple-api-codebuild-dev" -> null
+      - managed_policy_arns   = [] -> null
+      - max_session_duration  = 3600 -> null
+      - name                  = "simple-api-codebuild-dev" -> null
+      - path                  = "/" -> null
+      - tags                  = {
+          - "Environment" = "dev"
+          - "ManagedBy"   = "Terraform"
+          - "Project"     = "simple-api"
+        } -> null
+      - tags_all              = {
+          - "Environment" = "dev"
+          - "ManagedBy"   = "Terraform"
+          - "Owner"       = "CapelLuisFelipe"
+          - "Project"     = "simple-api"
+        } -> null
+      - unique_id             = "AROAXEVXYMHZDOM6P6VJ7" -> null
+        # (3 unchanged attributes hidden)
+
+      - inline_policy {
+          - name   = "codebuild-policy" -> null
+          - policy = jsonencode(
+                {
+                  - Statement = [
+                      - {
+                          - Action   = [
+                              - "logs:CreateLogGroup",
+                              - "logs:CreateLogStream",
+                              - "logs:PutLogEvents",
+                            ]
+                          - Effect   = "Allow"
+                          - Resource = "*"
+                        },
+                      - {
+                          - Action   = [
+                              - "s3:GetObject",
+                              - "s3:PutObject",
+                              - "s3:GetObjectVersion",
+                            ]
+                          - Effect   = "Allow"
+                          - Resource = "arn:aws:s3:::simple-api-pipeline-artifacts-491085390322/*"
+                        },
+                      - {
+                          - Action   = [
+                              - "ecr:GetAuthorizationToken",
+                              - "ecr:BatchCheckLayerAvailability",
+                              - "ecr:GetDownloadUrlForLayer",
+                              - "ecr:BatchGetImage",
+                              - "ecr:InitiateLayerUpload",
+                              - "ecr:UploadLayerPart",
+                              - "ecr:CompleteLayerUpload",
+                              - "ecr:PutImage",
+                            ]
+                          - Effect   = "Allow"
+                          - Resource = "*"
+                        },
+                    ]
+                  - Version   = "2012-10-17"
+                }
+            ) -> null
+        }
+    }
+
+  # module.cicd.aws_iam_role.codebuild_terraform will be destroyed
+  - resource "aws_iam_role" "codebuild_terraform" {
+      - arn                   = "arn:aws:iam::491085390322:role/simple-api-codebuild-terraform-dev" -> null
+      - assume_role_policy    = jsonencode(
+            {
+              - Statement = [
+                  - {
+                      - Action    = "sts:AssumeRole"
+                      - Effect    = "Allow"
+                      - Principal = {
+                          - Service = "codebuild.amazonaws.com"
+                        }
+                    },
+                ]
+              - Version   = "2012-10-17"
+            }
+        ) -> null
+      - create_date           = "2026-05-25T13:19:58Z" -> null
+      - force_detach_policies = false -> null
+      - id                    = "simple-api-codebuild-terraform-dev" -> null
+      - managed_policy_arns   = [] -> null
+      - max_session_duration  = 3600 -> null
+      - name                  = "simple-api-codebuild-terraform-dev" -> null
+      - path                  = "/" -> null
+      - tags                  = {
+          - "Environment" = "dev"
+          - "ManagedBy"   = "Terraform"
+          - "Project"     = "simple-api"
+        } -> null
+      - tags_all              = {
+          - "Environment" = "dev"
+          - "ManagedBy"   = "Terraform"
+          - "Owner"       = "CapelLuisFelipe"
+          - "Project"     = "simple-api"
+        } -> null
+      - unique_id             = "AROAXEVXYMHZFC5MMCBHA" -> null
+        # (3 unchanged attributes hidden)
+
+      - inline_policy {
+          - name   = "codebuild-terraform-policy" -> null
+          - policy = jsonencode(
+                {
+                  - Statement = [
+                      - {
+                          - Action   = [
+                              - "logs:CreateLogGroup",
+                              - "logs:CreateLogStream",
+                              - "logs:PutLogEvents",
+                            ]
+                          - Effect   = "Allow"
+                          - Resource = "*"
+                        },
+                      - {
+                          - Action   = [
+                              - "s3:GetObject",
+                              - "s3:PutObject",
+                              - "s3:GetObjectVersion",
+                              - "s3:GetBucketVersioning",
+                              - "s3:ListBucket",
+                            ]
+                          - Effect   = "Allow"
+                          - Resource = [
+                              - "arn:aws:s3:::simple-api-pipeline-artifacts-491085390322",
+                              - "arn:aws:s3:::simple-api-pipeline-artifacts-491085390322/*",
+                            ]
+                        },
+                      - {
+                          - Action   = [
+                              - "ssm:GetParameters",
+                              - "ssm:GetParameter",
+                            ]
+                          - Effect   = "Allow"
+                          - Resource = "arn:aws:ssm:*:*:parameter/simple-api/tf/*"
+                        },
+                      - {
+                          - Action   = [
+                              - "*",
+                            ]
+                          - Effect   = "Allow"
+                          - Resource = "*"
+                        },
+                    ]
+                  - Version   = "2012-10-17"
+                }
+            ) -> null
+        }
+    }
+
+  # module.cicd.aws_iam_role.codepipeline will be destroyed
+  - resource "aws_iam_role" "codepipeline" {
+      - arn                   = "arn:aws:iam::491085390322:role/simple-api-codepipeline-dev" -> null
+      - assume_role_policy    = jsonencode(
+            {
+              - Statement = [
+                  - {
+                      - Action    = "sts:AssumeRole"
+                      - Effect    = "Allow"
+                      - Principal = {
+                          - Service = "codepipeline.amazonaws.com"
+                        }
+                    },
+                ]
+              - Version   = "2012-10-17"
+            }
+        ) -> null
+      - create_date           = "2026-05-25T13:19:57Z" -> null
+      - force_detach_policies = false -> null
+      - id                    = "simple-api-codepipeline-dev" -> null
+      - managed_policy_arns   = [] -> null
+      - max_session_duration  = 3600 -> null
+      - name                  = "simple-api-codepipeline-dev" -> null
+      - path                  = "/" -> null
+      - tags                  = {
+          - "Environment" = "dev"
+          - "ManagedBy"   = "Terraform"
+          - "Project"     = "simple-api"
+        } -> null
+      - tags_all              = {
+          - "Environment" = "dev"
+          - "ManagedBy"   = "Terraform"
+          - "Owner"       = "CapelLuisFelipe"
+          - "Project"     = "simple-api"
+        } -> null
+      - unique_id             = "AROAXEVXYMHZLXZFWQNGU" -> null
+        # (3 unchanged attributes hidden)
+
+      - inline_policy {
+          - name   = "codepipeline-policy" -> null
+          - policy = jsonencode(
+                {
+                  - Statement = [
+                      - {
+                          - Action   = [
+                              - "s3:GetObject",
+                              - "s3:PutObject",
+                              - "s3:GetObjectVersion",
+                              - "s3:GetBucketVersioning",
+                            ]
+                          - Effect   = "Allow"
+                          - Resource = [
+                              - "arn:aws:s3:::simple-api-pipeline-artifacts-491085390322",
+                              - "arn:aws:s3:::simple-api-pipeline-artifacts-491085390322/*",
+                            ]
+                        },
+                      - {
+                          - Action   = [
+                              - "codebuild:BatchGetBuilds",
+                              - "codebuild:StartBuild",
+                            ]
+                          - Effect   = "Allow"
+                          - Resource = "*"
+                        },
+                      - {
+                          - Action   = [
+                              - "ecs:DescribeServices",
+                              - "ecs:DescribeTaskDefinition",
+                              - "ecs:DescribeTasks",
+                              - "ecs:ListTasks",
+                              - "ecs:RegisterTaskDefinition",
+                              - "ecs:UpdateService",
+                              - "ecs:TagResource",
+                            ]
+                          - Effect   = "Allow"
+                          - Resource = "*"
+                        },
+                      - {
+                          - Action    = [
+                              - "iam:PassRole",
+                            ]
+                          - Condition = {
+                              - StringLike = {
+                                  - "iam:PassedToService" = "ecs-tasks.amazonaws.com"
+                                }
+                            }
+                          - Effect    = "Allow"
+                          - Resource  = "*"
+                        },
+                      - {
+                          - Action   = [
+                              - "codestar-connections:UseConnection",
+                              - "codeconnections:UseConnection",
+                            ]
+                          - Effect   = "Allow"
+                          - Resource = "*"
+                        },
+                    ]
+                  - Version   = "2012-10-17"
+                }
+            ) -> null
+        }
+    }
+
+  # module.cicd.aws_iam_role_policy.codebuild will be destroyed
+  - resource "aws_iam_role_policy" "codebuild" {
+      - id          = "simple-api-codebuild-dev:codebuild-policy" -> null
+      - name        = "codebuild-policy" -> null
+      - policy      = jsonencode(
+            {
+              - Statement = [
+                  - {
+                      - Action   = [
+                          - "logs:CreateLogGroup",
+                          - "logs:CreateLogStream",
+                          - "logs:PutLogEvents",
+                        ]
+                      - Effect   = "Allow"
+                      - Resource = "*"
+                    },
+                  - {
+                      - Action   = [
+                          - "s3:GetObject",
+                          - "s3:PutObject",
+                          - "s3:GetObjectVersion",
+                        ]
+                      - Effect   = "Allow"
+                      - Resource = "arn:aws:s3:::simple-api-pipeline-artifacts-491085390322/*"
+                    },
+                  - {
+                      - Action   = [
+                          - "ecr:GetAuthorizationToken",
+                          - "ecr:BatchCheckLayerAvailability",
+                          - "ecr:GetDownloadUrlForLayer",
+                          - "ecr:BatchGetImage",
+                          - "ecr:InitiateLayerUpload",
+                          - "ecr:UploadLayerPart",
+                          - "ecr:CompleteLayerUpload",
+                          - "ecr:PutImage",
+                        ]
+                      - Effect   = "Allow"
+                      - Resource = "*"
+                    },
+                ]
+              - Version   = "2012-10-17"
+            }
+        ) -> null
+      - role        = "simple-api-codebuild-dev" -> null
+        # (1 unchanged attribute hidden)
+    }
+
+  # module.cicd.aws_iam_role_policy.codebuild_terraform will be destroyed
+  - resource "aws_iam_role_policy" "codebuild_terraform" {
+      - id          = "simple-api-codebuild-terraform-dev:codebuild-terraform-policy" -> null
+      - name        = "codebuild-terraform-policy" -> null
+      - policy      = jsonencode(
+            {
+              - Statement = [
+                  - {
+                      - Action   = [
+                          - "logs:CreateLogGroup",
+                          - "logs:CreateLogStream",
+                          - "logs:PutLogEvents",
+                        ]
+                      - Effect   = "Allow"
+                      - Resource = "*"
+                    },
+                  - {
+                      - Action   = [
+                          - "s3:GetObject",
+                          - "s3:PutObject",
+                          - "s3:GetObjectVersion",
+                          - "s3:GetBucketVersioning",
+                          - "s3:ListBucket",
+                        ]
+                      - Effect   = "Allow"
+                      - Resource = [
+                          - "arn:aws:s3:::simple-api-pipeline-artifacts-491085390322",
+                          - "arn:aws:s3:::simple-api-pipeline-artifacts-491085390322/*",
+                        ]
+                    },
+                  - {
+                      - Action   = [
+                          - "ssm:GetParameters",
+                          - "ssm:GetParameter",
+                        ]
+                      - Effect   = "Allow"
+                      - Resource = "arn:aws:ssm:*:*:parameter/simple-api/tf/*"
+                    },
+                  - {
+                      - Action   = [
+                          - "*",
+                        ]
+                      - Effect   = "Allow"
+                      - Resource = "*"
+                    },
+                ]
+              - Version   = "2012-10-17"
+            }
+        ) -> null
+      - role        = "simple-api-codebuild-terraform-dev" -> null
+        # (1 unchanged attribute hidden)
+    }
+
+  # module.cicd.aws_iam_role_policy.codepipeline will be destroyed
+  - resource "aws_iam_role_policy" "codepipeline" {
+      - id          = "simple-api-codepipeline-dev:codepipeline-policy" -> null
+      - name        = "codepipeline-policy" -> null
+      - policy      = jsonencode(
+            {
+              - Statement = [
+                  - {
+                      - Action   = [
+                          - "s3:GetObject",
+                          - "s3:PutObject",
+                          - "s3:GetObjectVersion",
+                          - "s3:GetBucketVersioning",
+                        ]
+                      - Effect   = "Allow"
+                      - Resource = [
+                          - "arn:aws:s3:::simple-api-pipeline-artifacts-491085390322",
+                          - "arn:aws:s3:::simple-api-pipeline-artifacts-491085390322/*",
+                        ]
+                    },
+                  - {
+                      - Action   = [
+                          - "codebuild:BatchGetBuilds",
+                          - "codebuild:StartBuild",
+                        ]
+                      - Effect   = "Allow"
+                      - Resource = "*"
+                    },
+                  - {
+                      - Action   = [
+                          - "ecs:DescribeServices",
+                          - "ecs:DescribeTaskDefinition",
+                          - "ecs:DescribeTasks",
+                          - "ecs:ListTasks",
+                          - "ecs:RegisterTaskDefinition",
+                          - "ecs:UpdateService",
+                          - "ecs:TagResource",
+                        ]
+                      - Effect   = "Allow"
+                      - Resource = "*"
+                    },
+                  - {
+                      - Action    = [
+                          - "iam:PassRole",
+                        ]
+                      - Condition = {
+                          - StringLike = {
+                              - "iam:PassedToService" = "ecs-tasks.amazonaws.com"
+                            }
+                        }
+                      - Effect    = "Allow"
+                      - Resource  = "*"
+                    },
+                  - {
+                      - Action   = [
+                          - "codestar-connections:UseConnection",
+                          - "codeconnections:UseConnection",
+                        ]
+                      - Effect   = "Allow"
+                      - Resource = "*"
+                    },
+                ]
+              - Version   = "2012-10-17"
+            }
+        ) -> null
+      - role        = "simple-api-codepipeline-dev" -> null
+        # (1 unchanged attribute hidden)
+    }
+
+  # module.cicd.aws_s3_bucket.artifacts will be destroyed
+  - resource "aws_s3_bucket" "artifacts" {
+      - arn                         = "arn:aws:s3:::simple-api-pipeline-artifacts-491085390322" -> null
+      - bucket                      = "simple-api-pipeline-artifacts-491085390322" -> null
+      - bucket_domain_name          = "simple-api-pipeline-artifacts-491085390322.s3.amazonaws.com" -> null
+      - bucket_regional_domain_name = "simple-api-pipeline-artifacts-491085390322.s3.us-east-1.amazonaws.com" -> null
+      - force_destroy               = true -> null
+      - hosted_zone_id              = "Z3AQBSTGFYJSTF" -> null
+      - id                          = "simple-api-pipeline-artifacts-491085390322" -> null
+      - object_lock_enabled         = false -> null
+      - region                      = "us-east-1" -> null
+      - request_payer               = "BucketOwner" -> null
+      - tags                        = {
+          - "Environment" = "dev"
+          - "ManagedBy"   = "Terraform"
+          - "Project"     = "simple-api"
+        } -> null
+      - tags_all                    = {
+          - "Environment" = "dev"
+          - "ManagedBy"   = "Terraform"
+          - "Owner"       = "CapelLuisFelipe"
+          - "Project"     = "simple-api"
+        } -> null
+        # (3 unchanged attributes hidden)
+
+      - grant {
+          - id          = "4fb5d5fd6d79aa037939aeffdddd85964551561e89502403f23296addbbe5fbb" -> null
+          - permissions = [
+              - "FULL_CONTROL",
+            ] -> null
+          - type        = "CanonicalUser" -> null
+            # (1 unchanged attribute hidden)
+        }
+
+      - server_side_encryption_configuration {
+          - rule {
+              - bucket_key_enabled = false -> null
+
+              - apply_server_side_encryption_by_default {
+                  - sse_algorithm     = "AES256" -> null
+                    # (1 unchanged attribute hidden)
+                }
+            }
+        }
+
+      - versioning {
+          - enabled    = true -> null
+          - mfa_delete = false -> null
+        }
+    }
+
+  # module.cicd.aws_s3_bucket_public_access_block.artifacts will be destroyed
+  - resource "aws_s3_bucket_public_access_block" "artifacts" {
+      - block_public_acls       = true -> null
+      - block_public_policy     = true -> null
+      - bucket                  = "simple-api-pipeline-artifacts-491085390322" -> null
+      - id                      = "simple-api-pipeline-artifacts-491085390322" -> null
+      - ignore_public_acls      = true -> null
+      - restrict_public_buckets = true -> null
+    }
+
+  # module.cicd.aws_s3_bucket_server_side_encryption_configuration.artifacts will be destroyed
+  - resource "aws_s3_bucket_server_side_encryption_configuration" "artifacts" {
+      - bucket                = "simple-api-pipeline-artifacts-491085390322" -> null
+      - id                    = "simple-api-pipeline-artifacts-491085390322" -> null
+        # (1 unchanged attribute hidden)
+
+      - rule {
+          - bucket_key_enabled = false -> null
+
+          - apply_server_side_encryption_by_default {
+              - sse_algorithm     = "AES256" -> null
+                # (1 unchanged attribute hidden)
+            }
+        }
+    }
+
+  # module.cicd.aws_s3_bucket_versioning.artifacts will be destroyed
+  - resource "aws_s3_bucket_versioning" "artifacts" {
+      - bucket                = "simple-api-pipeline-artifacts-491085390322" -> null
+      - id                    = "simple-api-pipeline-artifacts-491085390322" -> null
+        # (1 unchanged attribute hidden)
+
+      - versioning_configuration {
+          - status     = "Enabled" -> null
+            # (1 unchanged attribute hidden)
+        }
+    }
+
+  # module.iam.aws_iam_role.ecs_task will be destroyed
+  - resource "aws_iam_role" "ecs_task" {
+      - arn                   = "arn:aws:iam::491085390322:role/simple-api-ecs-task-dev" -> null
+      - assume_role_policy    = jsonencode(
+            {
+              - Statement = [
+                  - {
+                      - Action    = "sts:AssumeRole"
+                      - Effect    = "Allow"
+                      - Principal = {
+                          - Service = "ecs-tasks.amazonaws.com"
+                        }
+                    },
+                ]
+              - Version   = "2012-10-17"
+            }
+        ) -> null
+      - create_date           = "2026-05-25T13:19:57Z" -> null
+      - force_detach_policies = false -> null
+      - id                    = "simple-api-ecs-task-dev" -> null
+      - managed_policy_arns   = [] -> null
+      - max_session_duration  = 3600 -> null
+      - name                  = "simple-api-ecs-task-dev" -> null
+      - path                  = "/" -> null
+      - tags                  = {
+          - "Environment" = "dev"
+          - "ManagedBy"   = "Terraform"
+          - "Project"     = "simple-api"
+        } -> null
+      - tags_all              = {
+          - "Environment" = "dev"
+          - "ManagedBy"   = "Terraform"
+          - "Owner"       = "CapelLuisFelipe"
+          - "Project"     = "simple-api"
+        } -> null
+      - unique_id             = "AROAXEVXYMHZPC6HVFUVA" -> null
+        # (3 unchanged attributes hidden)
+
+      - inline_policy {
+          - name   = "observability" -> null
+          - policy = jsonencode(
+                {
+                  - Statement = [
+                      - {
+                          - Action   = [
+                              - "ecs:DescribeServices",
+                              - "ecs:ListTasks",
+                              - "ecs:DescribeTasks",
+                            ]
+                          - Effect   = "Allow"
+                          - Resource = "*"
+                        },
+                      - {
+                          - Action   = [
+                              - "application-autoscaling:DescribeScalingActivities",
+                            ]
+                          - Effect   = "Allow"
+                          - Resource = "*"
+                        },
+                      - {
+                          - Action   = [
+                              - "cloudwatch:DescribeAlarmHistory",
+                              - "cloudwatch:DescribeAlarms",
+                            ]
+                          - Effect   = "Allow"
+                          - Resource = "*"
+                        },
+                    ]
+                  - Version   = "2012-10-17"
+                }
+            ) -> null
+        }
+    }
+
+  # module.iam.aws_iam_role.ecs_task_execution will be destroyed
+  - resource "aws_iam_role" "ecs_task_execution" {
+      - arn                   = "arn:aws:iam::491085390322:role/simple-api-ecs-task-execution-dev" -> null
+      - assume_role_policy    = jsonencode(
+            {
+              - Statement = [
+                  - {
+                      - Action    = "sts:AssumeRole"
+                      - Effect    = "Allow"
+                      - Principal = {
+                          - Service = "ecs-tasks.amazonaws.com"
+                        }
+                    },
+                ]
+              - Version   = "2012-10-17"
+            }
+        ) -> null
+      - create_date           = "2026-05-25T13:19:57Z" -> null
+      - force_detach_policies = false -> null
+      - id                    = "simple-api-ecs-task-execution-dev" -> null
+      - managed_policy_arns   = [
+          - "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy",
+        ] -> null
+      - max_session_duration  = 3600 -> null
+      - name                  = "simple-api-ecs-task-execution-dev" -> null
+      - path                  = "/" -> null
+      - tags                  = {
+          - "Environment" = "dev"
+          - "ManagedBy"   = "Terraform"
+          - "Project"     = "simple-api"
+        } -> null
+      - tags_all              = {
+          - "Environment" = "dev"
+          - "ManagedBy"   = "Terraform"
+          - "Owner"       = "CapelLuisFelipe"
+          - "Project"     = "simple-api"
+        } -> null
+      - unique_id             = "AROAXEVXYMHZA3ROLZ6DF" -> null
+        # (3 unchanged attributes hidden)
+
+      - inline_policy {
+          - name   = "allow-secrets-manager" -> null
+          - policy = jsonencode(
+                {
+                  - Statement = [
+                      - {
+                          - Action   = [
+                              - "secretsmanager:GetSecretValue",
+                            ]
+                          - Effect   = "Allow"
+                          - Resource = "*"
+                        },
+                    ]
+                  - Version   = "2012-10-17"
+                }
+            ) -> null
+        }
+    }
+
+  # module.iam.aws_iam_role_policy.ecs_task_execution_secrets will be destroyed
+  - resource "aws_iam_role_policy" "ecs_task_execution_secrets" {
+      - id          = "simple-api-ecs-task-execution-dev:allow-secrets-manager" -> null
+      - name        = "allow-secrets-manager" -> null
+      - policy      = jsonencode(
+            {
+              - Statement = [
+                  - {
+                      - Action   = [
+                          - "secretsmanager:GetSecretValue",
+                        ]
+                      - Effect   = "Allow"
+                      - Resource = "*"
+                    },
+                ]
+              - Version   = "2012-10-17"
+            }
+        ) -> null
+      - role        = "simple-api-ecs-task-execution-dev" -> null
+        # (1 unchanged attribute hidden)
+    }
+
+  # module.iam.aws_iam_role_policy.ecs_task_observability will be destroyed
+  - resource "aws_iam_role_policy" "ecs_task_observability" {
+      - id          = "simple-api-ecs-task-dev:observability" -> null
+      - name        = "observability" -> null
+      - policy      = jsonencode(
+            {
+              - Statement = [
+                  - {
+                      - Action   = [
+                          - "ecs:DescribeServices",
+                          - "ecs:ListTasks",
+                          - "ecs:DescribeTasks",
+                        ]
+                      - Effect   = "Allow"
+                      - Resource = "*"
+                    },
+                  - {
+                      - Action   = [
+                          - "application-autoscaling:DescribeScalingActivities",
+                        ]
+                      - Effect   = "Allow"
+                      - Resource = "*"
+                    },
+                  - {
+                      - Action   = [
+                          - "cloudwatch:DescribeAlarmHistory",
+                          - "cloudwatch:DescribeAlarms",
+                        ]
+                      - Effect   = "Allow"
+                      - Resource = "*"
+                    },
+                ]
+              - Version   = "2012-10-17"
+            }
+        ) -> null
+      - role        = "simple-api-ecs-task-dev" -> null
+        # (1 unchanged attribute hidden)
+    }
+
+  # module.iam.aws_iam_role_policy_attachment.ecs_task_execution will be destroyed
+  - resource "aws_iam_role_policy_attachment" "ecs_task_execution" {
+      - id         = "simple-api-ecs-task-execution-dev-20260525131959095100000003" -> null
+      - policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy" -> null
+      - role       = "simple-api-ecs-task-execution-dev" -> null
+    }
+
+  # module.network.aws_internet_gateway.main will be destroyed
+  - resource "aws_internet_gateway" "main" {
+      - arn      = "arn:aws:ec2:us-east-1:491085390322:internet-gateway/igw-00c5597baee3d12da" -> null
+      - id       = "igw-00c5597baee3d12da" -> null
+      - owner_id = "491085390322" -> null
+      - tags     = {
+          - "Environment" = "dev"
+          - "ManagedBy"   = "Terraform"
+          - "Name"        = "simple-api-igw"
+          - "Project"     = "simple-api"
+        } -> null
+      - tags_all = {
+          - "Environment" = "dev"
+          - "ManagedBy"   = "Terraform"
+          - "Name"        = "simple-api-igw"
+          - "Owner"       = "CapelLuisFelipe"
+          - "Project"     = "simple-api"
+        } -> null
+      - vpc_id   = "vpc-05bd6cbbbfe5fd35d" -> null
+    }
+
+  # module.network.aws_route.public will be destroyed
+  - resource "aws_route" "public" {
+      - destination_cidr_block      = "0.0.0.0/0" -> null
+      - gateway_id                  = "igw-00c5597baee3d12da" -> null
+      - id                          = "r-rtb-0f73e72768ca675f01080289494" -> null
+      - origin                      = "CreateRoute" -> null
+      - route_table_id              = "rtb-0f73e72768ca675f0" -> null
+      - state                       = "active" -> null
+        # (13 unchanged attributes hidden)
+    }
+
+  # module.network.aws_route_table.private[0] will be destroyed
+  - resource "aws_route_table" "private" {
+      - arn              = "arn:aws:ec2:us-east-1:491085390322:route-table/rtb-0f42fecca36127026" -> null
+      - id               = "rtb-0f42fecca36127026" -> null
+      - owner_id         = "491085390322" -> null
+      - propagating_vgws = [] -> null
+      - route            = [] -> null
+      - tags             = {
+          - "Environment" = "dev"
+          - "ManagedBy"   = "Terraform"
+          - "Name"        = "simple-api-private-rt-1"
+          - "Project"     = "simple-api"
+        } -> null
+      - tags_all         = {
+          - "Environment" = "dev"
+          - "ManagedBy"   = "Terraform"
+          - "Name"        = "simple-api-private-rt-1"
+          - "Owner"       = "CapelLuisFelipe"
+          - "Project"     = "simple-api"
+        } -> null
+      - vpc_id           = "vpc-05bd6cbbbfe5fd35d" -> null
+    }
+
+  # module.network.aws_route_table.public will be destroyed
+  - resource "aws_route_table" "public" {
+      - arn              = "arn:aws:ec2:us-east-1:491085390322:route-table/rtb-0f73e72768ca675f0" -> null
+      - id               = "rtb-0f73e72768ca675f0" -> null
+      - owner_id         = "491085390322" -> null
+      - propagating_vgws = [] -> null
+      - route            = [
+          - {
+              - cidr_block                 = "0.0.0.0/0"
+              - gateway_id                 = "igw-00c5597baee3d12da"
+                # (11 unchanged attributes hidden)
+            },
+        ] -> null
+      - tags             = {
+          - "Environment" = "dev"
+          - "ManagedBy"   = "Terraform"
+          - "Name"        = "simple-api-public-rt"
+          - "Project"     = "simple-api"
+        } -> null
+      - tags_all         = {
+          - "Environment" = "dev"
+          - "ManagedBy"   = "Terraform"
+          - "Name"        = "simple-api-public-rt"
+          - "Owner"       = "CapelLuisFelipe"
+          - "Project"     = "simple-api"
+        } -> null
+      - vpc_id           = "vpc-05bd6cbbbfe5fd35d" -> null
+    }
+
+  # module.network.aws_route_table_association.private[0] will be destroyed
+  - resource "aws_route_table_association" "private" {
+      - id             = "rtbassoc-0f9a631b72bca0001" -> null
+      - route_table_id = "rtb-0f42fecca36127026" -> null
+      - subnet_id      = "subnet-06bcb35e2af89abaa" -> null
+        # (1 unchanged attribute hidden)
+    }
+
+  # module.network.aws_route_table_association.private[1] will be destroyed
+  - resource "aws_route_table_association" "private" {
+      - id             = "rtbassoc-0ff350e66b095c4fb" -> null
+      - route_table_id = "rtb-0f42fecca36127026" -> null
+      - subnet_id      = "subnet-0b8d088a66bf68a76" -> null
+        # (1 unchanged attribute hidden)
+    }
+
+  # module.network.aws_route_table_association.public[0] will be destroyed
+  - resource "aws_route_table_association" "public" {
+      - id             = "rtbassoc-0d669161cbe69ca5a" -> null
+      - route_table_id = "rtb-0f73e72768ca675f0" -> null
+      - subnet_id      = "subnet-017c1c6e476a48bf2" -> null
+        # (1 unchanged attribute hidden)
+    }
+
+  # module.network.aws_route_table_association.public[1] will be destroyed
+  - resource "aws_route_table_association" "public" {
+      - id             = "rtbassoc-0c4044a216c664b9d" -> null
+      - route_table_id = "rtb-0f73e72768ca675f0" -> null
+      - subnet_id      = "subnet-02831e868cf473da2" -> null
+        # (1 unchanged attribute hidden)
+    }
+
+  # module.network.aws_subnet.private[0] will be destroyed
+  - resource "aws_subnet" "private" {
+      - arn                                            = "arn:aws:ec2:us-east-1:491085390322:subnet/subnet-06bcb35e2af89abaa" -> null
+      - assign_ipv6_address_on_creation                = false -> null
+      - availability_zone                              = "us-east-1a" -> null
+      - availability_zone_id                           = "use1-az4" -> null
+      - cidr_block                                     = "10.0.11.0/24" -> null
+      - enable_dns64                                   = false -> null
+      - enable_lni_at_device_index                     = 0 -> null
+      - enable_resource_name_dns_a_record_on_launch    = false -> null
+      - enable_resource_name_dns_aaaa_record_on_launch = false -> null
+      - id                                             = "subnet-06bcb35e2af89abaa" -> null
+      - ipv6_native                                    = false -> null
+      - map_customer_owned_ip_on_launch                = false -> null
+      - map_public_ip_on_launch                        = false -> null
+      - owner_id                                       = "491085390322" -> null
+      - private_dns_hostname_type_on_launch            = "ip-name" -> null
+      - tags                                           = {
+          - "Environment" = "dev"
+          - "ManagedBy"   = "Terraform"
+          - "Name"        = "simple-api-private-subnet-1"
+          - "Project"     = "simple-api"
+        } -> null
+      - tags_all                                       = {
+          - "Environment" = "dev"
+          - "ManagedBy"   = "Terraform"
+          - "Name"        = "simple-api-private-subnet-1"
+          - "Owner"       = "CapelLuisFelipe"
+          - "Project"     = "simple-api"
+        } -> null
+      - vpc_id                                         = "vpc-05bd6cbbbfe5fd35d" -> null
+        # (4 unchanged attributes hidden)
+    }
+
+  # module.network.aws_subnet.private[1] will be destroyed
+  - resource "aws_subnet" "private" {
+      - arn                                            = "arn:aws:ec2:us-east-1:491085390322:subnet/subnet-0b8d088a66bf68a76" -> null
+      - assign_ipv6_address_on_creation                = false -> null
+      - availability_zone                              = "us-east-1b" -> null
+      - availability_zone_id                           = "use1-az6" -> null
+      - cidr_block                                     = "10.0.12.0/24" -> null
+      - enable_dns64                                   = false -> null
+      - enable_lni_at_device_index                     = 0 -> null
+      - enable_resource_name_dns_a_record_on_launch    = false -> null
+      - enable_resource_name_dns_aaaa_record_on_launch = false -> null
+      - id                                             = "subnet-0b8d088a66bf68a76" -> null
+      - ipv6_native                                    = false -> null
+      - map_customer_owned_ip_on_launch                = false -> null
+      - map_public_ip_on_launch                        = false -> null
+      - owner_id                                       = "491085390322" -> null
+      - private_dns_hostname_type_on_launch            = "ip-name" -> null
+      - tags                                           = {
+          - "Environment" = "dev"
+          - "ManagedBy"   = "Terraform"
+          - "Name"        = "simple-api-private-subnet-2"
+          - "Project"     = "simple-api"
+        } -> null
+      - tags_all                                       = {
+          - "Environment" = "dev"
+          - "ManagedBy"   = "Terraform"
+          - "Name"        = "simple-api-private-subnet-2"
+          - "Owner"       = "CapelLuisFelipe"
+          - "Project"     = "simple-api"
+        } -> null
+      - vpc_id                                         = "vpc-05bd6cbbbfe5fd35d" -> null
+        # (4 unchanged attributes hidden)
+    }
+
+  # module.network.aws_subnet.public[0] will be destroyed
+  - resource "aws_subnet" "public" {
+      - arn                                            = "arn:aws:ec2:us-east-1:491085390322:subnet/subnet-017c1c6e476a48bf2" -> null
+      - assign_ipv6_address_on_creation                = false -> null
+      - availability_zone                              = "us-east-1a" -> null
+      - availability_zone_id                           = "use1-az4" -> null
+      - cidr_block                                     = "10.0.1.0/24" -> null
+      - enable_dns64                                   = false -> null
+      - enable_lni_at_device_index                     = 0 -> null
+      - enable_resource_name_dns_a_record_on_launch    = false -> null
+      - enable_resource_name_dns_aaaa_record_on_launch = false -> null
+      - id                                             = "subnet-017c1c6e476a48bf2" -> null
+      - ipv6_native                                    = false -> null
+      - map_customer_owned_ip_on_launch                = false -> null
+      - map_public_ip_on_launch                        = true -> null
+      - owner_id                                       = "491085390322" -> null
+      - private_dns_hostname_type_on_launch            = "ip-name" -> null
+      - tags                                           = {
+          - "Environment" = "dev"
+          - "ManagedBy"   = "Terraform"
+          - "Name"        = "simple-api-public-subnet-1"
+          - "Project"     = "simple-api"
+        } -> null
+      - tags_all                                       = {
+          - "Environment" = "dev"
+          - "ManagedBy"   = "Terraform"
+          - "Name"        = "simple-api-public-subnet-1"
+          - "Owner"       = "CapelLuisFelipe"
+          - "Project"     = "simple-api"
+        } -> null
+      - vpc_id                                         = "vpc-05bd6cbbbfe5fd35d" -> null
+        # (4 unchanged attributes hidden)
+    }
+
+  # module.network.aws_subnet.public[1] will be destroyed
+  - resource "aws_subnet" "public" {
+      - arn                                            = "arn:aws:ec2:us-east-1:491085390322:subnet/subnet-02831e868cf473da2" -> null
+      - assign_ipv6_address_on_creation                = false -> null
+      - availability_zone                              = "us-east-1b" -> null
+      - availability_zone_id                           = "use1-az6" -> null
+      - cidr_block                                     = "10.0.2.0/24" -> null
+      - enable_dns64                                   = false -> null
+      - enable_lni_at_device_index                     = 0 -> null
+      - enable_resource_name_dns_a_record_on_launch    = false -> null
+      - enable_resource_name_dns_aaaa_record_on_launch = false -> null
+      - id                                             = "subnet-02831e868cf473da2" -> null
+      - ipv6_native                                    = false -> null
+      - map_customer_owned_ip_on_launch                = false -> null
+      - map_public_ip_on_launch                        = true -> null
+      - owner_id                                       = "491085390322" -> null
+      - private_dns_hostname_type_on_launch            = "ip-name" -> null
+      - tags                                           = {
+          - "Environment" = "dev"
+          - "ManagedBy"   = "Terraform"
+          - "Name"        = "simple-api-public-subnet-2"
+          - "Project"     = "simple-api"
+        } -> null
+      - tags_all                                       = {
+          - "Environment" = "dev"
+          - "ManagedBy"   = "Terraform"
+          - "Name"        = "simple-api-public-subnet-2"
+          - "Owner"       = "CapelLuisFelipe"
+          - "Project"     = "simple-api"
+        } -> null
+      - vpc_id                                         = "vpc-05bd6cbbbfe5fd35d" -> null
+        # (4 unchanged attributes hidden)
+    }
+
+  # module.network.aws_vpc.main will be destroyed
+  - resource "aws_vpc" "main" {
+      - arn                                  = "arn:aws:ec2:us-east-1:491085390322:vpc/vpc-05bd6cbbbfe5fd35d" -> null
+      - assign_generated_ipv6_cidr_block     = false -> null
+      - cidr_block                           = "10.0.0.0/16" -> null
+      - default_network_acl_id               = "acl-066f195c455f2bed1" -> null
+      - default_route_table_id               = "rtb-06f21024610671964" -> null
+      - default_security_group_id            = "sg-00978f148ed6d55e1" -> null
+      - dhcp_options_id                      = "dopt-0c1069d54dfd05c94" -> null
+      - enable_dns_hostnames                 = true -> null
+      - enable_dns_support                   = true -> null
+      - enable_network_address_usage_metrics = false -> null
+      - id                                   = "vpc-05bd6cbbbfe5fd35d" -> null
+      - instance_tenancy                     = "default" -> null
+      - ipv6_netmask_length                  = 0 -> null
+      - main_route_table_id                  = "rtb-06f21024610671964" -> null
+      - owner_id                             = "491085390322" -> null
+      - tags                                 = {
+          - "Environment" = "dev"
+          - "ManagedBy"   = "Terraform"
+          - "Name"        = "simple-api-vpc"
+          - "Project"     = "simple-api"
+        } -> null
+      - tags_all                             = {
+          - "Environment" = "dev"
+          - "ManagedBy"   = "Terraform"
+          - "Name"        = "simple-api-vpc"
+          - "Owner"       = "CapelLuisFelipe"
+          - "Project"     = "simple-api"
+        } -> null
+        # (4 unchanged attributes hidden)
+    }
+
+  # module.rds.aws_db_instance.main will be destroyed
+  - resource "aws_db_instance" "main" {
+      - address                               = "simple-api-db.c3auqsga4o10.us-east-1.rds.amazonaws.com" -> null
+      - allocated_storage                     = 20 -> null
+      - apply_immediately                     = false -> null
+      - arn                                   = "arn:aws:rds:us-east-1:491085390322:db:simple-api-db" -> null
+      - auto_minor_version_upgrade            = true -> null
+      - availability_zone                     = "us-east-1a" -> null
+      - backup_retention_period               = 7 -> null
+      - backup_target                         = "region" -> null
+      - backup_window                         = "03:50-04:20" -> null
+      - ca_cert_identifier                    = "rds-ca-rsa2048-g1" -> null
+      - copy_tags_to_snapshot                 = false -> null
+      - customer_owned_ip_enabled             = false -> null
+      - database_insights_mode                = "standard" -> null
+      - db_name                               = "simple_api" -> null
+      - db_subnet_group_name                  = "simple-api-db-subnet-group" -> null
+      - dedicated_log_volume                  = false -> null
+      - delete_automated_backups              = true -> null
+      - deletion_protection                   = false -> null
+      - domain_dns_ips                        = [] -> null
+      - enabled_cloudwatch_logs_exports       = [
+          - "postgresql",
+        ] -> null
+      - endpoint                              = "simple-api-db.c3auqsga4o10.us-east-1.rds.amazonaws.com:5432" -> null
+      - engine                                = "postgres" -> null
+      - engine_lifecycle_support              = "open-source-rds-extended-support" -> null
+      - engine_version                        = "15.18" -> null
+      - engine_version_actual                 = "15.18" -> null
+      - hosted_zone_id                        = "Z2R2ITUGPM61AM" -> null
+      - iam_database_authentication_enabled   = false -> null
+      - id                                    = "db-H5QVCY4TKGYUBNX3G4SHKG2CQA" -> null
+      - identifier                            = "simple-api-db" -> null
+      - instance_class                        = "db.t3.micro" -> null
+      - iops                                  = 0 -> null
+      - kms_key_id                            = "arn:aws:kms:us-east-1:491085390322:key/1b0e36e7-630d-4f4b-a452-7861c174d3eb" -> null
+      - latest_restorable_time                = "2026-05-25T13:54:22Z" -> null
+      - license_model                         = "postgresql-license" -> null
+      - listener_endpoint                     = [] -> null
+      - maintenance_window                    = "sun:10:04-sun:10:34" -> null
+      - master_user_secret                    = [] -> null
+      - max_allocated_storage                 = 0 -> null
+      - monitoring_interval                   = 0 -> null
+      - multi_az                              = false -> null
+      - network_type                          = "IPV4" -> null
+      - option_group_name                     = "default:postgres-15" -> null
+      - parameter_group_name                  = "simple-api-db-pg" -> null
+      - password                              = (sensitive value) -> null
+      - password_wo                           = (write-only attribute) -> null
+      - performance_insights_enabled          = true -> null
+      - performance_insights_kms_key_id       = "arn:aws:kms:us-east-1:491085390322:key/1b0e36e7-630d-4f4b-a452-7861c174d3eb" -> null
+      - performance_insights_retention_period = 7 -> null
+      - port                                  = 5432 -> null
+      - publicly_accessible                   = false -> null
+      - replicas                              = [] -> null
+      - resource_id                           = "db-H5QVCY4TKGYUBNX3G4SHKG2CQA" -> null
+      - skip_final_snapshot                   = true -> null
+      - status                                = "available" -> null
+      - storage_encrypted                     = true -> null
+      - storage_throughput                    = 0 -> null
+      - storage_type                          = "gp2" -> null
+      - tags                                  = {
+          - "Environment" = "dev"
+          - "ManagedBy"   = "Terraform"
+          - "Name"        = "simple-api-db"
+          - "Project"     = "simple-api"
+        } -> null
+      - tags_all                              = {
+          - "Environment" = "dev"
+          - "ManagedBy"   = "Terraform"
+          - "Name"        = "simple-api-db"
+          - "Owner"       = "CapelLuisFelipe"
+          - "Project"     = "simple-api"
+        } -> null
+      - username                              = (sensitive value) -> null
+      - vpc_security_group_ids                = [
+          - "sg-081d80775cb33b806",
+        ] -> null
+        # (13 unchanged attributes hidden)
+    }
+
+  # module.rds.aws_db_parameter_group.main will be destroyed
+  - resource "aws_db_parameter_group" "main" {
+      - arn          = "arn:aws:rds:us-east-1:491085390322:pg:simple-api-db-pg" -> null
+      - description  = "Managed by Terraform" -> null
+      - family       = "postgres15" -> null
+      - id           = "simple-api-db-pg" -> null
+      - name         = "simple-api-db-pg" -> null
+      - skip_destroy = false -> null
+      - tags         = {
+          - "Environment" = "dev"
+          - "ManagedBy"   = "Terraform"
+          - "Name"        = "simple-api-db-pg"
+          - "Project"     = "simple-api"
+        } -> null
+      - tags_all     = {
+          - "Environment" = "dev"
+          - "ManagedBy"   = "Terraform"
+          - "Name"        = "simple-api-db-pg"
+          - "Owner"       = "CapelLuisFelipe"
+          - "Project"     = "simple-api"
+        } -> null
+        # (1 unchanged attribute hidden)
+
+      - parameter {
+          - apply_method = "immediate" -> null
+          - name         = "rds.force_ssl" -> null
+          - value        = "0" -> null
+        }
+    }
+
+  # module.rds.aws_db_subnet_group.main will be destroyed
+  - resource "aws_db_subnet_group" "main" {
+      - arn                     = "arn:aws:rds:us-east-1:491085390322:subgrp:simple-api-db-subnet-group" -> null
+      - description             = "Managed by Terraform" -> null
+      - id                      = "simple-api-db-subnet-group" -> null
+      - name                    = "simple-api-db-subnet-group" -> null
+      - subnet_ids              = [
+          - "subnet-06bcb35e2af89abaa",
+          - "subnet-0b8d088a66bf68a76",
+        ] -> null
+      - supported_network_types = [
+          - "IPV4",
+        ] -> null
+      - tags                    = {
+          - "Environment" = "dev"
+          - "ManagedBy"   = "Terraform"
+          - "Name"        = "simple-api-db-subnet-group"
+          - "Project"     = "simple-api"
+        } -> null
+      - tags_all                = {
+          - "Environment" = "dev"
+          - "ManagedBy"   = "Terraform"
+          - "Name"        = "simple-api-db-subnet-group"
+          - "Owner"       = "CapelLuisFelipe"
+          - "Project"     = "simple-api"
+        } -> null
+      - vpc_id                  = "vpc-05bd6cbbbfe5fd35d" -> null
+        # (1 unchanged attribute hidden)
+    }
+
+  # module.security.aws_security_group.alb will be destroyed
+  - resource "aws_security_group" "alb" {
+      - arn                    = "arn:aws:ec2:us-east-1:491085390322:security-group/sg-0eb6ee789faca69ec" -> null
+      - description            = "Security group for ALB" -> null
+      - egress                 = [
+          - {
+              - cidr_blocks      = [
+                  - "0.0.0.0/0",
+                ]
+              - from_port        = 0
+              - ipv6_cidr_blocks = []
+              - prefix_list_ids  = []
+              - protocol         = "-1"
+              - security_groups  = []
+              - self             = false
+              - to_port          = 0
+                # (1 unchanged attribute hidden)
+            },
+        ] -> null
+      - id                     = "sg-0eb6ee789faca69ec" -> null
+      - ingress                = [
+          - {
+              - cidr_blocks      = [
+                  - "0.0.0.0/0",
+                ]
+              - from_port        = 80
+              - ipv6_cidr_blocks = []
+              - prefix_list_ids  = []
+              - protocol         = "tcp"
+              - security_groups  = []
+              - self             = false
+              - to_port          = 80
+                # (1 unchanged attribute hidden)
+            },
+        ] -> null
+      - name                   = "simple-api-alb-sg" -> null
+      - owner_id               = "491085390322" -> null
+      - revoke_rules_on_delete = false -> null
+      - tags                   = {
+          - "Environment" = "dev"
+          - "ManagedBy"   = "Terraform"
+          - "Name"        = "simple-api-alb-sg"
+          - "Project"     = "simple-api"
+        } -> null
+      - tags_all               = {
+          - "Environment" = "dev"
+          - "ManagedBy"   = "Terraform"
+          - "Name"        = "simple-api-alb-sg"
+          - "Owner"       = "CapelLuisFelipe"
+          - "Project"     = "simple-api"
+        } -> null
+      - vpc_id                 = "vpc-05bd6cbbbfe5fd35d" -> null
+        # (1 unchanged attribute hidden)
+    }
+
+  # module.security.aws_security_group.ecs will be destroyed
+  - resource "aws_security_group" "ecs" {
+      - arn                    = "arn:aws:ec2:us-east-1:491085390322:security-group/sg-0e4f6a2ee649f8e86" -> null
+      - description            = "Security group for ECS tasks" -> null
+      - egress                 = [
+          - {
+              - cidr_blocks      = [
+                  - "0.0.0.0/0",
+                ]
+              - from_port        = 0
+              - ipv6_cidr_blocks = []
+              - prefix_list_ids  = []
+              - protocol         = "-1"
+              - security_groups  = []
+              - self             = false
+              - to_port          = 0
+                # (1 unchanged attribute hidden)
+            },
+        ] -> null
+      - id                     = "sg-0e4f6a2ee649f8e86" -> null
+      - ingress                = [
+          - {
+              - cidr_blocks      = []
+              - from_port        = 3000
+              - ipv6_cidr_blocks = []
+              - prefix_list_ids  = []
+              - protocol         = "tcp"
+              - security_groups  = [
+                  - "sg-0eb6ee789faca69ec",
+                ]
+              - self             = false
+              - to_port          = 3000
+                # (1 unchanged attribute hidden)
+            },
+        ] -> null
+      - name                   = "simple-api-ecs-sg" -> null
+      - owner_id               = "491085390322" -> null
+      - revoke_rules_on_delete = false -> null
+      - tags                   = {
+          - "Environment" = "dev"
+          - "ManagedBy"   = "Terraform"
+          - "Name"        = "simple-api-ecs-sg"
+          - "Project"     = "simple-api"
+        } -> null
+      - tags_all               = {
+          - "Environment" = "dev"
+          - "ManagedBy"   = "Terraform"
+          - "Name"        = "simple-api-ecs-sg"
+          - "Owner"       = "CapelLuisFelipe"
+          - "Project"     = "simple-api"
+        } -> null
+      - vpc_id                 = "vpc-05bd6cbbbfe5fd35d" -> null
+        # (1 unchanged attribute hidden)
+    }
+
+  # module.security.aws_security_group.rds will be destroyed
+  - resource "aws_security_group" "rds" {
+      - arn                    = "arn:aws:ec2:us-east-1:491085390322:security-group/sg-081d80775cb33b806" -> null
+      - description            = "Security group for RDS database" -> null
+      - egress                 = [
+          - {
+              - cidr_blocks      = [
+                  - "0.0.0.0/0",
+                ]
+              - from_port        = 0
+              - ipv6_cidr_blocks = []
+              - prefix_list_ids  = []
+              - protocol         = "-1"
+              - security_groups  = []
+              - self             = false
+              - to_port          = 0
+                # (1 unchanged attribute hidden)
+            },
+        ] -> null
+      - id                     = "sg-081d80775cb33b806" -> null
+      - ingress                = [
+          - {
+              - cidr_blocks      = []
+              - from_port        = 5432
+              - ipv6_cidr_blocks = []
+              - prefix_list_ids  = []
+              - protocol         = "tcp"
+              - security_groups  = [
+                  - "sg-0e4f6a2ee649f8e86",
+                ]
+              - self             = false
+              - to_port          = 5432
+                # (1 unchanged attribute hidden)
+            },
+        ] -> null
+      - name                   = "simple-api-rds-sg" -> null
+      - owner_id               = "491085390322" -> null
+      - revoke_rules_on_delete = false -> null
+      - tags                   = {
+          - "Environment" = "dev"
+          - "ManagedBy"   = "Terraform"
+          - "Name"        = "simple-api-rds-sg"
+          - "Project"     = "simple-api"
+        } -> null
+      - tags_all               = {
+          - "Environment" = "dev"
+          - "ManagedBy"   = "Terraform"
+          - "Name"        = "simple-api-rds-sg"
+          - "Owner"       = "CapelLuisFelipe"
+          - "Project"     = "simple-api"
+        } -> null
+      - vpc_id                 = "vpc-05bd6cbbbfe5fd35d" -> null
+        # (1 unchanged attribute hidden)
+    }
+
+  # module.security.aws_vpc_security_group_egress_rule.alb_all will be destroyed
+  - resource "aws_vpc_security_group_egress_rule" "alb_all" {
+      - arn                    = "arn:aws:ec2:us-east-1:491085390322:security-group-rule/sgr-0d3586be0b5c082ac" -> null
+      - cidr_ipv4              = "0.0.0.0/0" -> null
+      - from_port              = -1 -> null
+      - id                     = "sgr-0d3586be0b5c082ac" -> null
+      - ip_protocol            = "-1" -> null
+      - security_group_id      = "sg-0eb6ee789faca69ec" -> null
+      - security_group_rule_id = "sgr-0d3586be0b5c082ac" -> null
+      - tags                   = {
+          - "Environment" = "dev"
+          - "ManagedBy"   = "Terraform"
+          - "Name"        = "allow-all-outbound"
+          - "Project"     = "simple-api"
+        } -> null
+      - tags_all               = {
+          - "Environment" = "dev"
+          - "ManagedBy"   = "Terraform"
+          - "Name"        = "allow-all-outbound"
+          - "Owner"       = "CapelLuisFelipe"
+          - "Project"     = "simple-api"
+        } -> null
+      - to_port                = -1 -> null
+    }
+
+  # module.security.aws_vpc_security_group_egress_rule.ecs_all will be destroyed
+  - resource "aws_vpc_security_group_egress_rule" "ecs_all" {
+      - arn                    = "arn:aws:ec2:us-east-1:491085390322:security-group-rule/sgr-0c939a35e44d67e1e" -> null
+      - cidr_ipv4              = "0.0.0.0/0" -> null
+      - from_port              = -1 -> null
+      - id                     = "sgr-0c939a35e44d67e1e" -> null
+      - ip_protocol            = "-1" -> null
+      - security_group_id      = "sg-0e4f6a2ee649f8e86" -> null
+      - security_group_rule_id = "sgr-0c939a35e44d67e1e" -> null
+      - tags                   = {
+          - "Environment" = "dev"
+          - "ManagedBy"   = "Terraform"
+          - "Name"        = "allow-all-outbound"
+          - "Project"     = "simple-api"
+        } -> null
+      - tags_all               = {
+          - "Environment" = "dev"
+          - "ManagedBy"   = "Terraform"
+          - "Name"        = "allow-all-outbound"
+          - "Owner"       = "CapelLuisFelipe"
+          - "Project"     = "simple-api"
+        } -> null
+      - to_port                = -1 -> null
+    }
+
+  # module.security.aws_vpc_security_group_egress_rule.rds_all will be destroyed
+  - resource "aws_vpc_security_group_egress_rule" "rds_all" {
+      - arn                    = "arn:aws:ec2:us-east-1:491085390322:security-group-rule/sgr-07d107f4c42c238ba" -> null
+      - cidr_ipv4              = "0.0.0.0/0" -> null
+      - from_port              = -1 -> null
+      - id                     = "sgr-07d107f4c42c238ba" -> null
+      - ip_protocol            = "-1" -> null
+      - security_group_id      = "sg-081d80775cb33b806" -> null
+      - security_group_rule_id = "sgr-07d107f4c42c238ba" -> null
+      - tags                   = {
+          - "Environment" = "dev"
+          - "ManagedBy"   = "Terraform"
+          - "Name"        = "allow-all-outbound"
+          - "Project"     = "simple-api"
+        } -> null
+      - tags_all               = {
+          - "Environment" = "dev"
+          - "ManagedBy"   = "Terraform"
+          - "Name"        = "allow-all-outbound"
+          - "Owner"       = "CapelLuisFelipe"
+          - "Project"     = "simple-api"
+        } -> null
+      - to_port                = -1 -> null
+    }
+
+  # module.security.aws_vpc_security_group_ingress_rule.alb_http will be destroyed
+  - resource "aws_vpc_security_group_ingress_rule" "alb_http" {
+      - arn                    = "arn:aws:ec2:us-east-1:491085390322:security-group-rule/sgr-0b6908c068f848fa3" -> null
+      - cidr_ipv4              = "0.0.0.0/0" -> null
+      - from_port              = 80 -> null
+      - id                     = "sgr-0b6908c068f848fa3" -> null
+      - ip_protocol            = "tcp" -> null
+      - security_group_id      = "sg-0eb6ee789faca69ec" -> null
+      - security_group_rule_id = "sgr-0b6908c068f848fa3" -> null
+      - tags                   = {
+          - "Environment" = "dev"
+          - "ManagedBy"   = "Terraform"
+          - "Name"        = "allow-http"
+          - "Project"     = "simple-api"
+        } -> null
+      - tags_all               = {
+          - "Environment" = "dev"
+          - "ManagedBy"   = "Terraform"
+          - "Name"        = "allow-http"
+          - "Owner"       = "CapelLuisFelipe"
+          - "Project"     = "simple-api"
+        } -> null
+      - to_port                = 80 -> null
+    }
+
+  # module.security.aws_vpc_security_group_ingress_rule.ecs_from_alb will be destroyed
+  - resource "aws_vpc_security_group_ingress_rule" "ecs_from_alb" {
+      - arn                          = "arn:aws:ec2:us-east-1:491085390322:security-group-rule/sgr-0b551493b32723f21" -> null
+      - from_port                    = 3000 -> null
+      - id                           = "sgr-0b551493b32723f21" -> null
+      - ip_protocol                  = "tcp" -> null
+      - referenced_security_group_id = "sg-0eb6ee789faca69ec" -> null
+      - security_group_id            = "sg-0e4f6a2ee649f8e86" -> null
+      - security_group_rule_id       = "sgr-0b551493b32723f21" -> null
+      - tags                         = {
+          - "Environment" = "dev"
+          - "ManagedBy"   = "Terraform"
+          - "Name"        = "allow-from-alb"
+          - "Project"     = "simple-api"
+        } -> null
+      - tags_all                     = {
+          - "Environment" = "dev"
+          - "ManagedBy"   = "Terraform"
+          - "Name"        = "allow-from-alb"
+          - "Owner"       = "CapelLuisFelipe"
+          - "Project"     = "simple-api"
+        } -> null
+      - to_port                      = 3000 -> null
+    }
+
+  # module.security.aws_vpc_security_group_ingress_rule.rds_from_ecs will be destroyed
+  - resource "aws_vpc_security_group_ingress_rule" "rds_from_ecs" {
+      - arn                          = "arn:aws:ec2:us-east-1:491085390322:security-group-rule/sgr-0a5302cfdd5374227" -> null
+      - from_port                    = 5432 -> null
+      - id                           = "sgr-0a5302cfdd5374227" -> null
+      - ip_protocol                  = "tcp" -> null
+      - referenced_security_group_id = "sg-0e4f6a2ee649f8e86" -> null
+      - security_group_id            = "sg-081d80775cb33b806" -> null
+      - security_group_rule_id       = "sgr-0a5302cfdd5374227" -> null
+      - tags                         = {
+          - "Environment" = "dev"
+          - "ManagedBy"   = "Terraform"
+          - "Name"        = "allow-from-ecs"
+          - "Project"     = "simple-api"
+        } -> null
+      - tags_all                     = {
+          - "Environment" = "dev"
+          - "ManagedBy"   = "Terraform"
+          - "Name"        = "allow-from-ecs"
+          - "Owner"       = "CapelLuisFelipe"
+          - "Project"     = "simple-api"
+        } -> null
+      - to_port                      = 5432 -> null
+    }
+
+Plan: 0 to add, 0 to change, 67 to destroy.
+
+Changes to Outputs:
+  - alb_arn                 = "arn:aws:elasticloadbalancing:us-east-1:491085390322:loadbalancer/app/simple-api-alb/d1941ea7ec4e28c8" -> null
+  - alb_dns_name            = "simple-api-alb-942091090.us-east-1.elb.amazonaws.com" -> null
+  - api_endpoints           = {
+      - connect = "http://simple-api-alb-942091090.us-east-1.elb.amazonaws.com/connect"
+      - root    = "http://simple-api-alb-942091090.us-east-1.elb.amazonaws.com/"
+    } -> null
+  - api_url                 = "http://simple-api-alb-942091090.us-east-1.elb.amazonaws.com" -> null
+  - aws_account_id          = "491085390322" -> null
+  - aws_region              = "us-east-1" -> null
+  - codebuild_project_name  = "simple-api-build-dev" -> null
+  - ecr_repository_arn      = "arn:aws:ecr:us-east-1:491085390322:repository/simple-api" -> null
+  - ecr_repository_url      = "491085390322.dkr.ecr.us-east-1.amazonaws.com/simple-api" -> null
+  - ecs_cluster_arn         = "arn:aws:ecs:us-east-1:491085390322:cluster/simple-api-cluster" -> null
+  - ecs_cluster_name        = "simple-api-cluster" -> null
+  - ecs_service_name        = "simple-api-service" -> null
+  - ecs_task_definition_arn = "arn:aws:ecs:us-east-1:491085390322:task-definition/simple-api:40" -> null
+  - pipeline_name           = "simple-api-pipeline-dev" -> null
+  - private_subnet_ids      = [
+      - "subnet-06bcb35e2af89abaa",
+      - "subnet-0b8d088a66bf68a76",
+    ] -> null
+  - public_subnet_ids       = [
+      - "subnet-017c1c6e476a48bf2",
+      - "subnet-02831e868cf473da2",
+    ] -> null
+  - rds_address             = "simple-api-db.c3auqsga4o10.us-east-1.rds.amazonaws.com" -> null
+  - rds_database_name       = "simple_api" -> null
+  - rds_endpoint            = "simple-api-db.c3auqsga4o10.us-east-1.rds.amazonaws.com:5432" -> null
+  - rds_port                = 5432 -> null
+  - rds_username            = (sensitive value) -> null
+  - vpc_id                  = "vpc-05bd6cbbbfe5fd35d" -> null
+
+Do you really want to destroy all resources?
+  Terraform will destroy all your managed infrastructure, as shown above.
+  There is no undo. Only 'yes' will be accepted to confirm.
+
+  Enter a value: yes
+
+module.cicd.aws_iam_role_policy.codebuild_terraform: Destroying... [id=simple-api-codebuild-terraform-dev:codebuild-terraform-policy]
+module.cicd.aws_iam_role_policy.codebuild: Destroying... [id=simple-api-codebuild-dev:codebuild-policy]
+module.cicd.aws_iam_role_policy.codepipeline: Destroying... [id=simple-api-codepipeline-dev:codepipeline-policy]
+module.security.aws_vpc_security_group_ingress_rule.alb_http: Destroying... [id=sgr-0b6908c068f848fa3]
+module.security.aws_vpc_security_group_ingress_rule.rds_from_ecs: Destroying... [id=sgr-0a5302cfdd5374227]
+module.iam.aws_iam_role_policy.ecs_task_execution_secrets: Destroying... [id=simple-api-ecs-task-execution-dev:allow-secrets-manager]
+module.network.aws_route_table_association.private[1]: Destroying... [id=rtbassoc-0ff350e66b095c4fb]
+aws_appautoscaling_policy.ecs_policy_memory: Destroying... [id=simple-api-memory-autoscaling]
+aws_cloudwatch_metric_alarm.ecs_cpu_low: Destroying... [id=simple-api-cpu-low]
+aws_cloudwatch_event_target.ecs_scaling_sns: Destroying... [id=simple-api-ecs-scaling-EcsScalingSNS]
+module.cicd.aws_iam_role_policy.codepipeline: Destruction complete after 1s
+aws_appautoscaling_policy.ecs_policy_memory: Destruction complete after 1s
+module.cicd.aws_s3_bucket_public_access_block.artifacts: Destroying... [id=simple-api-pipeline-artifacts-491085390322]
+aws_ecs_cluster_capacity_providers.main: Destroying... [id=simple-api-cluster]
+module.iam.aws_iam_role_policy.ecs_task_execution_secrets: Destruction complete after 1s
+aws_sns_topic_policy.alerts: Destroying... [id=arn:aws:sns:us-east-1:491085390322:simple-api-alerts-dev]
+aws_cloudwatch_event_target.ecs_scaling_sns: Destruction complete after 1s
+module.network.aws_route_table_association.public[0]: Destroying... [id=rtbassoc-0d669161cbe69ca5a]
+module.cicd.aws_iam_role_policy.codebuild: Destruction complete after 1s
+module.cicd.aws_iam_role_policy.codebuild_terraform: Destruction complete after 1s
+module.network.aws_route_table_association.public[1]: Destroying... [id=rtbassoc-0c4044a216c664b9d]
+module.iam.aws_iam_role_policy.ecs_task_observability: Destroying... [id=simple-api-ecs-task-dev:observability]
+aws_cloudwatch_metric_alarm.ecs_cpu_low: Destruction complete after 1s
+aws_appautoscaling_policy.ecs_policy_cpu: Destroying... [id=simple-api-cpu-autoscaling]
+module.iam.aws_iam_role_policy.ecs_task_observability: Destruction complete after 0s
+module.cicd.aws_s3_bucket_versioning.artifacts: Destroying... [id=simple-api-pipeline-artifacts-491085390322]
+module.security.aws_vpc_security_group_ingress_rule.rds_from_ecs: Destruction complete after 1s
+module.security.aws_vpc_security_group_ingress_rule.alb_http: Destruction complete after 1s
+aws_cloudwatch_metric_alarm.ecs_memory_high: Destroying... [id=simple-api-memory-high]
+aws_cloudwatch_metric_alarm.ecs_cpu_high: Destroying... [id=simple-api-cpu-high]
+module.network.aws_route_table_association.private[1]: Destruction complete after 2s
+module.security.aws_vpc_security_group_egress_rule.ecs_all: Destroying... [id=sgr-0c939a35e44d67e1e]
+aws_appautoscaling_policy.ecs_policy_cpu: Destruction complete after 1s
+aws_cloudwatch_metric_alarm.ecs_cpu_high: Destruction complete after 1s
+module.network.aws_route_table_association.private[0]: Destroying... [id=rtbassoc-0f9a631b72bca0001]
+aws_cloudwatch_metric_alarm.ecs_memory_low: Destroying... [id=simple-api-memory-low]
+aws_sns_topic_policy.alerts: Destruction complete after 1s
+module.network.aws_route_table_association.public[0]: Destruction complete after 1s
+aws_secretsmanager_secret_version.db_password: Destroying... [id=arn:aws:secretsmanager:us-east-1:491085390322:secret:simple-api/db-password-42k1AJ|terraform-20260525131958464100000002]
+aws_cloudwatch_event_target.pipeline_sns: Destroying... [id=simple-api-pipeline-state-SendToSNS]
+aws_cloudwatch_metric_alarm.ecs_memory_high: Destruction complete after 1s
+module.security.aws_vpc_security_group_egress_rule.alb_all: Destroying... [id=sgr-0d3586be0b5c082ac]
+aws_cloudwatch_event_target.pipeline_sns: Destruction complete after 0s
+module.security.aws_vpc_security_group_ingress_rule.ecs_from_alb: Destroying... [id=sgr-0b551493b32723f21]
+module.cicd.aws_s3_bucket_public_access_block.artifacts: Destruction complete after 1s
+module.security.aws_vpc_security_group_egress_rule.rds_all: Destroying... [id=sgr-07d107f4c42c238ba]
+module.network.aws_route_table_association.public[1]: Destruction complete after 1s
+module.network.aws_route.public: Destroying... [id=r-rtb-0f73e72768ca675f01080289494]
+module.cicd.aws_s3_bucket_versioning.artifacts: Destruction complete after 1s
+aws_cloudwatch_metric_alarm.ecs_memory_low: Destruction complete after 0s
+module.security.aws_vpc_security_group_egress_rule.ecs_all: Destruction complete after 0s
+module.iam.aws_iam_role_policy_attachment.ecs_task_execution: Destroying... [id=simple-api-ecs-task-execution-dev-20260525131959095100000003]
+module.cicd.aws_s3_bucket_server_side_encryption_configuration.artifacts: Destroying... [id=simple-api-pipeline-artifacts-491085390322]
+aws_cloudwatch_event_rule.ecs_scaling: Destroying... [id=simple-api-ecs-scaling]
+module.network.aws_route_table_association.private[0]: Destruction complete after 0s
+aws_appautoscaling_target.ecs_target: Destroying... [id=service/simple-api-cluster/simple-api-service]
+aws_secretsmanager_secret_version.db_password: Destruction complete after 0s
+module.security.aws_vpc_security_group_ingress_rule.ecs_from_alb: Destruction complete after 0s
+module.iam.aws_iam_role_policy_attachment.ecs_task_execution: Destruction complete after 0s
+module.security.aws_vpc_security_group_egress_rule.alb_all: Destruction complete after 0s
+aws_cloudwatch_event_rule.ecs_scaling: Destruction complete after 0s
+aws_cloudwatch_event_rule.pipeline_state: Destroying... [id=simple-api-pipeline-state]
+module.network.aws_route_table.private[0]: Destroying... [id=rtb-0f42fecca36127026]
+module.cicd.aws_s3_bucket_server_side_encryption_configuration.artifacts: Destruction complete after 0s
+module.security.aws_vpc_security_group_egress_rule.rds_all: Destruction complete after 0s
+aws_cloudwatch_event_rule.pipeline_state: Destruction complete after 1s
+module.cicd.aws_codepipeline.terraform: Destroying... [id=simple-api-terraform-pipeline-dev]
+module.cicd.aws_codepipeline.main: Destroying... [id=simple-api-pipeline-dev]
+aws_appautoscaling_target.ecs_target: Destruction complete after 1s
+module.network.aws_route.public: Destruction complete after 1s
+module.network.aws_route_table.public: Destroying... [id=rtb-0f73e72768ca675f0]
+module.network.aws_internet_gateway.main: Destroying... [id=igw-00c5597baee3d12da]
+module.network.aws_route_table.private[0]: Destruction complete after 1s
+module.cicd.aws_codepipeline.terraform: Destruction complete after 0s
+module.cicd.aws_codebuild_project.terraform: Destroying... [id=arn:aws:codebuild:us-east-1:491085390322:project/simple-api-terraform-dev]
+module.cicd.aws_codepipeline.main: Destruction complete after 1s
+module.cicd.aws_iam_role.codepipeline: Destroying... [id=simple-api-codepipeline-dev]
+module.cicd.aws_s3_bucket.artifacts: Destroying... [id=simple-api-pipeline-artifacts-491085390322]
+aws_ecs_service.main: Destroying... [id=arn:aws:ecs:us-east-1:491085390322:service/simple-api-cluster/simple-api-service]
+module.cicd.aws_codebuild_project.main: Destroying... [id=arn:aws:codebuild:us-east-1:491085390322:project/simple-api-build-dev]
+module.network.aws_route_table.public: Destruction complete after 1s
+module.cicd.aws_iam_role.codepipeline: Destruction complete after 0s
+module.cicd.aws_codebuild_project.terraform: Destruction complete after 1s
+module.cicd.aws_iam_role.codebuild_terraform: Destroying... [id=simple-api-codebuild-terraform-dev]
+module.cicd.aws_codebuild_project.main: Destruction complete after 0s
+module.cicd.aws_iam_role.codebuild: Destroying... [id=simple-api-codebuild-dev]
+module.cicd.aws_iam_role.codebuild_terraform: Destruction complete after 1s
+module.cicd.aws_iam_role.codebuild: Destruction complete after 1s
+module.cicd.aws_s3_bucket.artifacts: Destruction complete after 1s
+aws_ecs_cluster_capacity_providers.main: Still destroying... [id=simple-api-cluster, 00m10s elapsed]
+aws_ecs_cluster_capacity_providers.main: Destruction complete after 11s
+module.network.aws_internet_gateway.main: Still destroying... [id=igw-00c5597baee3d12da, 00m10s elapsed]
+aws_ecs_service.main: Still destroying... [id=arn:aws:ecs:us-east-1:491085390322:service/simple-api-cluster/simple-api-service, 00m10s elapsed]
+capel@MacBook-Air-de-Luis dev % bash destroy.sh
+=== Removendo SNS do state (prevent_destroy) ===
+Removed aws_sns_topic.alerts
+Successfully removed 1 resource instance(s).
+Removed aws_sns_topic_subscription.email
+Successfully removed 1 resource instance(s).
+=== Destruindo infraestrutura ===module.network.aws_internet_gateway.main: Still destroying... [id=igw-00c5597baee3d12da, 00m20s elapsed]
+aws_ecs_service.main: Still destroying... [id=arn:aws:ecs:us-east-1:491085390322:service/simple-api-cluster/simple-api-service, 00m20s elapsed]
+module.network.aws_internet_gateway.main: Still destroying... [id=igw-00c5597baee3d12da, 00m30s elapsed]
+aws_ecs_service.main: Still destroying... [id=arn:aws:ecs:us-east-1:491085390322:service/simple-api-cluster/simple-api-service, 00m30s elapsed]
+module.network.aws_internet_gateway.main: Still destroying... [id=igw-00c5597baee3d12da, 00m40s elapsed]
+aws_ecs_service.main: Still destroying... [id=arn:aws:ecs:us-east-1:491085390322:service/simple-api-cluster/simple-api-service, 00m40s elapsed]
+module.network.aws_internet_gateway.main: Still destroying... [id=igw-00c5597baee3d12da, 00m50s elapsed]
+aws_ecs_service.main: Still destroying... [id=arn:aws:ecs:us-east-1:491085390322:service/simple-api-cluster/simple-api-service, 00m50s elapsed]
+module.network.aws_internet_gateway.main: Still destroying... [id=igw-00c5597baee3d12da, 01m00s elapsed]
+aws_ecs_service.main: Still destroying... [id=arn:aws:ecs:us-east-1:491085390322:service/simple-api-cluster/simple-api-service, 01m00s elapsed]
+module.network.aws_internet_gateway.main: Still destroying... [id=igw-00c5597baee3d12da, 01m10s elapsed]
+aws_ecs_service.main: Still destroying... [id=arn:aws:ecs:us-east-1:491085390322:service/simple-api-cluster/simple-api-service, 01m10s elapsed]
+module.network.aws_internet_gateway.main: Still destroying... [id=igw-00c5597baee3d12da, 01m20s elapsed]
+aws_ecs_service.main: Still destroying... [id=arn:aws:ecs:us-east-1:491085390322:service/simple-api-cluster/simple-api-service, 01m20s elapsed]
+module.network.aws_internet_gateway.main: Still destroying... [id=igw-00c5597baee3d12da, 01m30s elapsed]
+aws_ecs_service.main: Still destroying... [id=arn:aws:ecs:us-east-1:491085390322:service/simple-api-cluster/simple-api-service, 01m30s elapsed]
+module.network.aws_internet_gateway.main: Still destroying... [id=igw-00c5597baee3d12da, 01m40s elapsed]
+aws_ecs_service.main: Still destroying... [id=arn:aws:ecs:us-east-1:491085390322:service/simple-api-cluster/simple-api-service, 01m40s elapsed]
+module.network.aws_internet_gateway.main: Still destroying... [id=igw-00c5597baee3d12da, 01m50s elapsed]
+aws_ecs_service.main: Still destroying... [id=arn:aws:ecs:us-east-1:491085390322:service/simple-api-cluster/simple-api-service, 01m50s elapsed]
+module.network.aws_internet_gateway.main: Still destroying... [id=igw-00c5597baee3d12da, 02m00s elapsed]
+aws_ecs_service.main: Still destroying... [id=arn:aws:ecs:us-east-1:491085390322:service/simple-api-cluster/simple-api-service, 02m00s elapsed]
+module.network.aws_internet_gateway.main: Still destroying... [id=igw-00c5597baee3d12da, 02m10s elapsed]
+aws_ecs_service.main: Still destroying... [id=arn:aws:ecs:us-east-1:491085390322:service/simple-api-cluster/simple-api-service, 02m10s elapsed]
+module.network.aws_internet_gateway.main: Still destroying... [id=igw-00c5597baee3d12da, 02m20s elapsed]
+aws_ecs_service.main: Still destroying... [id=arn:aws:ecs:us-east-1:491085390322:service/simple-api-cluster/simple-api-service, 02m20s elapsed]
+module.network.aws_internet_gateway.main: Still destroying... [id=igw-00c5597baee3d12da, 02m30s elapsed]
+aws_ecs_service.main: Still destroying... [id=arn:aws:ecs:us-east-1:491085390322:service/simple-api-cluster/simple-api-service, 02m30s elapsed]
+module.network.aws_internet_gateway.main: Still destroying... [id=igw-00c5597baee3d12da, 02m40s elapsed]
+aws_ecs_service.main: Still destroying... [id=arn:aws:ecs:us-east-1:491085390322:service/simple-api-cluster/simple-api-service, 02m40s elapsed]
+module.network.aws_internet_gateway.main: Still destroying... [id=igw-00c5597baee3d12da, 02m50s elapsed]
+aws_ecs_service.main: Still destroying... [id=arn:aws:ecs:us-east-1:491085390322:service/simple-api-cluster/simple-api-service, 02m50s elapsed]
+module.network.aws_internet_gateway.main: Still destroying... [id=igw-00c5597baee3d12da, 03m00s elapsed]
+aws_ecs_service.main: Still destroying... [id=arn:aws:ecs:us-east-1:491085390322:service/simple-api-cluster/simple-api-service, 03m00s elapsed]
+module.network.aws_internet_gateway.main: Still destroying... [id=igw-00c5597baee3d12da, 03m10s elapsed]
+aws_ecs_service.main: Still destroying... [id=arn:aws:ecs:us-east-1:491085390322:service/simple-api-cluster/simple-api-service, 03m10s elapsed]
+module.network.aws_internet_gateway.main: Still destroying... [id=igw-00c5597baee3d12da, 03m20s elapsed]
+aws_ecs_service.main: Still destroying... [id=arn:aws:ecs:us-east-1:491085390322:service/simple-api-cluster/simple-api-service, 03m20s elapsed]
+module.network.aws_internet_gateway.main: Still destroying... [id=igw-00c5597baee3d12da, 03m30s elapsed]
+aws_ecs_service.main: Still destroying... [id=arn:aws:ecs:us-east-1:491085390322:service/simple-api-cluster/simple-api-service, 03m30s elapsed]
+module.network.aws_internet_gateway.main: Still destroying... [id=igw-00c5597baee3d12da, 03m40s elapsed]
+aws_ecs_service.main: Still destroying... [id=arn:aws:ecs:us-east-1:491085390322:service/simple-api-cluster/simple-api-service, 03m40s elapsed]
+module.network.aws_internet_gateway.main: Still destroying... [id=igw-00c5597baee3d12da, 03m50s elapsed]
+aws_ecs_service.main: Still destroying... [id=arn:aws:ecs:us-east-1:491085390322:service/simple-api-cluster/simple-api-service, 03m50s elapsed]
+module.network.aws_internet_gateway.main: Still destroying... [id=igw-00c5597baee3d12da, 04m00s elapsed]
+aws_ecs_service.main: Still destroying... [id=arn:aws:ecs:us-east-1:491085390322:service/simple-api-cluster/simple-api-service, 04m00s elapsed]
+module.network.aws_internet_gateway.main: Still destroying... [id=igw-00c5597baee3d12da, 04m10s elapsed]
+aws_ecs_service.main: Still destroying... [id=arn:aws:ecs:us-east-1:491085390322:service/simple-api-cluster/simple-api-service, 04m10s elapsed]
+module.network.aws_internet_gateway.main: Still destroying... [id=igw-00c5597baee3d12da, 04m20s elapsed]
+aws_ecs_service.main: Still destroying... [id=arn:aws:ecs:us-east-1:491085390322:service/simple-api-cluster/simple-api-service, 04m20s elapsed]
+module.network.aws_internet_gateway.main: Still destroying... [id=igw-00c5597baee3d12da, 04m30s elapsed]
+aws_ecs_service.main: Still destroying... [id=arn:aws:ecs:us-east-1:491085390322:service/simple-api-cluster/simple-api-service, 04m30s elapsed]
+module.network.aws_internet_gateway.main: Still destroying... [id=igw-00c5597baee3d12da, 04m40s elapsed]
+aws_ecs_service.main: Still destroying... [id=arn:aws:ecs:us-east-1:491085390322:service/simple-api-cluster/simple-api-service, 04m40s elapsed]
+module.network.aws_internet_gateway.main: Still destroying... [id=igw-00c5597baee3d12da, 04m50s elapsed]
+aws_ecs_service.main: Still destroying... [id=arn:aws:ecs:us-east-1:491085390322:service/simple-api-cluster/simple-api-service, 04m50s elapsed]
+module.network.aws_internet_gateway.main: Still destroying... [id=igw-00c5597baee3d12da, 05m00s elapsed]
+aws_ecs_service.main: Still destroying... [id=arn:aws:ecs:us-east-1:491085390322:service/simple-api-cluster/simple-api-service, 05m00s elapsed]
+module.network.aws_internet_gateway.main: Still destroying... [id=igw-00c5597baee3d12da, 05m10s elapsed]
+aws_ecs_service.main: Still destroying... [id=arn:aws:ecs:us-east-1:491085390322:service/simple-api-cluster/simple-api-service, 05m10s elapsed]
+module.network.aws_internet_gateway.main: Still destroying... [id=igw-00c5597baee3d12da, 05m20s elapsed]
+aws_ecs_service.main: Still destroying... [id=arn:aws:ecs:us-east-1:491085390322:service/simple-api-cluster/simple-api-service, 05m20s elapsed]
+module.network.aws_internet_gateway.main: Still destroying... [id=igw-00c5597baee3d12da, 05m30s elapsed]
+aws_ecs_service.main: Still destroying... [id=arn:aws:ecs:us-east-1:491085390322:service/simple-api-cluster/simple-api-service, 05m30s elapsed]
+module.network.aws_internet_gateway.main: Still destroying... [id=igw-00c5597baee3d12da, 05m40s elapsed]
+aws_ecs_service.main: Still destroying... [id=arn:aws:ecs:us-east-1:491085390322:service/simple-api-cluster/simple-api-service, 05m40s elapsed]
+module.network.aws_internet_gateway.main: Still destroying... [id=igw-00c5597baee3d12da, 05m50s elapsed]
+aws_ecs_service.main: Still destroying... [id=arn:aws:ecs:us-east-1:491085390322:service/simple-api-cluster/simple-api-service, 05m50s elapsed]
+module.network.aws_internet_gateway.main: Still destroying... [id=igw-00c5597baee3d12da, 06m00s elapsed]
+aws_ecs_service.main: Still destroying... [id=arn:aws:ecs:us-east-1:491085390322:service/simple-api-cluster/simple-api-service, 06m00s elapsed]
+module.network.aws_internet_gateway.main: Still destroying... [id=igw-00c5597baee3d12da, 06m10s elapsed]
+aws_ecs_service.main: Still destroying... [id=arn:aws:ecs:us-east-1:491085390322:service/simple-api-cluster/simple-api-service, 06m10s elapsed]
+module.network.aws_internet_gateway.main: Still destroying... [id=igw-00c5597baee3d12da, 06m20s elapsed]
+aws_ecs_service.main: Still destroying... [id=arn:aws:ecs:us-east-1:491085390322:service/simple-api-cluster/simple-api-service, 06m20s elapsed]
+module.network.aws_internet_gateway.main: Still destroying... [id=igw-00c5597baee3d12da, 06m30s elapsed]
+aws_ecs_service.main: Still destroying... [id=arn:aws:ecs:us-east-1:491085390322:service/simple-api-cluster/simple-api-service, 06m30s elapsed]
+module.network.aws_internet_gateway.main: Still destroying... [id=igw-00c5597baee3d12da, 06m40s elapsed]
+aws_ecs_service.main: Still destroying... [id=arn:aws:ecs:us-east-1:491085390322:service/simple-api-cluster/simple-api-service, 06m40s elapsed]
+module.network.aws_internet_gateway.main: Still destroying... [id=igw-00c5597baee3d12da, 06m50s elapsed]
+aws_ecs_service.main: Still destroying... [id=arn:aws:ecs:us-east-1:491085390322:service/simple-api-cluster/simple-api-service, 06m50s elapsed]
+module.network.aws_internet_gateway.main: Still destroying... [id=igw-00c5597baee3d12da, 07m00s elapsed]
+aws_ecs_service.main: Still destroying... [id=arn:aws:ecs:us-east-1:491085390322:service/simple-api-cluster/simple-api-service, 07m00s elapsed]
+module.network.aws_internet_gateway.main: Still destroying... [id=igw-00c5597baee3d12da, 07m10s elapsed]
+aws_ecs_service.main: Still destroying... [id=arn:aws:ecs:us-east-1:491085390322:service/simple-api-cluster/simple-api-service, 07m10s elapsed]
+aws_ecs_service.main: Destruction complete after 7m12s
+aws_ecs_cluster.main: Destroying... [id=arn:aws:ecs:us-east-1:491085390322:cluster/simple-api-cluster]
+module.security.aws_security_group.ecs: Destroying... [id=sg-0e4f6a2ee649f8e86]
+aws_ecs_task_definition.main: Destroying... [id=simple-api]
+module.alb.aws_lb_listener.main: Destroying... [id=arn:aws:elasticloadbalancing:us-east-1:491085390322:listener/app/simple-api-alb/d1941ea7ec4e28c8/9ec0cf6d1b1ca045]
+aws_ecs_task_definition.main: Destruction complete after 0s
+aws_secretsmanager_secret.db_password: Destroying... [id=arn:aws:secretsmanager:us-east-1:491085390322:secret:simple-api/db-password-42k1AJ]
+aws_cloudwatch_log_group.ecs: Destroying... [id=/ecs/simple-api]
+module.iam.aws_iam_role.ecs_task: Destroying... [id=simple-api-ecs-task-dev]
+module.iam.aws_iam_role.ecs_task_execution: Destroying... [id=simple-api-ecs-task-execution-dev]
+aws_ecr_repository.main: Destroying... [id=simple-api]
+module.rds.aws_db_instance.main: Destroying... [id=db-H5QVCY4TKGYUBNX3G4SHKG2CQA]
+aws_ecs_cluster.main: Destruction complete after 1s
+module.alb.aws_lb_listener.main: Destruction complete after 1s
+module.alb.aws_lb_target_group.main: Destroying... [id=arn:aws:elasticloadbalancing:us-east-1:491085390322:targetgroup/simple-api-tg/0c30d88c4e9ff8f1]
+module.alb.aws_lb.main: Destroying... [id=arn:aws:elasticloadbalancing:us-east-1:491085390322:loadbalancer/app/simple-api-alb/d1941ea7ec4e28c8]
+aws_cloudwatch_log_group.ecs: Destruction complete after 1s
+module.alb.aws_lb_target_group.main: Destruction complete after 0s
+aws_secretsmanager_secret.db_password: Destruction complete after 1s
+aws_ecr_repository.main: Destruction complete after 1s
+module.iam.aws_iam_role.ecs_task: Destruction complete after 1s
+module.iam.aws_iam_role.ecs_task_execution: Destruction complete after 2s
+module.security.aws_security_group.ecs: Destruction complete after 2s
+module.network.aws_internet_gateway.main: Still destroying... [id=igw-00c5597baee3d12da, 07m20s elapsed]
+module.rds.aws_db_instance.main: Still destroying... [id=db-H5QVCY4TKGYUBNX3G4SHKG2CQA, 00m10s elapsed]
+module.alb.aws_lb.main: Still destroying... [id=arn:aws:elasticloadbalancing:us-east-1:...er/app/simple-api-alb/d1941ea7ec4e28c8, 00m10s elapsed]
+module.network.aws_internet_gateway.main: Still destroying... [id=igw-00c5597baee3d12da, 07m30s elapsed]
+module.alb.aws_lb.main: Destruction complete after 18s
+module.network.aws_subnet.public[1]: Destroying... [id=subnet-02831e868cf473da2]
+module.network.aws_subnet.public[0]: Destroying... [id=subnet-017c1c6e476a48bf2]
+module.security.aws_security_group.alb: Destroying... [id=sg-0eb6ee789faca69ec]
+module.rds.aws_db_instance.main: Still destroying... [id=db-H5QVCY4TKGYUBNX3G4SHKG2CQA, 00m20s elapsed]
+module.network.aws_subnet.public[0]: Destruction complete after 2s
+module.network.aws_subnet.public[1]: Destruction complete after 3s
+module.security.aws_security_group.alb: Destruction complete after 3s
+module.network.aws_internet_gateway.main: Destruction complete after 7m39s
+module.rds.aws_db_instance.main: Still destroying... [id=db-H5QVCY4TKGYUBNX3G4SHKG2CQA, 00m30s elapsed]
+module.rds.aws_db_instance.main: Still destroying... [id=db-H5QVCY4TKGYUBNX3G4SHKG2CQA, 00m40s elapsed]
+module.rds.aws_db_instance.main: Still destroying... [id=db-H5QVCY4TKGYUBNX3G4SHKG2CQA, 00m50s elapsed]
+module.rds.aws_db_instance.main: Still destroying... [id=db-H5QVCY4TKGYUBNX3G4SHKG2CQA, 01m00s elapsed]
+module.rds.aws_db_instance.main: Still destroying... [id=db-H5QVCY4TKGYUBNX3G4SHKG2CQA, 01m10s elapsed]
+module.rds.aws_db_instance.main: Still destroying... [id=db-H5QVCY4TKGYUBNX3G4SHKG2CQA, 01m20s elapsed]
+module.rds.aws_db_instance.main: Still destroying... [id=db-H5QVCY4TKGYUBNX3G4SHKG2CQA, 01m30s elapsed]
+module.rds.aws_db_instance.main: Still destroying... [id=db-H5QVCY4TKGYUBNX3G4SHKG2CQA, 01m40s elapsed]
+module.rds.aws_db_instance.main: Still destroying... [id=db-H5QVCY4TKGYUBNX3G4SHKG2CQA, 01m50s elapsed]
+module.rds.aws_db_instance.main: Destruction complete after 1m53s
+module.rds.aws_db_parameter_group.main: Destroying... [id=simple-api-db-pg]
+module.rds.aws_db_subnet_group.main: Destroying... [id=simple-api-db-subnet-group]
+module.security.aws_security_group.rds: Destroying... [id=sg-081d80775cb33b806]
+module.rds.aws_db_parameter_group.main: Destruction complete after 0s
+module.rds.aws_db_subnet_group.main: Destruction complete after 0s
+module.network.aws_subnet.private[1]: Destroying... [id=subnet-0b8d088a66bf68a76]
+module.network.aws_subnet.private[0]: Destroying... [id=subnet-06bcb35e2af89abaa]
+module.network.aws_subnet.private[0]: Destruction complete after 1s
+module.network.aws_subnet.private[1]: Destruction complete after 1s
+module.security.aws_security_group.rds: Destruction complete after 1s
+module.network.aws_vpc.main: Destroying... [id=vpc-05bd6cbbbfe5fd35d]
+module.network.aws_vpc.main: Destruction complete after 1s
+
+Destroy complete! Resources: 67 destroyed.
+capel@MacBook-Air-de-Luis dev % capel@MacBook-Air-de-Luis dev % bash destroy.sh
+zsh: command not found: capel@MacBook-Air-de-Luis
+capel@MacBook-Air-de-Luis dev % === Removendo SNS do state (prevent_destroy) ===
+zsh: == not found
+capel@MacBook-Air-de-Luis dev % Removed aws_sns_topic.alerts
+zsh: command not found: Removed
+capel@MacBook-Air-de-Luis dev % Successfully removed 1 resource instance(s).
+zsh: no matches found: instance(s).
+capel@MacBook-Air-de-Luis dev % Removed aws_sns_topic_subscription.email
+zsh: command not found: Removed
+capel@MacBook-Air-de-Luis dev % Successfully removed 1 resource instance(s).
+zsh: no matches found: instance(s).
+capel@MacBook-Air-de-Luis dev %
