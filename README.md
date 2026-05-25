@@ -15,7 +15,7 @@ Toda a infraestrutura foi provisionada via Terraform, organizada em módulos reu
 | Recurso | Configuração |
 |---|---|
 | **ECS Fargate** | Cluster + Service, 1–4 tasks, 0.25 vCPU / 0.5 GB |
-| **Application Load Balancer** | Internet-facing, health check em `/` |
+| **Application Load Balancer** | Internet-facing, health check em `/health` |
 | **RDS PostgreSQL 15** | `db.t3.micro`, Multi-AZ desativado, privado em subnet isolada |
 | **VPC** | 2 AZs, subnets públicas (ECS/ALB) e privadas (RDS) |
 | **ECR** | Registry privado para imagem Docker da API |
@@ -86,6 +86,7 @@ O painel atualiza automaticamente a cada 10s enquanto o stress loop está ativo.
 
 | Rota | Método | Descrição |
 |---|---|---|
+| `/health` | GET | Health check do ALB (não incrementa contador) |
 | `/` | GET | Mensagem estática + hostname da task + contador de requests |
 | `/connect` | GET | Conecta ao RDS e retorna versão do PostgreSQL |
 | `/stress` | GET | Satura CPU por N segundos (`?seconds=30`, máx. 30s) |

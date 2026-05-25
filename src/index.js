@@ -25,6 +25,10 @@ const aasClient = new ApplicationAutoScalingClient({ region: REGION });
 
     // ── original routes (unchanged) ──────────────────────────────────────────
 
+    app.get('/health', (req, res) => {
+        res.json({ status: 'ok' })
+    })
+
     app.get('/', async (req, res) => {
         i++;
         const response = { message: 'API OK', task: os.hostname(), task_request_count: i }

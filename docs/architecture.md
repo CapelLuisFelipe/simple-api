@@ -51,7 +51,7 @@ RDS SG:  ECS SG    → porta 5432
 |-------------------|---------------------------------------------------|
 | ECS Fargate       | Orquestração de containers (256 CPU / 512 MB)     |
 | RDS PostgreSQL 15 | Banco de dados gerenciado (db.t3.micro, 20 GB)    |
-| ALB               | Load balancer público, health check na rota `/`   |
+| ALB               | Load balancer público, health check na rota `/health`   |
 | ECR               | Registry de imagens Docker                        |
 | Secrets Manager   | Armazenamento da senha do banco                   |
 | CodePipeline      | Orquestração de CI/CD (2 pipelines)               |
