@@ -120,3 +120,14 @@ override.tf.json
 # Local files
 terraform.tfplan
 tfplan
+errored.tfstate
+
+# macOS
+.DS_Store
+**/.DS_Store
+
+# Claude Code
+.claude/
+
+# Downloaded files
+*.pdf

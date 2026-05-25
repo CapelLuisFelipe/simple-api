@@ -277,6 +277,10 @@ resource "aws_codepipeline" "main" {
   role_arn      = aws_iam_role.codepipeline.arn
   pipeline_type = "V2"
 
+  lifecycle {
+    ignore_changes = [trigger, stage, tags_all]
+  }
+
   trigger {
     provider_type = "CodeStarSourceConnection"
     git_configuration {
@@ -353,6 +357,10 @@ resource "aws_codepipeline" "terraform" {
   name          = "simple-api-terraform-pipeline-${var.environment}"
   role_arn      = aws_iam_role.codepipeline.arn
   pipeline_type = "V2"
+
+  lifecycle {
+    ignore_changes = [trigger, stage, tags_all]
+  }
 
   trigger {
     provider_type = "CodeStarSourceConnection"

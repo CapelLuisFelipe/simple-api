@@ -27,7 +27,7 @@ const aasClient = new ApplicationAutoScalingClient({ region: REGION });
 
     app.get('/', async (req, res) => {
         i++;
-        const response = { message: 'API OK TESTE1!', task: os.hostname(), task_request_count: i }
+        const response = { message: 'API OK', task: os.hostname(), task_request_count: i }
         console.log(response)
         res.send(response)
     })

@@ -56,8 +56,8 @@ RDS SG:  ECS SG    → porta 5432
 | Secrets Manager   | Armazenamento da senha do banco                   |
 | CodePipeline      | Orquestração de CI/CD (2 pipelines)               |
 | CodeBuild         | Build da imagem Docker + execução do Terraform    |
-| CloudWatch Logs   | Logs das tasks ECS e do RDS                       |
-| CloudWatch Alarms | Alertas de CPU >70% e memória >80%                |
+| CloudWatch Logs   | Logs das tasks ECS (`/ecs/simple-api`, 7 dias)    |
+| CloudWatch Alarms | Alertas de CPU ≥30% (alta) e ≤20% (baixa)        |
 | SNS               | Entrega de alertas por e-mail                     |
 | S3                | Artefatos das pipelines + Terraform state         |
 
@@ -82,16 +82,20 @@ Variáveis sensíveis do Terraform são lidas do SSM Parameter Store durante o b
 
 ## Auto-scaling
 
-| Métrica    | Scale Out | Scale In |
-|------------|-----------|----------|
-| CPU        | ≥ 70%     | ≤ 30%    |
-| Memória    | ≥ 80%     | ≤ 40%    |
+| Métrica | Scale Out | Scale In | Cooldown Out | Cooldown In |
+|---------|-----------|----------|--------------|-------------|
+| CPU     | ≥ 30%     | ≤ 20%    | 30s          | 120s        |
 
 Capacidade: mínimo 1 task, máximo 4 tasks.
 
 ## Endpoints da API
 
-| Rota       | Descrição                                       |
-|------------|-------------------------------------------------|
-| `GET /`    | Health check — retorna `{"message":"API OK!"}` |
-| `GET /connect` | Testa conexão com o banco PostgreSQL        |
+| Rota                   | Descrição                                                    |
+|------------------------|--------------------------------------------------------------|
+| `GET /`                | Mensagem estática + hostname da task + contador de requests  |
+| `GET /connect`         | Testa conexão com o banco PostgreSQL                         |
+| `GET /stress`          | Satura CPU por N segundos (`?seconds=30`, máx. 30s)          |
+| `GET /dashboard`       | Painel de observabilidade visual                             |
+| `GET /obs/status`      | Status do ECS Service (running/desired/pending)              |
+| `GET /obs/scaling-events` | Últimos 10 eventos de auto scaling                        |
+| `GET /obs/alarm-history`  | Histórico de estados dos alarmes CloudWatch               |
