@@ -180,8 +180,8 @@ resource "aws_iam_role_policy" "codepipeline" {
       },
       {
         Effect   = "Allow"
-        Action   = ["codestar-connections:UseConnection"]
-        Resource = var.codestar_connection_arn
+        Action   = ["codestar-connections:UseConnection", "codeconnections:UseConnection"]
+        Resource = "*"
       }
     ]
   })
